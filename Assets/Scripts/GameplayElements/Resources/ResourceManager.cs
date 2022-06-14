@@ -20,12 +20,12 @@ public class ResourceManager : MonoBehaviour
     }
     #endregion
 
-    int _citizenNumber;
+    [SerializeField] int _citizenNumber;
     #region getter
     public int CitizenNumber { get { return _citizenNumber; } }
     #endregion
 
-    int _citizenSatisfaction;
+    [SerializeField] int _citizenSatisfaction;
     #region getter
     public int CitizenSatisfaction { get { return _citizenSatisfaction; } }
     #endregion
@@ -35,35 +35,40 @@ public class ResourceManager : MonoBehaviour
     public int Budget { get { return _budget; } }
     #endregion
 
-    int _income;
+    [SerializeField] int _income;
     #region getter
     public int Income { get { return _income; } }
     #endregion
 
-    int _actionPoints;
+    [SerializeField] int _actionPoints;
     #region getter
     public int ActionPoints { get { return _actionPoints; } }
     #endregion
 
-    private void UpdateCitiyenNumber(int valToAdd)
+    public void UpdateCitiyenNumber(int valToAdd)
     {
         _citizenNumber += valToAdd;
+        UIManager.Instance.UpdateCitizenNumberTxt(CitizenNumber);
     }
-    private void UpdateCitizenSatisfaction(int valToAdd)
+    public void UpdateCitizenSatisfaction(int valToAdd)
     {
         _citizenSatisfaction += valToAdd;
+        UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
     }
-    private void UpdateIncome(int valToAdd)
+    public void UpdateIncome(int valToAdd)
     {
         _income += valToAdd;
+        UIManager.Instance.UpdateIncomeTxt(Income);
     }
-    private void UpdateBudget(int valToAdd)
+    public void UpdateBudget(int valToAdd)
     {
         _budget += valToAdd;
+        UIManager.Instance.UpdateBudgetTxt(Budget);
     }
-    private void UpdateActionPoints(int valToAdd)
+    public void UpdateActionPoints(int valToAdd)
     {
         _actionPoints += valToAdd;
+        UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
     }
 
 }

@@ -4461,6 +4461,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 839373a872d288543a9c3946b2d04ef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  budget: {fileID: 1057734658}
+  income: {fileID: 236052897}
+  citizenNumber: {fileID: 1671036185}
+  citizenSatisfaction: {fileID: 424613157}
+  ActionPoints: {fileID: 525615323}
   houseButtonDefault: {fileID: 60253435}
   houseButtonDown: {fileID: 1591547674}
   businessButtonDefault: {fileID: 433021304}
@@ -6988,6 +6993,102 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970310288}
   m_Mesh: {fileID: 2195268101590937582, guid: 687897740941a3f47b9b232a87be4c1b, type: 3}
+--- !u!1 &974668272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 974668274}
+  - component: {fileID: 974668273}
+  m_Layer: 0
+  m_Name: CostsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &974668273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974668272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4dfc550d4a2ff948906ce7e21e06f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfrastructuresStats:
+  - _name: House
+    _cActionPoints: 6
+    _cBudgetSmall: 1100000
+    _cBudgetMedium: 1600000
+    _cBudgetLarge: 2700000
+    _bCitizenNumberSmall: 1
+    _bCitizenNumberMedium: 2
+    _bCitizenNumberLarge: 3
+    _bCitizenSatisfaction: 1
+    _bIncomeSmall: 0
+    _bIncomeMedium: 0
+    _bIncomeLarge: 0
+  - _name: Business
+    _cActionPoints: 5
+    _cBudgetSmall: 3100000
+    _cBudgetMedium: 4500000
+    _cBudgetLarge: 7500000
+    _bCitizenNumberSmall: 0
+    _bCitizenNumberMedium: 0
+    _bCitizenNumberLarge: 0
+    _bCitizenSatisfaction: 0
+    _bIncomeSmall: 1
+    _bIncomeMedium: 2
+    _bIncomeLarge: 3
+  BGIStats:
+  - _name: Green Roof
+    _cActionPoints: 3
+    _cBudgetResidentialSmall: 70000
+    _cBudgetResidentialMedium: 110000
+    _cBudgetResidentialLarge: 180000
+    _cBudgetCommercialSmall: 160000
+    _cBudgetCommercialMedium: 240000
+    _cBudgetCommercialLarge: 400000
+    _bCitizenSatisfaction: 1
+  - _name: Permeable Pavement
+    _cActionPoints: 2
+    _cBudgetResidentialSmall: 50000
+    _cBudgetResidentialMedium: 70000
+    _cBudgetResidentialLarge: 170000
+    _cBudgetCommercialSmall: 70000
+    _cBudgetCommercialMedium: 110000
+    _cBudgetCommercialLarge: 170000
+    _bCitizenSatisfaction: 0
+  - _name: Rain Barrel
+    _cActionPoints: 1
+    _cBudgetResidentialSmall: 10000
+    _cBudgetResidentialMedium: 14000
+    _cBudgetResidentialLarge: 20000
+    _cBudgetCommercialSmall: 18000
+    _cBudgetCommercialMedium: 27000
+    _cBudgetCommercialLarge: 44000
+    _bCitizenSatisfaction: 0
+--- !u!4 &974668274
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 974668272}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -136.04173, y: -369.47516, z: -89.364105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &978892970
 GameObject:
   m_ObjectHideFlags: 0
@@ -14038,7 +14139,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3883d11cd360f4f8e2c117343363a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _citizenNumber: 20000
+  _citizenSatisfaction: 0
   _budget: 10000000
+  _income: 0
+  _actionPoints: 12
 --- !u!4 &2091922411
 Transform:
   m_ObjectHideFlags: 0

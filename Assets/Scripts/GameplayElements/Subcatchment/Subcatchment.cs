@@ -72,7 +72,7 @@ public class Subcatchment : MonoBehaviour
 
                 if (input.MouseLeftButton())
                 {
-                    Debug.Log("Pressed on subcatchment n." + SubcatchmentNumber);
+                    InfrastructureBuilder.Instance.BuildInfrastructure(GetComponent<Subcatchment>());
                 }
             }
             else
@@ -102,9 +102,9 @@ public class Subcatchment : MonoBehaviour
 
     }
 
-    public void BuildOnSubcatchment()
+    public void BuildInfrastructureOnSubcatchment()
     {
-
+        transform.GetChild(0).gameObject.SetActive(true);
     }
 
     void MouseHoveringOnSubcatchment()

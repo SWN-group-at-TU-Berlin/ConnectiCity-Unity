@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -27,6 +28,13 @@ public class UIManager : MonoBehaviour
         DefaultButtons.Add(RBButtonDefault);
     }
     #endregion
+
+    [Header("Resources References")]
+    [SerializeField] TextMeshProUGUI budget;
+    [SerializeField] TextMeshProUGUI income;
+    [SerializeField] TextMeshProUGUI citizenNumber;
+    [SerializeField] TextMeshProUGUI citizenSatisfaction;
+    [SerializeField] TextMeshProUGUI ActionPoints;
 
     [Header("Buttons References")]
     [SerializeField] GameObject houseButtonDefault;
@@ -100,4 +108,10 @@ public class UIManager : MonoBehaviour
             DeactivateDefaultButtons(houseButtonDefault);
         }
     }
+
+    public void UpdateBudgetTxt(int newBudget){ budget.text = newBudget.ToString(); }
+    public void UpdateIncomeTxt(int newIncome){ income.text = newIncome.ToString(); }
+    public void UpdateCitizenNumberTxt(int newCN) { citizenNumber.text = newCN.ToString(); }
+    public void UpdateCitizenSatisfactionTxt(int newCS) { citizenSatisfaction.text = newCS.ToString(); }
+    public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
 }
