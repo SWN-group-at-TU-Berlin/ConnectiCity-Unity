@@ -24,13 +24,13 @@ public class CostsManager : MonoBehaviour
     public List<BasicInfrastructureStats> InfrastructuresStats;
     public List<BasicBGIStats> BGIStats;
 
-    public BasicInfrastructureStats GetInfrastructureStats(string infrastructureName) {
-        BasicInfrastructureStats infrastructureStats = Array.Find(InfrastructuresStats.ToArray(), stats => stats.Name.Equals(infrastructureName));
+    public BasicInfrastructureStats GetInfrastructureStats(InfrastructureType infrastructure) {
+        BasicInfrastructureStats infrastructureStats = Array.Find(InfrastructuresStats.ToArray(), stats => stats.Name.Equals(infrastructure.ToString()));
         return infrastructureStats;
     }
-    public BasicBGIStats GetBGIStats(string BGIName)
+    public BasicBGIStats GetBGIStats(InfrastructureType BGIName)
     {
-        BasicBGIStats infrastructureStats = Array.Find(BGIStats.ToArray(), stats => stats.Name.Equals(BGIName));
+        BasicBGIStats infrastructureStats = Array.Find(BGIStats.ToArray(), stats => stats.Name.Equals(BGIName.ToString()));
         return infrastructureStats;
     }
 

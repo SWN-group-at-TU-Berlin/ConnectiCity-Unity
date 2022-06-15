@@ -102,9 +102,34 @@ public class Subcatchment : MonoBehaviour
 
     }
 
-    public void BuildInfrastructureOnSubcatchment()
+    public void BuildInfrastructureOnSubcatchment(InfrastructureType infrastructure)
     {
-        transform.GetChild(0).gameObject.SetActive(true);
+        if (infrastructure.Equals(InfrastructureType.Business) || infrastructure.Equals(InfrastructureType.House))
+        {
+            transform.GetChild(0).gameObject.SetActive(true);
+            IsBuilt = true;
+        }
+        else
+        {
+            switch (infrastructure)
+            {
+                case InfrastructureType.GR:
+                    {
+                        Debug.Log("GR built");
+                        break;
+                    }
+                case InfrastructureType.RB:
+                    {
+                        Debug.Log("RB built");
+                        break;
+                    }
+                case InfrastructureType.PP:
+                    {
+                        Debug.Log("PP built");
+                        break;
+                    }
+            }
+        }
     }
 
     void MouseHoveringOnSubcatchment()
