@@ -23,6 +23,7 @@ public class MapManager : MonoBehaviour
         {
             lightIntensity = light.intensity;
         }
+        DeactivateSubcatchmentsChildren();
     }
     #endregion
 
@@ -32,6 +33,17 @@ public class MapManager : MonoBehaviour
     [SerializeField] float lightFatctor;
 
     float lightIntensity;
+
+    private void DeactivateSubcatchmentsChildren()
+    {
+        foreach(Subcatchment subcat in _subcatchments)
+        {
+            foreach(Transform child in subcat.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
+    }
 
     public Subcatchment GetSubcatchment(int subcatchmentNumber)
     {

@@ -45,7 +45,7 @@ public class ResourceManager : MonoBehaviour
     public int ActionPoints { get { return _actionPoints; } }
     #endregion
 
-    public void UpdateCitiyenNumber(int valToAdd)
+    public void UpdateCitizenNumber(int valToAdd)
     {
         _citizenNumber += valToAdd;
         UIManager.Instance.UpdateCitizenNumberTxt(CitizenNumber);

@@ -640,15 +640,15 @@ public class InfrastructureBuilder : MonoBehaviour
         {
             case AreaSize.Small:
                 ResourceManager.Instance.UpdateBudget(-stats.CBudgetSmall);
-                ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenNumberSmall);
+                ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberSmall);
                 break;
             case AreaSize.Medium:
                 ResourceManager.Instance.UpdateBudget(-stats.CBudgetMedium);
-                ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenNumberMedium);
+                ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberMedium);
                 break;
             case AreaSize.Large:
                 ResourceManager.Instance.UpdateBudget(-stats.CBudgetLarge);
-                ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenNumberLarge);
+                ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberLarge);
                 break;
 
         }
@@ -664,15 +664,15 @@ public class InfrastructureBuilder : MonoBehaviour
             {
                 case AreaSize.Small:
                     ResourceManager.Instance.UpdateBudget(-stats.CBudgetCommercialSmall);
-                    ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenSatisfaction);
+                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
                     break;
                 case AreaSize.Medium:
                     ResourceManager.Instance.UpdateBudget(-stats.CBudgetCommercialMedium);
-                    ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenSatisfaction);
+                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
                     break;
                 case AreaSize.Large:
                     ResourceManager.Instance.UpdateBudget(-stats.CBudgetCommercialLarge);
-                    ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenSatisfaction);
+                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
                     break;
 
             }
@@ -683,15 +683,15 @@ public class InfrastructureBuilder : MonoBehaviour
             {
                 case AreaSize.Small:
                     ResourceManager.Instance.UpdateBudget(-stats.CBudgetResidentialSmall);
-                    ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenSatisfaction);
+                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
                     break;
                 case AreaSize.Medium:
                     ResourceManager.Instance.UpdateBudget(-stats.CBudgetResidentialMedium);
-                    ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenSatisfaction);
+                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
                     break;
                 case AreaSize.Large:
                     ResourceManager.Instance.UpdateBudget(-stats.CBudgetResidentialLarge);
-                    ResourceManager.Instance.UpdateCitiyenNumber(stats.BCitizenSatisfaction);
+                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
                     break;
 
             }

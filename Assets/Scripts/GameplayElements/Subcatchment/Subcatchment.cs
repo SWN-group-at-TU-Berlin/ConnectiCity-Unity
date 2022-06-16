@@ -109,33 +109,26 @@ public class Subcatchment : MonoBehaviour
 
     }
 
+    private void ShowInfrastructure(InfrastructureType infrastructure)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.name.Equals(infrastructure.ToString()))
+            {
+                child.gameObject.SetActive(true);
+            }
+        }
+    }
+
     public void BuildInfrastructureOnSubcatchment(InfrastructureType infrastructure)
     {
-        if (infrastructure.Equals(InfrastructureType.Business) || infrastructure.Equals(InfrastructureType.House))
+        ShowInfrastructure(infrastructure);
+        if (infrastructure.Equals(InfrastructureType.House) || infrastructure.Equals(InfrastructureType.Business))
         {
-            transform.GetChild(0).gameObject.SetActive(true);
             _isBuilt = true;
         }
         else
         {
-            switch (infrastructure)
-            {
-                case InfrastructureType.GR:
-                    {
-                        Debug.Log("GR built");
-                        break;
-                    }
-                case InfrastructureType.RB:
-                    {
-                        Debug.Log("RB built");
-                        break;
-                    }
-                case InfrastructureType.PP:
-                    {
-                        Debug.Log("PP built");
-                        break;
-                    }
-            }
             BGIHosted.Add(infrastructure);
         }
     }
@@ -143,19 +136,22 @@ public class Subcatchment : MonoBehaviour
     public bool CanHostBGI(InfrastructureType BGI)
     {
         bool canHostBGI = false;
-        if(BGI.Equals(InfrastructureType.House) || BGI.Equals(InfrastructureType.Business))
+        if (BGI.Equals(InfrastructureType.House) || BGI.Equals(InfrastructureType.Business))
         {
             canHostBGI = false;
-        } else if(BGIHosted.Count >= 2)
+        }
+        else if (BGIHosted.Count >= 2)
         {
             canHostBGI = false;
-        } else if(BGIHosted.Count == 0)
+        }
+        else if (BGIHosted.Count == 0)
         {
             canHostBGI = true;
-        } else if(!BGIHosted[0].Equals(BGI))
+        }
+        else if (!BGIHosted[0].Equals(BGI))
         {
             canHostBGI = true;
-        } 
+        }
         return canHostBGI;
     }
 
