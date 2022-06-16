@@ -212,8 +212,7 @@ public class UIManager : MonoBehaviour
                 child.GetComponent<TextMeshProUGUI>().text = "You don't have enough Action Points :(";
             }
         }
-        Vector2 offset = new Vector2(MessageBoard.GetComponent<RectTransform>().rect.width, -MessageBoard.GetComponent<RectTransform>().rect.height);
-        MessageBoard.transform.position = input.MousePosition() + offset;//Camera.main.ScreenToViewportPoint(input.MousePosition());
+        OffsetMessageBoardPosition();
         StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
     }
     
@@ -225,8 +224,7 @@ public class UIManager : MonoBehaviour
                 child.GetComponent<TextMeshProUGUI>().text = "You don't have enough Budget :(";
             }
         }
-        Vector2 offset = new Vector2(MessageBoard.GetComponent<RectTransform>().rect.width, -MessageBoard.GetComponent<RectTransform>().rect.height);
-        MessageBoard.transform.position = input.MousePosition() + offset;//Camera.main.ScreenToViewportPoint(input.MousePosition());
+        OffsetMessageBoardPosition();
         StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
     }
 
@@ -239,10 +237,29 @@ public class UIManager : MonoBehaviour
                 child.GetComponent<TextMeshProUGUI>().text = "There are no built subcatchment :(";
             }
         }
-        Vector2 offset = new Vector2(MessageBoard.GetComponent<RectTransform>().rect.width, -MessageBoard.GetComponent<RectTransform>().rect.height);
-        MessageBoard.transform.position = input.MousePosition() + offset;//Camera.main.ScreenToViewportPoint(input.MousePosition());
+        OffsetMessageBoardPosition();
         StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
     }
+
+    public void SubcatchmentAlreadyHostsBGI(InfrastructureType BGI)
+    {
+        foreach (Transform child in MessageBoard.transform)
+        {
+            if (child.name.Equals("Message"))
+            {
+                child.GetComponent<TextMeshProUGUI>().text = "You have already build " + BGI + "s on this subcatchment :D";
+            }
+        }
+        OffsetMessageBoardPosition();
+        StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
+    }
+
+    private void OffsetMessageBoardPosition()
+    {
+        Vector2 offset = new Vector2(MessageBoard.GetComponent<RectTransform>().rect.width, -MessageBoard.GetComponent<RectTransform>().rect.height);
+        MessageBoard.transform.position = input.MousePosition() + offset;
+    }
+
     public void UpdateBudgetTxt(int newBudget){ budget.text = newBudget.ToString(); }
     public void UpdateIncomeTxt(int newIncome){ income.text = newIncome.ToString(); }
     public void UpdateCitizenNumberTxt(int newCN) { citizenNumber.text = newCN.ToString(); }

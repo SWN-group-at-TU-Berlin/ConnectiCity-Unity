@@ -165,7 +165,7 @@ public class InfrastructureBuilder : MonoBehaviour
         }
 
 
-        if (ResourceManager.Instance.ActionPoints >= CostsManager.Instance.GetBGIStats(InfrastructureType.GR).CActionPoints + 1)
+        if (ResourceManager.Instance.ActionPoints >= CostsManager.Instance.GetBGIStats(InfrastructureType.GR).CActionPoints)
         {
             //Determine size of commercial subcatchment to highlight
             if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.GR).CBudgetResidentialLarge)
@@ -208,14 +208,14 @@ public class InfrastructureBuilder : MonoBehaviour
         {
             if (subcat.Usage.Equals(AreaUsage.Residential))
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential] && subcat.IsBuilt)
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.GR))
                 {
                     subcatchmentToHighlight.Add(subcat);
                 }
             }
             else
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial] && subcat.IsBuilt)
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.GR))
                 {
                     subcatchmentToHighlight.Add(subcat);
                 }
@@ -234,11 +234,211 @@ public class InfrastructureBuilder : MonoBehaviour
     }
     public void CheckPPSubcatchmentAvailabilities()
     {
+        //Change InfrastructureBuilder status variables
+        isBuilding = true;
         SelectedInfrastructure = InfrastructureType.PP;
+
+        //Get needed subcatchements
+        Subcatchment[] builtSubcatchments = MapManager.Instance.GetBuiltSubcatchments();
+        int budget = ResourceManager.Instance.Budget;
+
+        //CHECK ON COMMERCIAL AREA
+        //Check if enough action points are available
+        Dictionary<AreaUsage, AreaSize> typeAndSizeOfSubcatToHighlight = new Dictionary<AreaUsage, AreaSize>();
+        if (ResourceManager.Instance.ActionPoints >= CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CActionPoints + 1)
+        {
+            //Determine size of commercial subcatchment to highlight
+            if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CBudgetCommercialLarge)
+            {
+                if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CBudgetCommercialMedium)
+                {
+                    if (budget > CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CBudgetCommercialSmall)
+                    {
+                        typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Commercial, AreaSize.Small);
+                    }
+                }
+                else
+                {
+                    typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Commercial, AreaSize.Medium);
+                }
+            }
+            else
+            {
+                typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Commercial, AreaSize.Large);
+            }
+        }
+
+
+        if (ResourceManager.Instance.ActionPoints >= CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CActionPoints)
+        {
+            //Determine size of commercial subcatchment to highlight
+            if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CBudgetResidentialLarge)
+            {
+                if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CBudgetResidentialMedium)
+                {
+                    if (budget > CostsManager.Instance.GetBGIStats(InfrastructureType.PP).CBudgetResidentialSmall)
+                    {
+                        typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Residential, AreaSize.Small);
+                    }
+                    else
+                    {
+                        //not enough budget message
+                        UIManager.Instance.MissingBudgetMessage();
+                        UIManager.Instance.PPButtonPressed();
+                        return;
+                    }
+                }
+                else
+                {
+                    typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Residential, AreaSize.Medium);
+                }
+            }
+            else
+            {
+                typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Residential, AreaSize.Large);
+            }
+        }
+        else
+        {
+            //Pop up info message
+            UIManager.Instance.MissingActionPointMessage();
+            UIManager.Instance.PPButtonPressed();
+            return;
+        }
+
+        //Get subcatchment needed based on area size and if built or not
+        List<Subcatchment> subcatchmentToHighlight = new List<Subcatchment>();
+        foreach (Subcatchment subcat in builtSubcatchments)
+        {
+            if (subcat.Usage.Equals(AreaUsage.Residential))
+            {
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.PP))
+                {
+                    subcatchmentToHighlight.Add(subcat);
+                }
+            }
+            else
+            {
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.PP))
+                {
+                    subcatchmentToHighlight.Add(subcat);
+                }
+            }
+        }
+        if (subcatchmentToHighlight.Count > 0)
+        {
+            MapManager.Instance.HighlightBuildableSubcatchments(subcatchmentToHighlight.ToArray());
+        }
+        else
+        {
+            UIManager.Instance.SubcatchmentNotBuiltMessage();
+            UIManager.Instance.PPButtonPressed();
+            return;
+        }
     }
     public void CheckRBSubcatchmentAvailabilities()
     {
+        //Change InfrastructureBuilder status variables
+        isBuilding = true;
         SelectedInfrastructure = InfrastructureType.RB;
+
+        //Get needed subcatchements
+        Subcatchment[] builtSubcatchments = MapManager.Instance.GetBuiltSubcatchments();
+        int budget = ResourceManager.Instance.Budget;
+
+        //CHECK ON COMMERCIAL AREA
+        //Check if enough action points are available
+        Dictionary<AreaUsage, AreaSize> typeAndSizeOfSubcatToHighlight = new Dictionary<AreaUsage, AreaSize>();
+        if (ResourceManager.Instance.ActionPoints >= CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CActionPoints + 1)
+        {
+            //Determine size of commercial subcatchment to highlight
+            if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CBudgetCommercialLarge)
+            {
+                if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CBudgetCommercialMedium)
+                {
+                    if (budget > CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CBudgetCommercialSmall)
+                    {
+                        typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Commercial, AreaSize.Small);
+                    }
+                }
+                else
+                {
+                    typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Commercial, AreaSize.Medium);
+                }
+            }
+            else
+            {
+                typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Commercial, AreaSize.Large);
+            }
+        }
+
+
+        if (ResourceManager.Instance.ActionPoints >= CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CActionPoints)
+        {
+            //Determine size of commercial subcatchment to highlight
+            if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CBudgetResidentialLarge)
+            {
+                if (budget < CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CBudgetResidentialMedium)
+                {
+                    if (budget > CostsManager.Instance.GetBGIStats(InfrastructureType.RB).CBudgetResidentialSmall)
+                    {
+                        typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Residential, AreaSize.Small);
+                    }
+                    else
+                    {
+                        //not enough budget message
+                        UIManager.Instance.MissingBudgetMessage();
+                        UIManager.Instance.RBButtonPressed();
+                        return;
+                    }
+                }
+                else
+                {
+                    typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Residential, AreaSize.Medium);
+                }
+            }
+            else
+            {
+                typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Residential, AreaSize.Large);
+            }
+        }
+        else
+        {
+            //Pop up info message
+            UIManager.Instance.MissingActionPointMessage();
+            UIManager.Instance.RBButtonPressed();
+            return;
+        }
+
+        //Get subcatchment needed based on area size and if built or not
+        List<Subcatchment> subcatchmentToHighlight = new List<Subcatchment>();
+        foreach (Subcatchment subcat in builtSubcatchments)
+        {
+            if (subcat.Usage.Equals(AreaUsage.Residential))
+            {
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.RB))
+                {
+                    subcatchmentToHighlight.Add(subcat);
+                }
+            }
+            else
+            {
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.RB))
+                {
+                    subcatchmentToHighlight.Add(subcat);
+                }
+            }
+        }
+        if (subcatchmentToHighlight.Count > 0)
+        {
+            MapManager.Instance.HighlightBuildableSubcatchments(subcatchmentToHighlight.ToArray());
+        }
+        else
+        {
+            UIManager.Instance.SubcatchmentNotBuiltMessage();
+            UIManager.Instance.RBButtonPressed();
+            return;
+        }
     }
 
     public void ResetSelectedInfrastructure()
@@ -284,6 +484,7 @@ public class InfrastructureBuilder : MonoBehaviour
                     {
                         stats.CActionPoints += 1;
                     }
+                    BGIResourceUpdate(subcatToBuildOn, stats);
                     break;
                 }
             case InfrastructureType.GR:
@@ -305,6 +506,7 @@ public class InfrastructureBuilder : MonoBehaviour
                     {
                         stats.CActionPoints += 1;
                     }
+                    BGIResourceUpdate(subcatToBuildOn, stats);
                     break;
                 }
             default:

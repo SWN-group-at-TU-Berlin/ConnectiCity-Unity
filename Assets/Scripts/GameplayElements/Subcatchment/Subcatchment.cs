@@ -26,16 +26,22 @@ public class Subcatchment : MonoBehaviour
     Material defaultMaterial;
     Color highlightSelectionColor;
 
-    public bool IsBuilt { get; set; }
-    public bool IsHighlighted { get; set; }
+
+    bool _isBuilt;
+    #region getter
+    public bool IsBuilt { get { return _isBuilt; } }
+    #endregion
+    bool _isHighlighted;
+    #region getter
+    public bool IsHighlighted { get { return _isHighlighted; } }
+    #endregion
 
     Outline outline;
 
-    int BGIHosted { get; set; }
-    bool CanHostBGI { get; set; }
-    bool IsSelected { get; set; }
+    List<InfrastructureType> BGIHosted { get; set; }
+    bool IsSelected { get; set; } // still don't know if this will be useful
     bool IsHovered { get; set; }
-    bool Active { get; set; }
+    bool Active { get; set; } //getting deactivated after rainfall event
 
     InputProvider input;
 
@@ -43,6 +49,7 @@ public class Subcatchment : MonoBehaviour
     {
         defaultMaterial = GetComponent<MeshRenderer>().material;
         highlightSelectionColor = GetComponent<Outline>().OutlineColor;
+        BGIHosted = new List<InfrastructureType>();
     }
 
     private void OnEnable()
@@ -107,7 +114,7 @@ public class Subcatchment : MonoBehaviour
         if (infrastructure.Equals(InfrastructureType.Business) || infrastructure.Equals(InfrastructureType.House))
         {
             transform.GetChild(0).gameObject.SetActive(true);
-            IsBuilt = true;
+            _isBuilt = true;
         }
         else
         {
@@ -129,7 +136,27 @@ public class Subcatchment : MonoBehaviour
                         break;
                     }
             }
+            BGIHosted.Add(infrastructure);
         }
+    }
+
+    public bool CanHostBGI(InfrastructureType BGI)
+    {
+        bool canHostBGI = false;
+        if(BGI.Equals(InfrastructureType.House) || BGI.Equals(InfrastructureType.Business))
+        {
+            canHostBGI = false;
+        } else if(BGIHosted.Count >= 2)
+        {
+            canHostBGI = false;
+        } else if(BGIHosted.Count == 0)
+        {
+            canHostBGI = true;
+        } else if(!BGIHosted[0].Equals(BGI))
+        {
+            canHostBGI = true;
+        } 
+        return canHostBGI;
     }
 
     void MouseHoveringOnSubcatchment()
@@ -151,13 +178,13 @@ public class Subcatchment : MonoBehaviour
 
     public void HighlightSubcatchment()
     {
-        IsHighlighted = true;
+        _isHighlighted = true;
         GetComponent<MeshRenderer>().material = _highlightedMaterial;
     }
 
     public void DehighlightSubcatchment()
     {
-        IsHighlighted = false;
+        _isHighlighted = false;
         GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
