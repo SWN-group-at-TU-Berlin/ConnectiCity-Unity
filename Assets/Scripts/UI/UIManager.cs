@@ -241,6 +241,19 @@ public class UIManager : MonoBehaviour
         StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
     }
 
+    public void NoSubcatchmentCanHostBGIMessage()
+    {
+        foreach (Transform child in MessageBoard.transform)
+        {
+            if (child.name.Equals("Message"))
+            {
+                child.GetComponent<TextMeshProUGUI>().text = "The built subcatchments already have this BGI implemented :(";
+            }
+        }
+        OffsetMessageBoardPosition();
+        StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
+    }
+
     public void SubcatchmentAlreadyHostsBGI(InfrastructureType BGI)
     {
         foreach (Transform child in MessageBoard.transform)

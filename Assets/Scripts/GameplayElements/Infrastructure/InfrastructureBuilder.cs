@@ -148,10 +148,7 @@ public class InfrastructureBuilder : MonoBehaviour
                     {
                         typeAndSizeOfSubcatToHighlight.Add(AreaUsage.Commercial, AreaSize.Small);
                     }
-                    else
-                    {
-                        //not enough budget message
-                    }
+
                 }
                 else
                 {
@@ -208,16 +205,52 @@ public class InfrastructureBuilder : MonoBehaviour
         {
             if (subcat.Usage.Equals(AreaUsage.Residential))
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.GR))
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential])
                 {
-                    subcatchmentToHighlight.Add(subcat);
+                    if (subcat.IsBuilt)
+                    {
+                        if (subcat.CanHostBGI(InfrastructureType.GR))
+                        {
+                            subcatchmentToHighlight.Add(subcat);
+                        }
+                        else
+                        {
+                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
+                            UIManager.Instance.GRButtonPressed();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        UIManager.Instance.SubcatchmentNotBuiltMessage();
+                        UIManager.Instance.GRButtonPressed();
+                        return;
+                    }
                 }
             }
             else
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.GR))
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial])
                 {
-                    subcatchmentToHighlight.Add(subcat);
+                    if (subcat.IsBuilt)
+                    {
+                        if (subcat.CanHostBGI(InfrastructureType.GR))
+                        {
+                            subcatchmentToHighlight.Add(subcat);
+                        }
+                        else
+                        {
+                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
+                            UIManager.Instance.GRButtonPressed();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        UIManager.Instance.SubcatchmentNotBuiltMessage();
+                        UIManager.Instance.GRButtonPressed();
+                        return;
+                    }
                 }
             }
         }
@@ -229,6 +262,7 @@ public class InfrastructureBuilder : MonoBehaviour
         {
             UIManager.Instance.SubcatchmentNotBuiltMessage();
             UIManager.Instance.GRButtonPressed();
+            Debug.Log("LAST BUTTON PRESSED");
             return;
         }
     }
@@ -312,16 +346,52 @@ public class InfrastructureBuilder : MonoBehaviour
         {
             if (subcat.Usage.Equals(AreaUsage.Residential))
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.PP))
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential])
                 {
-                    subcatchmentToHighlight.Add(subcat);
+                    if (subcat.IsBuilt)
+                    {
+                        if (subcat.CanHostBGI(InfrastructureType.PP))
+                        {
+                            subcatchmentToHighlight.Add(subcat);
+                        }
+                        else
+                        {
+                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
+                            UIManager.Instance.PPButtonPressed();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        UIManager.Instance.SubcatchmentNotBuiltMessage();
+                        UIManager.Instance.PPButtonPressed();
+                        return;
+                    }
                 }
             }
             else
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.PP))
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial])
                 {
-                    subcatchmentToHighlight.Add(subcat);
+                    if (subcat.IsBuilt)
+                    {
+                        if (subcat.CanHostBGI(InfrastructureType.PP))
+                        {
+                            subcatchmentToHighlight.Add(subcat);
+                        }
+                        else
+                        {
+                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
+                            UIManager.Instance.PPButtonPressed();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        UIManager.Instance.SubcatchmentNotBuiltMessage();
+                        UIManager.Instance.PPButtonPressed();
+                        return;
+                    }
                 }
             }
         }
@@ -416,16 +486,52 @@ public class InfrastructureBuilder : MonoBehaviour
         {
             if (subcat.Usage.Equals(AreaUsage.Residential))
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.RB))
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Residential])
                 {
-                    subcatchmentToHighlight.Add(subcat);
+                    if (subcat.IsBuilt)
+                    {
+                        if (subcat.CanHostBGI(InfrastructureType.RB))
+                        {
+                            subcatchmentToHighlight.Add(subcat);
+                        }
+                        else
+                        {
+                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
+                            UIManager.Instance.RBButtonPressed();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        UIManager.Instance.SubcatchmentNotBuiltMessage();
+                        UIManager.Instance.RBButtonPressed();
+                        return;
+                    }
                 }
             }
             else
             {
-                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial] && subcat.IsBuilt && subcat.CanHostBGI(InfrastructureType.RB))
+                if (subcat.Size <= typeAndSizeOfSubcatToHighlight[AreaUsage.Commercial])
                 {
-                    subcatchmentToHighlight.Add(subcat);
+                    if (subcat.IsBuilt)
+                    {
+                        if (subcat.CanHostBGI(InfrastructureType.RB))
+                        {
+                            subcatchmentToHighlight.Add(subcat);
+                        }
+                        else
+                        {
+                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
+                            UIManager.Instance.RBButtonPressed();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        UIManager.Instance.SubcatchmentNotBuiltMessage();
+                        UIManager.Instance.RBButtonPressed();
+                        return;
+                    }
                 }
             }
         }
@@ -485,6 +591,7 @@ public class InfrastructureBuilder : MonoBehaviour
                         stats.CActionPoints += 1;
                     }
                     BGIResourceUpdate(subcatToBuildOn, stats);
+                    UIManager.Instance.RBButtonPressed();
                     break;
                 }
             case InfrastructureType.GR:
@@ -496,6 +603,7 @@ public class InfrastructureBuilder : MonoBehaviour
                         stats.CActionPoints += 1;
                     }
                     BGIResourceUpdate(subcatToBuildOn, stats);
+                    UIManager.Instance.GRButtonPressed();
                     break;
                 }
             case InfrastructureType.PP:
@@ -507,6 +615,7 @@ public class InfrastructureBuilder : MonoBehaviour
                         stats.CActionPoints += 1;
                     }
                     BGIResourceUpdate(subcatToBuildOn, stats);
+                    UIManager.Instance.PPButtonPressed();
                     break;
                 }
             default:
@@ -567,7 +676,8 @@ public class InfrastructureBuilder : MonoBehaviour
                     break;
 
             }
-        } else
+        }
+        else
         {
             switch (subcatToBuildOn.Size)
             {
