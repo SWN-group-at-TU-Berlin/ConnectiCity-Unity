@@ -31,6 +31,10 @@ public class Subcatchment : MonoBehaviour
     #region getter
     public bool IsBuilt { get { return _isBuilt; } }
     #endregion
+    bool _isHostingBGI;
+    #region getter
+    public bool IsHostingBGI { get { return _isHostingBGI; } }
+    #endregion
     bool _isHighlighted;
     #region getter
     public bool IsHighlighted { get { return _isHighlighted; } }
@@ -38,7 +42,10 @@ public class Subcatchment : MonoBehaviour
 
     Outline outline;
 
-    List<InfrastructureType> BGIHosted { get; set; }
+    List<InfrastructureType> _BGIHosted;
+    #region getter
+    public List<InfrastructureType> BGIHosted { get { return _BGIHosted; } }
+    #endregion
     bool IsSelected { get; set; } // still don't know if this will be useful
     bool IsHovered { get; set; }
     bool Active { get; set; } //getting deactivated after rainfall event
@@ -49,7 +56,8 @@ public class Subcatchment : MonoBehaviour
     {
         defaultMaterial = GetComponent<MeshRenderer>().material;
         highlightSelectionColor = GetComponent<Outline>().OutlineColor;
-        BGIHosted = new List<InfrastructureType>();
+        _BGIHosted = new List<InfrastructureType>();
+        _isHostingBGI = false;
     }
 
     private void OnEnable()
@@ -104,11 +112,6 @@ public class Subcatchment : MonoBehaviour
         }
     }
 
-    void RequestInfrastructureConstruction()
-    {
-
-    }
-
     private void ShowInfrastructure(InfrastructureType infrastructure)
     {
         foreach (Transform child in transform)
@@ -130,6 +133,7 @@ public class Subcatchment : MonoBehaviour
         else
         {
             BGIHosted.Add(infrastructure);
+            _isHostingBGI = true;
         }
     }
 

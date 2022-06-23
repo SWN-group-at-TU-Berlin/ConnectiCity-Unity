@@ -11,3 +11,11 @@ public enum InfrastructureType
     GR,
     RB
 }
+
+public enum BGICombo
+{
+    Null,
+    PP_RB,
+    GR_PP,
+    RB_GR
+}

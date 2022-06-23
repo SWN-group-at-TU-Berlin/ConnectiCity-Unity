@@ -5,7 +5,7 @@ using UnityEngine;
 public enum AreaSize
 {
     Null = 0,
-    Small = 1,
-    Medium = 2,
-    Large = 3
+    Small = 4500, //sqrmt
+    Medium = 6800, //sqrmt
+    Large = 11050 //sqrmt
 }
