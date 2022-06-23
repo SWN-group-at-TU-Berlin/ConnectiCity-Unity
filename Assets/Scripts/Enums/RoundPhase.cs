@@ -4,8 +4,6 @@ using UnityEngine;
 
 public enum RoundPhase
 {
-    Collection,
-    Build,
-    Repearing,
-    Rain
+    Playing,
+    RainEvent
 }

@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI citizenNumber;
     [SerializeField] TextMeshProUGUI citizenSatisfaction;
     [SerializeField] TextMeshProUGUI ActionPoints;
+    [SerializeField] TextMeshProUGUI CurrentRound;
 
     [Header("Buttons References")]
     [SerializeField] GameObject houseButtonDefault;
@@ -241,6 +242,19 @@ public class UIManager : MonoBehaviour
         StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
     }
 
+    public void NotEnoughResourceToBuildInfrastructureMessage(AreaUsage subcatUsage)
+    {
+        foreach (Transform child in MessageBoard.transform)
+        {
+            if (child.name.Equals("Message"))
+            {
+                child.GetComponent<TextMeshProUGUI>().text = "You don't have enough resources to build a new "+subcatUsage.ToString() + " subcatchment :(";
+            }
+        }
+        OffsetMessageBoardPosition();
+        StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
+    }
+
     public void NoSubcatchmentCanHostBGIMessage()
     {
         foreach (Transform child in MessageBoard.transform)
@@ -278,6 +292,7 @@ public class UIManager : MonoBehaviour
     public void UpdateCitizenNumberTxt(int newCN) { citizenNumber.text = newCN.ToString(); }
     public void UpdateCitizenSatisfactionTxt(int newCS) { citizenSatisfaction.text = newCS.ToString(); }
     public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
+    public void UpdateRoundTxt(int currentRound) { CurrentRound.text = "Round" + currentRound.ToString(); }
 
     IEnumerator FadeInfoBoardOut(GameObject boardToFade, float staticTime, float fadeTime)
     {

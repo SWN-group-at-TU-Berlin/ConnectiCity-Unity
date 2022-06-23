@@ -22,6 +22,7 @@ public class Subcatchment : MonoBehaviour
 
     [Header("Highlighted Materials")]
     [SerializeField] Material _highlightedMaterial;
+    [SerializeField] Material _deactivatedMaterial;
 
     Material defaultMaterial;
     Color highlightSelectionColor;
@@ -48,8 +49,10 @@ public class Subcatchment : MonoBehaviour
     #endregion
     bool IsSelected { get; set; } // still don't know if this will be useful
     bool IsHovered { get; set; }
-    bool Active { get; set; } //getting deactivated after rainfall event
-
+    bool _active;//getting deactivated after rainfall event
+    #region getter
+    public bool Active { get { return _active; } }
+    #endregion
     InputProvider input;
 
     private void Awake()
@@ -58,6 +61,7 @@ public class Subcatchment : MonoBehaviour
         highlightSelectionColor = GetComponent<Outline>().OutlineColor;
         _BGIHosted = new List<InfrastructureType>();
         _isHostingBGI = false;
+        _active = true;
     }
 
     private void OnEnable()
@@ -188,8 +192,49 @@ public class Subcatchment : MonoBehaviour
         GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 
-    public void HostNewBGI()
+    public void SetSubcatchmentActive(bool activeState)
     {
-
+        if (activeState)
+        {
+            _active = true;
+            GetComponent<MeshRenderer>().material = defaultMaterial;
+            //update income on activation
+            if (_usage.Equals(AreaUsage.Commercial))
+            {
+                if (Size.Equals(AreaSize.Large))
+                {
+                    ResourceManager.Instance.UpdateIncome(CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge);
+                }
+                if (Size.Equals(AreaSize.Large))
+                {
+                    ResourceManager.Instance.UpdateIncome(CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeMedium);
+                }
+                if (Size.Equals(AreaSize.Large))
+                {
+                    ResourceManager.Instance.UpdateIncome(CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeSmall);
+                }
+            }
+        }
+        else
+        {
+            _active = false;
+            GetComponent<MeshRenderer>().material = _deactivatedMaterial;
+            //update income on deactivation
+            if (_usage.Equals(AreaUsage.Commercial))
+            {
+                if (Size.Equals(AreaSize.Large))
+                {
+                    ResourceManager.Instance.UpdateIncome(-CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge);
+                }
+                if (Size.Equals(AreaSize.Large))
+                {
+                    ResourceManager.Instance.UpdateIncome(-CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeMedium);
+                }
+                if (Size.Equals(AreaSize.Large))
+                {
+                    ResourceManager.Instance.UpdateIncome(-CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeSmall);
+                }
+            }
+        }
     }
 }

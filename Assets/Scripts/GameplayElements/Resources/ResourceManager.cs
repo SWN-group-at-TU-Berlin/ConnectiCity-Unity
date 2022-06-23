@@ -17,6 +17,8 @@ public class ResourceManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        defaultAP = _actionPoints;
     }
     #endregion
 
@@ -45,9 +47,11 @@ public class ResourceManager : MonoBehaviour
     public int ActionPoints { get { return _actionPoints; } }
     #endregion
 
+    int defaultAP;
+
     public void UpdateCitizenNumber(int valToAdd)
     {
-        _citizenNumber += valToAdd;
+        _citizenNumber += valToAdd*1000;
         UIManager.Instance.UpdateCitizenNumberTxt(CitizenNumber);
     }
     public void UpdateCitizenSatisfaction(int valToAdd)
@@ -60,6 +64,10 @@ public class ResourceManager : MonoBehaviour
         _income += valToAdd;
         UIManager.Instance.UpdateIncomeTxt(Income);
     }
+    public void UpdateBudgetAtRoundStart()
+    {
+        UpdateBudget(Income * 1000000);
+    }
     public void UpdateBudget(int valToAdd)
     {
         _budget += valToAdd;
@@ -69,6 +77,13 @@ public class ResourceManager : MonoBehaviour
     {
         _actionPoints += valToAdd;
         UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
+    }
+
+    public void ResetActionPoints()
+    {
+        _actionPoints = defaultAP;
+        UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
+
     }
 
 }

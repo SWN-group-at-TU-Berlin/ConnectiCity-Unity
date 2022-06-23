@@ -98,4 +98,15 @@ public class MapManager : MonoBehaviour
         }
         light.intensity = lightIntensity;
     }
+
+    public void ReactivateAllSubcatchments()
+    {
+        foreach(Subcatchment subcat in _subcatchments)
+        {
+            if (!subcat.Active)
+            {
+                subcat.SetSubcatchmentActive(true);
+            }
+        }
+    }
 }

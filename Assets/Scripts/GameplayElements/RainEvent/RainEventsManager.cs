@@ -5,6 +5,23 @@ using UnityEngine;
 
 public class RainEventsManager : MonoBehaviour
 {
+    private static RainEventsManager _instance;
+    #region getter
+    public static RainEventsManager Instance { get { return _instance; } }
+    #endregion
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
     [SerializeField] int maxRainEvent1Threshold;
     [SerializeField] int maxRainEvent2Threshold;
     [SerializeField] int maxRainEvent3Threshold;
@@ -26,33 +43,32 @@ public class RainEventsManager : MonoBehaviour
     public void RainEvent()
     {
         //pick random rain event intensity
-        int rainEventIntesity = UnityEngine.Random.Range(1, 3+1);
+        int rainEventIntesity = UnityEngine.Random.Range(1, 3 + 1);
 
         //pick 2 random subcats
-        int subcatNum1 = UnityEngine.Random.Range(1, 12+1);
-        int subcatNum2 = UnityEngine.Random.Range(1, 12+1);
+        int subcatNum1 = UnityEngine.Random.Range(1, 12 + 1);
+        int subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
         while (subcatNum1 == subcatNum2)
         {
-            subcatNum2 = UnityEngine.Random.Range(1, 12+1);
+            subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
         }
         Subcatchment subcat1 = MapManager.Instance.GetSubcatchment(subcatNum1);
         Subcatchment subcat2 = MapManager.Instance.GetSubcatchment(subcatNum2);
         //get budget loss
         int budgetLoss = CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat1, rainEventIntesity) + CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat2, rainEventIntesity);
         //get deactivation
-        bool deactivation1 = CostsManager.Instance.SubcatchmentDeactivation(subcat1, rainEventIntesity);
-        bool deactivation2 = CostsManager.Instance.SubcatchmentDeactivation(subcat2, rainEventIntesity);
+        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat1, rainEventIntesity));
+        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat2, rainEventIntesity));
         //get citizen satisfaction loss
         int citizenSatisfactionDecresase1 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat1), rainEventIntesity);
         int citizenSatisfactionDecresase2 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat2), rainEventIntesity);
 
-        /*TEST THIS */
-        Debug.Log("Rain event intesity: " + rainEventIntesity + "\n"
-                   + "Subcatchment affected: " + "\n"
-                   + "- "+ subcat1.SubcatchmentNumber + " deactivation: " + deactivation1 + " citizen satisfaction loss: " + citizenSatisfactionDecresase1 + "\n"
-                   + "- " + subcat2.SubcatchmentNumber + " deactivation: " + deactivation2 + " citizen satisfaction loss: " + citizenSatisfactionDecresase2 + "\n"
-                   + "Total budget loss: " + budgetLoss + "\n");
+        //update resources
+        ResourceManager.Instance.UpdateBudget(-budgetLoss);
+        ResourceManager.Instance.UpdateCitizenSatisfaction(-(citizenSatisfactionDecresase1 + citizenSatisfactionDecresase2));
 
+        //ask to restart round
+        RoundManager.Instance.StartRound();
     }
 
     public float GetRunoffReductionPercentage(Subcatchment subcat)

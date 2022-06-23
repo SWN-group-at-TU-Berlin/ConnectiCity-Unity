@@ -43,6 +43,11 @@ public class InfrastructureBuilder : MonoBehaviour
                     {
                         maxSizeToHighlight = AreaSize.Small;
                     }
+                    else
+                    {
+                        UIManager.Instance.MissingBudgetMessage();
+                        UIManager.Instance.HouseButtonPressed();
+                    }
                 }
                 else
                 {
@@ -58,12 +63,20 @@ public class InfrastructureBuilder : MonoBehaviour
             List<Subcatchment> subcatchmentToHighlight = new List<Subcatchment>();
             foreach (Subcatchment house in houseSubcatchments)
             {
-                if (house.Size <= maxSizeToHighlight && !house.IsBuilt)
+                if (house.Size <= maxSizeToHighlight && !house.IsBuilt && house.Active)
                 {
                     subcatchmentToHighlight.Add(house);
                 }
             }
-            MapManager.Instance.HighlightBuildableSubcatchments(subcatchmentToHighlight.ToArray());
+            if (subcatchmentToHighlight.Count > 0)
+            {
+                MapManager.Instance.HighlightBuildableSubcatchments(subcatchmentToHighlight.ToArray());
+            }
+            else
+            {
+                UIManager.Instance.NotEnoughResourceToBuildInfrastructureMessage(AreaUsage.Residential);
+                UIManager.Instance.HouseButtonPressed();
+            }
         }
         else
         {
@@ -94,6 +107,11 @@ public class InfrastructureBuilder : MonoBehaviour
                     {
                         maxSizeToHighlight = AreaSize.Small;
                     }
+                    else
+                    {
+                        UIManager.Instance.MissingBudgetMessage();
+                        UIManager.Instance.BusinessButtonPressed();
+                    }
                 }
                 else
                 {
@@ -109,13 +127,21 @@ public class InfrastructureBuilder : MonoBehaviour
             List<Subcatchment> subcatchmentToHighlight = new List<Subcatchment>();
             foreach (Subcatchment business in businessSubcatchments)
             {
-                if (business.Size <= maxSizeToHighlight && !business.IsBuilt)
+                if (business.Size <= maxSizeToHighlight && !business.IsBuilt && business.Active)
                 {
                     subcatchmentToHighlight.Add(business);
                 }
             }
             //Highlight subcatchments
-            MapManager.Instance.HighlightBuildableSubcatchments(subcatchmentToHighlight.ToArray());
+            if (subcatchmentToHighlight.Count > 0)
+            {
+                MapManager.Instance.HighlightBuildableSubcatchments(subcatchmentToHighlight.ToArray());
+            }
+            else
+            {
+                UIManager.Instance.NotEnoughResourceToBuildInfrastructureMessage(AreaUsage.Commercial);
+                UIManager.Instance.BusinessButtonPressed();
+            }
         }
         else
         {
@@ -209,15 +235,9 @@ public class InfrastructureBuilder : MonoBehaviour
                 {
                     if (subcat.IsBuilt)
                     {
-                        if (subcat.CanHostBGI(InfrastructureType.GR))
+                        if (subcat.CanHostBGI(InfrastructureType.GR) && subcat.Active)
                         {
                             subcatchmentToHighlight.Add(subcat);
-                        }
-                        else
-                        {
-                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
-                            UIManager.Instance.GRButtonPressed();
-                            return;
                         }
                     }
                     else
@@ -234,15 +254,9 @@ public class InfrastructureBuilder : MonoBehaviour
                 {
                     if (subcat.IsBuilt)
                     {
-                        if (subcat.CanHostBGI(InfrastructureType.GR))
+                        if (subcat.CanHostBGI(InfrastructureType.GR) && subcat.Active)
                         {
                             subcatchmentToHighlight.Add(subcat);
-                        }
-                        else
-                        {
-                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
-                            UIManager.Instance.GRButtonPressed();
-                            return;
                         }
                     }
                     else
@@ -350,15 +364,9 @@ public class InfrastructureBuilder : MonoBehaviour
                 {
                     if (subcat.IsBuilt)
                     {
-                        if (subcat.CanHostBGI(InfrastructureType.PP))
+                        if (subcat.CanHostBGI(InfrastructureType.PP) && subcat.Active)
                         {
                             subcatchmentToHighlight.Add(subcat);
-                        }
-                        else
-                        {
-                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
-                            UIManager.Instance.PPButtonPressed();
-                            return;
                         }
                     }
                     else
@@ -375,15 +383,9 @@ public class InfrastructureBuilder : MonoBehaviour
                 {
                     if (subcat.IsBuilt)
                     {
-                        if (subcat.CanHostBGI(InfrastructureType.PP))
+                        if (subcat.CanHostBGI(InfrastructureType.PP) && subcat.Active)
                         {
                             subcatchmentToHighlight.Add(subcat);
-                        }
-                        else
-                        {
-                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
-                            UIManager.Instance.PPButtonPressed();
-                            return;
                         }
                     }
                     else
@@ -490,15 +492,9 @@ public class InfrastructureBuilder : MonoBehaviour
                 {
                     if (subcat.IsBuilt)
                     {
-                        if (subcat.CanHostBGI(InfrastructureType.RB))
+                        if (subcat.CanHostBGI(InfrastructureType.RB) && subcat.Active)
                         {
                             subcatchmentToHighlight.Add(subcat);
-                        }
-                        else
-                        {
-                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
-                            UIManager.Instance.RBButtonPressed();
-                            return;
                         }
                     }
                     else
@@ -515,15 +511,9 @@ public class InfrastructureBuilder : MonoBehaviour
                 {
                     if (subcat.IsBuilt)
                     {
-                        if (subcat.CanHostBGI(InfrastructureType.RB))
+                        if (subcat.CanHostBGI(InfrastructureType.RB) && subcat.Active)
                         {
                             subcatchmentToHighlight.Add(subcat);
-                        }
-                        else
-                        {
-                            UIManager.Instance.NoSubcatchmentCanHostBGIMessage();
-                            UIManager.Instance.RBButtonPressed();
-                            return;
                         }
                     }
                     else
@@ -577,7 +567,7 @@ public class InfrastructureBuilder : MonoBehaviour
                     if (ResourceManager.Instance.ActionPoints >= stats.CActionPoints)
                     {
                         GeneralInfrastructureResourceUpdate(subcatToBuildOn, stats);
-                        ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
+                        ResourceManager.Instance.UpdateIncome(stats.BCitizenSatisfaction);
                         UIManager.Instance.BusinessButtonPressed();
                     }
                     break;
@@ -640,14 +630,17 @@ public class InfrastructureBuilder : MonoBehaviour
         {
             case AreaSize.Small:
                 ResourceManager.Instance.UpdateBudget(-stats.CBudgetSmall);
+                ResourceManager.Instance.UpdateIncome(stats.BIncomeSmall);
                 ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberSmall);
                 break;
             case AreaSize.Medium:
                 ResourceManager.Instance.UpdateBudget(-stats.CBudgetMedium);
+                ResourceManager.Instance.UpdateIncome(stats.BIncomeMedium);
                 ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberMedium);
                 break;
             case AreaSize.Large:
                 ResourceManager.Instance.UpdateBudget(-stats.CBudgetLarge);
+                ResourceManager.Instance.UpdateIncome(stats.BIncomeLarge);
                 ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberLarge);
                 break;
 
