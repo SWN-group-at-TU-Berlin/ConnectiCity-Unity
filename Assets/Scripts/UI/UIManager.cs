@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -22,6 +23,18 @@ public class UIManager : MonoBehaviour
 
         InitializeButtonList();
         InitializeMessageBoard();
+        InitializeInfoPanels();
+    }
+
+    private void InitializeInfoPanels()
+    {
+        infoPanelsNotInUse = new Queue<Transform>();
+        infoPanelsInUse = new Queue<Transform>();
+        foreach (Transform infoPanel in InfoPanels)
+        {
+            infoPanel.gameObject.SetActive(false);
+            infoPanelsNotInUse.Enqueue(infoPanel);
+        }
     }
 
     #endregion
@@ -50,6 +63,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject MessageBoard;
     [SerializeField] private float staticTime;
     [SerializeField] private float fadeOutTime;
+    [Tooltip("parent obj of all info panels")]
+    [SerializeField] Transform InfoPanels;
 
     //Button variables
     List<GameObject> DefaultButtons;
@@ -63,6 +78,8 @@ public class UIManager : MonoBehaviour
     Color fullAlphaBackground;
     Color fullAlphaTitle;
     Color fullAlphaMessage;
+    Queue<Transform> infoPanelsNotInUse; // deactivated
+    Queue<Transform> infoPanelsInUse; // active
 
     //InputProvider reference
     InputProvider input;
@@ -138,6 +155,7 @@ public class UIManager : MonoBehaviour
         if (businessButtonDefault.activeInHierarchy)
         {
             ActivateDefaultButtons(businessButtonDefault);
+            HideInfoPanels();
         }
         else
         {
@@ -153,6 +171,7 @@ public class UIManager : MonoBehaviour
         if (houseButtonDefault.activeInHierarchy)
         {
             ActivateDefaultButtons(houseButtonDefault);
+            HideInfoPanels();
         }
         else
         {
@@ -168,6 +187,7 @@ public class UIManager : MonoBehaviour
         if (GRButtonDefault.activeInHierarchy)
         {
             ActivateDefaultButtons(GRButtonDefault);
+            HideInfoPanels();
         }
         else
         {
@@ -183,6 +203,7 @@ public class UIManager : MonoBehaviour
         if (PPButtonDefault.activeInHierarchy)
         {
             ActivateDefaultButtons(PPButtonDefault);
+            HideInfoPanels();
         }
         else
         {
@@ -198,6 +219,7 @@ public class UIManager : MonoBehaviour
         if (RBButtonDefault.activeInHierarchy)
         {
             ActivateDefaultButtons(RBButtonDefault);
+            HideInfoPanels();
         }
         else
         {
@@ -207,21 +229,23 @@ public class UIManager : MonoBehaviour
 
     public void MissingActionPointMessage()
     {
-        foreach(Transform child in MessageBoard.transform)
+        foreach (Transform child in MessageBoard.transform)
         {
-            if (child.name.Equals("Message")) {
+            if (child.name.Equals("Message"))
+            {
                 child.GetComponent<TextMeshProUGUI>().text = "You don't have enough Action Points :(";
             }
         }
         OffsetMessageBoardPosition();
         StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
     }
-    
+
     public void MissingBudgetMessage()
     {
-        foreach(Transform child in MessageBoard.transform)
+        foreach (Transform child in MessageBoard.transform)
         {
-            if (child.name.Equals("Message")) {
+            if (child.name.Equals("Message"))
+            {
                 child.GetComponent<TextMeshProUGUI>().text = "You don't have enough Budget :(";
             }
         }
@@ -248,7 +272,7 @@ public class UIManager : MonoBehaviour
         {
             if (child.name.Equals("Message"))
             {
-                child.GetComponent<TextMeshProUGUI>().text = "You don't have enough resources to build a new "+subcatUsage.ToString() + " subcatchment :(";
+                child.GetComponent<TextMeshProUGUI>().text = "You don't have enough resources to build a new " + subcatUsage.ToString() + " subcatchment :(";
             }
         }
         OffsetMessageBoardPosition();
@@ -287,12 +311,57 @@ public class UIManager : MonoBehaviour
         MessageBoard.transform.position = input.MousePosition() + offset;
     }
 
-    public void UpdateBudgetTxt(int newBudget){ budget.text = newBudget.ToString(); }
-    public void UpdateIncomeTxt(int newIncome){ income.text = newIncome.ToString(); }
+    public void UpdateBudgetTxt(int newBudget) { budget.text = newBudget.ToString(); }
+    public void UpdateIncomeTxt(int newIncome) { income.text = newIncome.ToString(); }
     public void UpdateCitizenNumberTxt(int newCN) { citizenNumber.text = newCN.ToString(); }
     public void UpdateCitizenSatisfactionTxt(int newCS) { citizenSatisfaction.text = newCS.ToString(); }
     public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
     public void UpdateRoundTxt(int currentRound) { CurrentRound.text = "Round" + currentRound.ToString(); }
+
+    public void ShowInfoPanel(Vector3 position, int actionPoints, int budget)
+    {
+        if (infoPanelsNotInUse.Count > 0)
+        {
+
+            Transform infoPanel = infoPanelsNotInUse.Dequeue();
+            infoPanel.gameObject.SetActive(true);
+            TextMeshProUGUI bdg;
+            TextMeshProUGUI ap;
+            if (infoPanel.GetChild(0).name.Equals("AP"))
+            {
+                ap = infoPanel.GetChild(0).GetComponent<TextMeshProUGUI>();
+                bdg = infoPanel.GetChild(1).GetComponent<TextMeshProUGUI>();
+            }
+            else
+            {
+                ap = infoPanel.GetChild(1).GetComponent<TextMeshProUGUI>();
+                bdg = infoPanel.GetChild(0).GetComponent<TextMeshProUGUI>();
+            }
+            ap.text = actionPoints.ToString();
+            bdg.text = budget.ToString();
+
+            infoPanel.transform.position = Camera.main.WorldToScreenPoint(position);
+            infoPanel.transform.position = new Vector3(infoPanel.position.x, infoPanel.position.y, 0f);
+            infoPanelsInUse.Enqueue(infoPanel);
+        } else
+        {
+            Debug.LogWarning("InfoPanelNotInUse empty");
+        }
+
+    }
+
+    public void HideInfoPanels()
+    {
+        infoPanelsInUse.Clear();
+        foreach(Transform infoPanel in InfoPanels)
+        {
+            if (infoPanel.gameObject.activeInHierarchy)
+            {
+                infoPanel.gameObject.SetActive(false);
+                infoPanelsNotInUse.Enqueue(infoPanel);
+            }
+        }
+    }
 
     IEnumerator FadeInfoBoardOut(GameObject boardToFade, float staticTime, float fadeTime)
     {
@@ -322,7 +391,8 @@ public class UIManager : MonoBehaviour
         Color tmpTitleColor = title.color;
         Color tmpMessageColor = message.color;
 
-        while(title.color.a > 0){
+        while (title.color.a > 0)
+        {
 
             //subtract alpha amount
             tmpBackgroudColor.a -= alphaToSubtractFromBackground;
@@ -334,7 +404,7 @@ public class UIManager : MonoBehaviour
             title.color = tmpTitleColor;
             message.color = tmpMessageColor;
 
-            yield return new WaitForSeconds(fadeTime/100);
+            yield return new WaitForSeconds(fadeTime / 100);
         }
 
         //deactivate message board to avoid it covering clickable stuff

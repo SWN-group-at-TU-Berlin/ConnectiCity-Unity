@@ -163,6 +163,81 @@ public class Subcatchment : MonoBehaviour
         return canHostBGI;
     }
 
+    public void ShowInfos(InfrastructureType infrastructure)
+    {
+        int budgetCost = 0;
+        int apCost = 0;
+        if (infrastructure.Equals(InfrastructureType.House) || infrastructure.Equals(InfrastructureType.Business))
+        {
+            BasicInfrastructureStats stats = CostsManager.Instance.GetInfrastructureStats(infrastructure);
+            if (_size.Equals(AreaSize.Small))
+            {
+                budgetCost = stats.CBudgetSmall;
+            }
+            else if (_size.Equals(AreaSize.Medium))
+            {
+
+                budgetCost = stats.CBudgetMedium;
+            }
+            else if (_size.Equals(AreaSize.Large))
+            {
+
+                budgetCost = stats.CBudgetLarge;
+            }
+            apCost = stats.CActionPoints;
+        }
+        else
+        {
+            BasicBGIStats stats = CostsManager.Instance.GetBGIStats(infrastructure);
+            if (Usage.Equals(AreaUsage.Residential))
+            {
+                if (_size.Equals(AreaSize.Small))
+                {
+                    budgetCost = stats.CBudgetResidentialSmall;
+                }
+                else if (_size.Equals(AreaSize.Medium))
+                {
+
+                    budgetCost = stats.CBudgetResidentialMedium;
+                }
+                else if (_size.Equals(AreaSize.Large))
+                {
+
+                    budgetCost = stats.CBudgetResidentialLarge;
+                }
+                apCost = stats.CActionPoints;
+            }
+            else
+            {
+                if (_size.Equals(AreaSize.Small))
+                {
+                    budgetCost = stats.CBudgetCommercialSmall;
+                }
+                else if (_size.Equals(AreaSize.Medium))
+                {
+
+                    budgetCost = stats.CBudgetCommercialMedium;
+                }
+                else if (_size.Equals(AreaSize.Large))
+                {
+
+                    budgetCost = stats.CBudgetCommercialLarge;
+                }
+                apCost = stats.CActionPoints + 1;
+            }
+        }
+        Vector3 position = Vector3.zero;
+        foreach(Transform child in transform)
+        {
+            if (child.name.Equals("InfoPanelPoint"))
+            {
+                position = child.position;
+            }
+        }
+
+        UIManager.Instance.ShowInfoPanel(position, apCost, budgetCost);
+    }
+
     void MouseHoveringOnSubcatchment()
     {
         IsHovered = true;

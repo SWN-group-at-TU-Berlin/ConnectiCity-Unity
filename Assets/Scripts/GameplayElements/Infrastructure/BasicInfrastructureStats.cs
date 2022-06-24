@@ -17,7 +17,7 @@ public class BasicCardStats
 [System.Serializable]
 public class BasicInfrastructureStats : BasicCardStats
 {
-    [SerializeField] int _cBudgetSmall;
+    [SerializeField] int _cBudgetSmall;// cost
     #region getter
     public int CBudgetSmall { get { return _cBudgetSmall; } }
     #endregion
@@ -29,7 +29,7 @@ public class BasicInfrastructureStats : BasicCardStats
     #region getter
     public int CBudgetLarge { get { return _cBudgetLarge; } }
     #endregion
-    [SerializeField] int _bCitizenNumberSmall;
+    [SerializeField] int _bCitizenNumberSmall;//benefit
     #region getter
     public int BCitizenNumberSmall { get { return _bCitizenNumberSmall; } }
     #endregion

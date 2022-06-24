@@ -86,7 +86,7 @@ public class CostsManager : MonoBehaviour
                         }
                         catch (Exception objReference)
                         {
-                            Debug.LogWarning("Residential Flood Cost count = " + ResidentialFloodCosts.Count);
+                            Debug.LogWarning("Residential Flood Cost count = " + ResidentialFloodCosts.Count + " exception: " + objReference);
                         }
                     }
                     else
@@ -97,7 +97,7 @@ public class CostsManager : MonoBehaviour
                         }
                         catch (Exception objReference)
                         {
-                            Debug.LogWarning("Commercial Flood Cost count = " + CommercialFloodCosts.Count);
+                            Debug.LogWarning("Commercial Flood Cost count = " + CommercialFloodCosts.Count + " exception: " + objReference);
                         }
                     }
                     break;
@@ -112,7 +112,7 @@ public class CostsManager : MonoBehaviour
                         }
                         catch (Exception objReference)
                         {
-                            Debug.LogWarning("Residential Flood Cost count = " + ResidentialFloodCosts.Count);
+                            Debug.LogWarning("Residential Flood Cost count = " + ResidentialFloodCosts.Count + " exception: " + objReference);
                         }
                     }
                     else
@@ -123,7 +123,7 @@ public class CostsManager : MonoBehaviour
                         }
                         catch (Exception objReference)
                         {
-                            Debug.LogWarning("Commercial Flood Cost count = " + ResidentialFloodCosts.Count);
+                            Debug.LogWarning("Commercial Flood Cost count = " + ResidentialFloodCosts.Count + " exception: " + objReference);
                         }
                     }
                     break;
@@ -138,7 +138,7 @@ public class CostsManager : MonoBehaviour
                         }
                         catch (Exception objReference)
                         {
-                            Debug.LogWarning("Residential Flood Cost count = " + ResidentialFloodCosts.Count);
+                            Debug.LogWarning("Residential Flood Cost count = " + ResidentialFloodCosts.Count + " exception: " + objReference);
                         }
                     }
                     else
@@ -149,7 +149,7 @@ public class CostsManager : MonoBehaviour
                         }
                         catch (Exception objReference)
                         {
-                            Debug.LogWarning("Commercial Flood Cost count = " + ResidentialFloodCosts.Count);
+                            Debug.LogWarning("Commercial Flood Cost count = " + ResidentialFloodCosts.Count + " exception: " + objReference);
                         }
                     }
                     break;
