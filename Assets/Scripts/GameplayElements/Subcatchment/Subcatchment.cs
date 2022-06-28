@@ -67,6 +67,15 @@ public class Subcatchment : MonoBehaviour
         _active = true;
     }
 
+    private void Start()
+    {
+        if (SubcatchmentNumber == 7)
+        {
+
+            InfrastructureBuilder.Instance.BuildInfrastructure(this);
+        }
+    }
+
     private void OnEnable()
     {
         outline = GetComponent<Outline>();
@@ -280,11 +289,11 @@ public class Subcatchment : MonoBehaviour
     {
         if (activeState)
         {
-            _active = true;
-            GetComponent<MeshRenderer>().material = defaultMaterial;
             //update income on activation
-            if (_usage.Equals(AreaUsage.Commercial))
+            if (_usage.Equals(AreaUsage.Commercial) && !_active)
             {
+                GetComponent<MeshRenderer>().material = defaultMaterial;
+                _active = true;
                 if (Size.Equals(AreaSize.Large))
                 {
                     int incomeUpdate = CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge;
@@ -307,11 +316,11 @@ public class Subcatchment : MonoBehaviour
         }
         else
         {
-            _active = false;
-            GetComponent<MeshRenderer>().material = _deactivatedMaterial;
             //update income on deactivation
-            if (_usage.Equals(AreaUsage.Commercial))
+            if (_usage.Equals(AreaUsage.Commercial) && _active)
             {
+                GetComponent<MeshRenderer>().material = _deactivatedMaterial;
+                _active = false;
                 if (Size.Equals(AreaSize.Large))
                 {
                     int incomeUpdate = -CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge;

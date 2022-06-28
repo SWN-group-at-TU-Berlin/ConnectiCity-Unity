@@ -62,10 +62,36 @@ public class MapManager : MonoBehaviour
         return houses;
     }
 
+    public int GetNumberOfHousesSubcatchmentsBuilt()
+    {
+        int builtHouseSubcats = 0;
+        foreach(Subcatchment subcat in GetHousesSubcatchments())
+        {
+            if (subcat.IsBuilt)
+            {
+                builtHouseSubcats++;
+            }
+        }
+        return builtHouseSubcats;
+    }
+
     public Subcatchment[] GetBusinessSubcatchments()
     {
         Subcatchment[] businesses = Array.FindAll(_subcatchments.ToArray(), s => s.Usage == AreaUsage.Commercial);
         return businesses;
+    }
+
+    public int GetNumberOfBusinessSubcatchmentsBuilt()
+    {
+        int builtHouseSubcats = 0;
+        foreach (Subcatchment subcat in GetBusinessSubcatchments())
+        {
+            if (subcat.IsBuilt)
+            {
+                builtHouseSubcats++;
+            }
+        }
+        return builtHouseSubcats;
     }
 
     public Subcatchment[] GetBuiltSubcatchments()

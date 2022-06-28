@@ -192,7 +192,7 @@ public class CostsManager : MonoBehaviour
                 }
                 else
                 {
-                    if (!subcat.BGIHosted[0].Equals(InfrastructureType.PP))
+                    if (rainfallIntensity == 3 && !subcat.BGIHosted[0].Equals(InfrastructureType.PP))
                     {
                         deactivation = true;
                     }

@@ -39,6 +39,8 @@ public class RainEventsManager : MonoBehaviour
     public List<RunoffReductionPercentageBGICombo> BGIComboRunoffReduction { get { return _BGIComboRunoffReduction; } }
     #endregion
 
+    float runoffReductionPercentageAccumulate = 0;
+
     private void Start()
     {
         rainParticles.GetComponent<ParticleSystem>().Stop();
@@ -85,6 +87,7 @@ public class RainEventsManager : MonoBehaviour
         int budgetLoss = budgetLossSubcat1 + budgetLossSubcat2;
         //get deactivation
         //get citizen satisfaction loss
+        //float runoffReductionPercentageSubcat1 = 
         int citizenSatisfactionDecresase1 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat1), rainEventIntesity);
         int citizenSatisfactionDecresase2 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat2), rainEventIntesity);
 

@@ -271,6 +271,19 @@ public class UIManager : MonoBehaviour
         StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
     }
 
+    public void BuildMoreResidentialSubcatchmentsMessage()
+    {
+        foreach (Transform child in MessageBoard.transform)
+        {
+            if (child.name.Equals("Message"))
+            {
+                child.GetComponent<TextMeshProUGUI>().text = "The number of Residential subcatchment must be higher than the number of Commercial subcatchment in order to build a new one :(";
+            }
+        }
+        OffsetMessageBoardPosition();
+        StartCoroutine(FadeInfoBoardOut(MessageBoard, staticTime, fadeOutTime));
+    }
+
     public void NotEnoughResourceToBuildInfrastructureMessage(AreaUsage subcatUsage)
     {
         foreach (Transform child in MessageBoard.transform)
