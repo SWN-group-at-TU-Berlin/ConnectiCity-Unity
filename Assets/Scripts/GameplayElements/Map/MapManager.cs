@@ -19,7 +19,7 @@ public class MapManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        if(light != null)
+        if (light != null)
         {
             lightIntensity = light.intensity;
         }
@@ -36,9 +36,9 @@ public class MapManager : MonoBehaviour
 
     private void DeactivateSubcatchmentsChildren()
     {
-        foreach(Subcatchment subcat in _subcatchments)
+        foreach (Subcatchment subcat in _subcatchments)
         {
-            foreach(Transform child in subcat.transform)
+            foreach (Transform child in subcat.transform)
             {
                 child.gameObject.SetActive(false);
             }
@@ -81,7 +81,7 @@ public class MapManager : MonoBehaviour
             subcat.HighlightSubcatchment();
         }
         //lower light intensiti for cooler visual effect
-        if(subcatchments.Length > 0)
+        if (subcatchments.Length > 0)
         {
             light.intensity = lightIntensity * lightFatctor;
         }
@@ -99,14 +99,44 @@ public class MapManager : MonoBehaviour
         light.intensity = lightIntensity;
     }
 
+    public IEnumerator FadeOffLights()
+    {
+        float lowLightIntesntiy = lightIntensity * lightFatctor;
+        while(light.intensity > lowLightIntesntiy)
+        {
+            light.intensity -= 0.05f;
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
+
+    public IEnumerator FadeInLights()
+    {
+        while (light.intensity < 1)
+        {
+            light.intensity += 0.05f;
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
+
     public void ReactivateAllSubcatchments()
     {
-        foreach(Subcatchment subcat in _subcatchments)
+        foreach (Subcatchment subcat in _subcatchments)
         {
             if (!subcat.Active)
             {
                 subcat.SetSubcatchmentActive(true);
             }
         }
+    }
+
+    public int GetNumberOfBGIsBuilt()
+    {
+        int bgisNum = 0;
+        foreach (Subcatchment subcat in _subcatchments)
+        {
+            bgisNum += subcat.BGIHosted.Count;
+        }
+
+        return bgisNum;
     }
 }

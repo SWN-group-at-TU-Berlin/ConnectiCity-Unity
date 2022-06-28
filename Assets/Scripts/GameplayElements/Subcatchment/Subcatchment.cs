@@ -53,6 +53,9 @@ public class Subcatchment : MonoBehaviour
     #region getter
     public bool Active { get { return _active; } }
     #endregion
+
+    float defaultHighlightedMatIntesity;
+
     InputProvider input;
 
     private void Awake()
@@ -226,16 +229,22 @@ public class Subcatchment : MonoBehaviour
                 apCost = stats.CActionPoints + 1;
             }
         }
+        Vector3 position = GetInfoPanelPosition();
+
+        UIManager.Instance.ShowInfoPanel(position, apCost, budgetCost);
+    }
+
+    public Vector3 GetInfoPanelPosition()
+    {
         Vector3 position = Vector3.zero;
-        foreach(Transform child in transform)
+        foreach (Transform child in transform)
         {
             if (child.name.Equals("InfoPanelPoint"))
             {
                 position = child.position;
             }
         }
-
-        UIManager.Instance.ShowInfoPanel(position, apCost, budgetCost);
+        return position;
     }
 
     void MouseHoveringOnSubcatchment()
@@ -278,15 +287,21 @@ public class Subcatchment : MonoBehaviour
             {
                 if (Size.Equals(AreaSize.Large))
                 {
-                    ResourceManager.Instance.UpdateIncome(CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge);
+                    int incomeUpdate = CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge;
+                    ResourceManager.Instance.UpdateIncome(incomeUpdate);
+                    UIManager.Instance.ShowFloatingTxt(incomeUpdate, "i", this);
                 }
-                if (Size.Equals(AreaSize.Large))
+                if (Size.Equals(AreaSize.Medium))
                 {
-                    ResourceManager.Instance.UpdateIncome(CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeMedium);
+                    int incomeUpdate = CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeMedium;
+                    ResourceManager.Instance.UpdateIncome(incomeUpdate);
+                    UIManager.Instance.ShowFloatingTxt(incomeUpdate, "i", this);
                 }
-                if (Size.Equals(AreaSize.Large))
+                if (Size.Equals(AreaSize.Small))
                 {
-                    ResourceManager.Instance.UpdateIncome(CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeSmall);
+                    int incomeUpdate = CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeSmall;
+                    ResourceManager.Instance.UpdateIncome(incomeUpdate);
+                    UIManager.Instance.ShowFloatingTxt(incomeUpdate, "i", this);
                 }
             }
         }
@@ -299,15 +314,21 @@ public class Subcatchment : MonoBehaviour
             {
                 if (Size.Equals(AreaSize.Large))
                 {
-                    ResourceManager.Instance.UpdateIncome(-CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge);
+                    int incomeUpdate = -CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeLarge;
+                    ResourceManager.Instance.UpdateIncome(incomeUpdate);
+                    UIManager.Instance.ShowFloatingTxt(incomeUpdate, "i", this);
                 }
-                if (Size.Equals(AreaSize.Large))
+                if (Size.Equals(AreaSize.Medium))
                 {
-                    ResourceManager.Instance.UpdateIncome(-CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeMedium);
+                    int incomeUpdate = -CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeMedium;
+                    ResourceManager.Instance.UpdateIncome(incomeUpdate);
+                    UIManager.Instance.ShowFloatingTxt(incomeUpdate, "i", this);
                 }
-                if (Size.Equals(AreaSize.Large))
+                if (Size.Equals(AreaSize.Small))
                 {
-                    ResourceManager.Instance.UpdateIncome(-CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeSmall);
+                    int incomeUpdate = -CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business).BIncomeSmall;
+                    ResourceManager.Instance.UpdateIncome(incomeUpdate);
+                    UIManager.Instance.ShowFloatingTxt(incomeUpdate, "i", this);
                 }
             }
         }

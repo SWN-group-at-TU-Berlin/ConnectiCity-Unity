@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using TMPro;
 
 public class RainEventsManager : MonoBehaviour
 {
@@ -22,6 +23,9 @@ public class RainEventsManager : MonoBehaviour
         }
     }
 
+    [SerializeField] GameObject rainEventInfoPanel;
+    [SerializeField] GameObject rainParticles;
+
     [SerializeField] int maxRainEvent1Threshold;
     [SerializeField] int maxRainEvent2Threshold;
     [SerializeField] int maxRainEvent3Threshold;
@@ -35,19 +39,40 @@ public class RainEventsManager : MonoBehaviour
     public List<RunoffReductionPercentageBGICombo> BGIComboRunoffReduction { get { return _BGIComboRunoffReduction; } }
     #endregion
 
+    private void Start()
+    {
+        rainParticles.GetComponent<ParticleSystem>().Stop();
+        rainEventInfoPanel.GetComponent<Animator>().enabled = false;
+    }
+
     /*TEST THIS FUNCTION:
      to test this function you need to
     1. set all the runoff reduction values manually in the inspector of this game object
     3. create a button that allow testing
     */
-    public void RainEvent()
+    public IEnumerator RainEvent()
     {
-        //pick random rain event intensity
         int rainEventIntesity = UnityEngine.Random.Range(1, 3 + 1);
+
+        //"turn off the light"
+        StartCoroutine(MapManager.Instance.FadeOffLights());
+
+        //show rain event info panel
+        rainEventInfoPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "A rain event of intesity " + rainEventIntesity + " is coming!";
+        rainEventInfoPanel.GetComponent<Animator>().enabled = true;
+        rainEventInfoPanel.GetComponent<Animator>().Play("Appear", -1, 0f);
+        yield return new WaitForSeconds(1);
+
+        //start rain particles
+        rainParticles.GetComponent<ParticleSystem>().Play();
+
+        //pick random rain event intensity
 
         //pick 2 random subcats
         int subcatNum1 = UnityEngine.Random.Range(1, 12 + 1);
         int subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
+        Debug.Log("Subcat affected: " + subcatNum1 + "; " + subcatNum2 + ";");
+
         while (subcatNum1 == subcatNum2)
         {
             subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
@@ -55,17 +80,48 @@ public class RainEventsManager : MonoBehaviour
         Subcatchment subcat1 = MapManager.Instance.GetSubcatchment(subcatNum1);
         Subcatchment subcat2 = MapManager.Instance.GetSubcatchment(subcatNum2);
         //get budget loss
-        int budgetLoss = CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat1, rainEventIntesity) + CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat2, rainEventIntesity);
+        int budgetLossSubcat1 = CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat1, rainEventIntesity);
+        int budgetLossSubcat2 = CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat2, rainEventIntesity);
+        int budgetLoss = budgetLossSubcat1 + budgetLossSubcat2;
         //get deactivation
-        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat1, rainEventIntesity));
-        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat2, rainEventIntesity));
         //get citizen satisfaction loss
         int citizenSatisfactionDecresase1 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat1), rainEventIntesity);
         int citizenSatisfactionDecresase2 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat2), rainEventIntesity);
 
-        //update resources
-        ResourceManager.Instance.UpdateBudget(-budgetLoss);
-        ResourceManager.Instance.UpdateCitizenSatisfaction(-(citizenSatisfactionDecresase1 + citizenSatisfactionDecresase2));
+        yield return new WaitForSeconds(4);
+        rainParticles.GetComponent<ParticleSystem>().Stop();
+
+
+        //Call UI text effect on budget decrease
+        UIManager.Instance.ShowFloatingTxt(budgetLossSubcat1, "b", subcat1);
+        ResourceManager.Instance.UpdateBudget(-budgetLossSubcat1);
+        UIManager.Instance.ShowFloatingTxt(budgetLossSubcat2, "b", subcat2);
+        ResourceManager.Instance.UpdateBudget(-budgetLossSubcat2);
+        yield return new WaitForSeconds(1);
+
+        //Call UI text effect on citizen satisfaction
+        if (citizenSatisfactionDecresase1 != 0 || citizenSatisfactionDecresase2 != 0)
+        {
+            if (citizenSatisfactionDecresase1 != 0)
+            {
+                UIManager.Instance.ShowFloatingTxt(citizenSatisfactionDecresase1, "c", subcat1);
+                ResourceManager.Instance.UpdateCitizenSatisfaction(citizenSatisfactionDecresase1);
+            }
+            if (citizenSatisfactionDecresase2 != 0)
+            {
+                UIManager.Instance.ShowFloatingTxt(citizenSatisfactionDecresase2, "c", subcat2);
+                ResourceManager.Instance.UpdateCitizenSatisfaction(citizenSatisfactionDecresase2);
+            }
+
+            yield return new WaitForSeconds(1);
+
+        }
+
+        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat1, rainEventIntesity));
+        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat2, rainEventIntesity));
+        yield return new WaitForSeconds(1);
+
+        StartCoroutine(MapManager.Instance.FadeInLights());
 
         //ask to restart round
         RoundManager.Instance.StartRound();

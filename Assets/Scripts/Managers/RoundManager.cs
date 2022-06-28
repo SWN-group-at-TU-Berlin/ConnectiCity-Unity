@@ -47,11 +47,21 @@ public class RoundManager : MonoBehaviour
                 _currentRound++;
                 _phase = RoundPhase.RainEvent;
                 MapManager.Instance.ReactivateAllSubcatchments();
-                RainEventsManager.Instance.RainEvent();
+                StartCoroutine(RainEventsManager.Instance.RainEvent());
             }
             else
             {
                 //calculate final score
+                //take current citizen satisfaction
+                int citizenSatisfaction = ResourceManager.Instance.CitizenSatisfaction;
+                //take current citizen number / 10000
+                int citizenNumberScore = ResourceManager.Instance.CitizenNumber / 10000;
+                //sum citizen number + citizen satisfaction = social score
+                int socialScore = citizenSatisfaction + citizenNumberScore;
+                //take current budget/5000000
+
+                //sum budget + income = economic score
+                //show how many bgis are built 
                 //show final score to player
                 //end the game or replay
             }

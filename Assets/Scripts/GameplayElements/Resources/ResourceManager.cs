@@ -32,6 +32,11 @@ public class ResourceManager : MonoBehaviour
     public int CitizenSatisfaction { get { return _citizenSatisfaction; } }
     #endregion
 
+    [SerializeField] int _maxCitizenSatisfaction;
+    #region getter
+    public int MaxCitizenSatisfaction { get { return _maxCitizenSatisfaction; } }
+    #endregion
+
     [SerializeField] int _budget;
     #region getter
     public int Budget { get { return _budget; } }
@@ -51,13 +56,17 @@ public class ResourceManager : MonoBehaviour
 
     public void UpdateCitizenNumber(int valToAdd)
     {
-        _citizenNumber += valToAdd*1000;
+        _citizenNumber += valToAdd * 1000;
         UIManager.Instance.UpdateCitizenNumberTxt(CitizenNumber);
     }
     public void UpdateCitizenSatisfaction(int valToAdd)
     {
-        _citizenSatisfaction += valToAdd;
-        UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
+        if (_citizenSatisfaction < _maxCitizenSatisfaction)
+        {
+            _citizenSatisfaction += valToAdd;
+            _citizenSatisfaction = (int)Mathf.Clamp(_citizenSatisfaction, 0f, _maxCitizenSatisfaction);
+            UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
+        }
     }
     public void UpdateIncome(int valToAdd)
     {

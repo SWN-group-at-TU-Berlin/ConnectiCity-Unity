@@ -66,6 +66,11 @@ public class UIManager : MonoBehaviour
     [Tooltip("parent obj of all info panels")]
     [SerializeField] Transform InfoPanels;
 
+    [Header("Floating text references")]
+    [SerializeField] GameObject floatingTextParent;
+    [SerializeField] GameObject floatingTextPrefab;
+    [SerializeField] float floatingSpeed;
+    [SerializeField] float txtFadeOutTime;
     //Button variables
     List<GameObject> DefaultButtons;
     bool _houseButtonPressed = false;
@@ -343,7 +348,8 @@ public class UIManager : MonoBehaviour
             infoPanel.transform.position = Camera.main.WorldToScreenPoint(position);
             infoPanel.transform.position = new Vector3(infoPanel.position.x, infoPanel.position.y, 0f);
             infoPanelsInUse.Enqueue(infoPanel);
-        } else
+        }
+        else
         {
             Debug.LogWarning("InfoPanelNotInUse empty");
         }
@@ -353,7 +359,7 @@ public class UIManager : MonoBehaviour
     public void HideInfoPanels()
     {
         infoPanelsInUse.Clear();
-        foreach(Transform infoPanel in InfoPanels)
+        foreach (Transform infoPanel in InfoPanels)
         {
             if (infoPanel.gameObject.activeInHierarchy)
             {
@@ -409,6 +415,36 @@ public class UIManager : MonoBehaviour
 
         //deactivate message board to avoid it covering clickable stuff
         MessageBoard.SetActive(false);
+
+    }
+
+
+    public void ShowFloatingTxt(float valueToShow, string resourceAffected, Subcatchment subcatAffected)
+    {
+        Vector3 tmpTxtPos = Camera.main.WorldToScreenPoint(subcatAffected.GetInfoPanelPosition());
+        Vector3 txtPos = new Vector3(tmpTxtPos.x, tmpTxtPos.y, 0f);
+        foreach(Transform tmp in floatingTextParent.transform)
+        {
+            if (tmp.name.Contains(subcatAffected.SubcatchmentNumber.ToString()))
+            {
+                txtPos = tmp.position;
+            }
+        }
+        GameObject floatingTxtInstance = Instantiate(floatingTextPrefab, txtPos, Quaternion.identity, InfoPanels.transform.parent);
+        //GameObject floatingTxtInstance = Instantiate(floatingTextPrefab, Vector3.zero, Quaternion.identity, InfoPanels.transform.parent);
+        //floatingTxtInstance.transform.position = txtPos;
+        floatingTxtInstance.SetActive(true);
+        TextMeshProUGUI textMesh = floatingTxtInstance.GetComponent<TextMeshProUGUI>();
+        if (valueToShow > 0)
+        {
+            textMesh.color = Color.green;
+        }
+        else
+        {
+            textMesh.color = Color.red;
+        }
+
+        floatingTxtInstance.GetComponent<FloatingText>().SetupFloatingText(valueToShow.ToString(), floatingSpeed, fadeOutTime, 0.01f, resourceAffected);
 
     }
 }
