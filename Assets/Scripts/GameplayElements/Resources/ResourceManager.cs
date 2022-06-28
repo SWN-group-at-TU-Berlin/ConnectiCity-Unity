@@ -61,7 +61,7 @@ public class ResourceManager : MonoBehaviour
     }
     public void UpdateCitizenSatisfaction(int valToAdd)
     {
-        if (_citizenSatisfaction < _maxCitizenSatisfaction)
+        if (_citizenSatisfaction < _maxCitizenSatisfaction || _citizenSatisfaction >= 0)
         {
             _citizenSatisfaction += valToAdd;
             _citizenSatisfaction = (int)Mathf.Clamp(_citizenSatisfaction, 0f, _maxCitizenSatisfaction);
@@ -70,8 +70,11 @@ public class ResourceManager : MonoBehaviour
     }
     public void UpdateIncome(int valToAdd)
     {
-        _income += valToAdd;
-        UIManager.Instance.UpdateIncomeTxt(Income);
+        if (_income >= 0)
+        {
+            _income += valToAdd;
+            UIManager.Instance.UpdateIncomeTxt(Income);
+        }
     }
     public void UpdateBudgetAtRoundStart()
     {

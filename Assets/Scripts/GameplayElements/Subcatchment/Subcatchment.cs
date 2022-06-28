@@ -290,7 +290,7 @@ public class Subcatchment : MonoBehaviour
         if (activeState)
         {
             //update income on activation
-            if (_usage.Equals(AreaUsage.Commercial) && !_active)
+            if (_usage.Equals(AreaUsage.Commercial) && !_active && _isBuilt)
             {
                 GetComponent<MeshRenderer>().material = defaultMaterial;
                 _active = true;
@@ -317,7 +317,7 @@ public class Subcatchment : MonoBehaviour
         else
         {
             //update income on deactivation
-            if (_usage.Equals(AreaUsage.Commercial) && _active)
+            if (_usage.Equals(AreaUsage.Commercial) && _active && _isBuilt)
             {
                 GetComponent<MeshRenderer>().material = _deactivatedMaterial;
                 _active = false;

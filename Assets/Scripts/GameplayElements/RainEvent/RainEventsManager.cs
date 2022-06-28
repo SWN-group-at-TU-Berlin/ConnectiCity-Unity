@@ -39,7 +39,7 @@ public class RainEventsManager : MonoBehaviour
     public List<RunoffReductionPercentageBGICombo> BGIComboRunoffReduction { get { return _BGIComboRunoffReduction; } }
     #endregion
 
-    float runoffReductionPercentageAccumulate = 0;
+    float runoffReductionPercentageAccumulated = 0;
 
     private void Start()
     {
@@ -54,7 +54,17 @@ public class RainEventsManager : MonoBehaviour
     */
     public IEnumerator RainEvent()
     {
-        int rainEventIntesity = UnityEngine.Random.Range(1, 3 + 1);
+        float rainEventChance = UnityEngine.Random.Range(0f, 1f);
+        int rainEventIntesity = 1; //50% chance
+        if(rainEventChance < 0.5f)
+        {
+            rainEventIntesity = 2; // 30% chance
+
+                if(rainEventChance < 0.2f)
+                {
+                    rainEventIntesity = 3; //20% chance
+                }
+        }
 
         //"turn off the light"
         StartCoroutine(MapManager.Instance.FadeOffLights());
@@ -87,18 +97,27 @@ public class RainEventsManager : MonoBehaviour
         int budgetLoss = budgetLossSubcat1 + budgetLossSubcat2;
         //get deactivation
         //get citizen satisfaction loss
-        //float runoffReductionPercentageSubcat1 = 
-        int citizenSatisfactionDecresase1 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat1), rainEventIntesity);
-        int citizenSatisfactionDecresase2 = GetCitizenSatisfactionModifier(GetRunoffReductionPercentage(subcat2), rainEventIntesity);
+        float runoffReductionPercentageSubcat1 = GetRunoffReductionPercentage(subcat1, rainEventIntesity);
+        float runoffReductionPercentageSubcat2 = GetRunoffReductionPercentage(subcat2, rainEventIntesity);
+        int citizenSatisfactionDecresase1 = 0;
+        int citizenSatisfactionDecresase2 = 0;
+        if (subcat1.IsBuilt)
+        {
+            citizenSatisfactionDecresase1 = GetCitizenSatisfactionModifier(runoffReductionPercentageSubcat1, rainEventIntesity);
+        }
+        if (subcat2.IsBuilt)
+        {
+            citizenSatisfactionDecresase2 = GetCitizenSatisfactionModifier(runoffReductionPercentageSubcat2, rainEventIntesity);
+        }
 
         yield return new WaitForSeconds(4);
         rainParticles.GetComponent<ParticleSystem>().Stop();
 
 
         //Call UI text effect on budget decrease
-        UIManager.Instance.ShowFloatingTxt(budgetLossSubcat1, "b", subcat1);
+        UIManager.Instance.ShowFloatingTxt(-budgetLossSubcat1, "b", subcat1);
         ResourceManager.Instance.UpdateBudget(-budgetLossSubcat1);
-        UIManager.Instance.ShowFloatingTxt(budgetLossSubcat2, "b", subcat2);
+        UIManager.Instance.ShowFloatingTxt(-budgetLossSubcat2, "b", subcat2);
         ResourceManager.Instance.UpdateBudget(-budgetLossSubcat2);
         yield return new WaitForSeconds(1);
 
@@ -120,8 +139,8 @@ public class RainEventsManager : MonoBehaviour
 
         }
 
-        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat1, rainEventIntesity));
-        subcat1.SetSubcatchmentActive(CostsManager.Instance.SubcatchmentDeactivation(subcat2, rainEventIntesity));
+        subcat1.SetSubcatchmentActive(!CostsManager.Instance.SubcatchmentDeactivation(subcat1, rainEventIntesity));
+        subcat2.SetSubcatchmentActive(!CostsManager.Instance.SubcatchmentDeactivation(subcat2, rainEventIntesity));
         yield return new WaitForSeconds(1);
 
         StartCoroutine(MapManager.Instance.FadeInLights());
@@ -130,7 +149,7 @@ public class RainEventsManager : MonoBehaviour
         RoundManager.Instance.StartRound();
     }
 
-    public float GetRunoffReductionPercentage(Subcatchment subcat)
+    public float GetRunoffReductionPercentage(Subcatchment subcat, int rainIntesity)
     {
         float runoffReductionPercentage = 0;
         bool gr = false;
@@ -167,30 +186,30 @@ public class RainEventsManager : MonoBehaviour
             {
                 if (gr)
                 {
-                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.GR)).RunoffReductionPercentage;
+                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.GR) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
                 }
                 if (rb)
                 {
-                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.RB)).RunoffReductionPercentage;
+                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.RB) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
                 }
                 if (pp)
                 {
-                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.PP)).RunoffReductionPercentage;
+                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.PP) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
                 }
             }
             else
             {
                 if (gr && pp)
                 {
-                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.GR_PP)).RunoffReductionPercentage;
+                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.GR_PP) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
                 }
                 if (gr && rb)
                 {
-                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.RB_GR)).RunoffReductionPercentage;
+                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.RB_GR) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
                 }
                 if (rb && pp)
                 {
-                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.PP_RB)).RunoffReductionPercentage;
+                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.PP_RB) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
                 }
             }
         }

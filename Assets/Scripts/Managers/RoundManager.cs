@@ -28,6 +28,8 @@ public class RoundManager : MonoBehaviour
         UIManager.Instance.UpdateRoundTxt(CurrentRound);
     }
 
+    [SerializeField] EndGamePanel endGamePanel;
+
     int _currentRound;
     #region getter
     public int CurrentRound { get { return _currentRound; } }
@@ -59,10 +61,28 @@ public class RoundManager : MonoBehaviour
                 //sum citizen number + citizen satisfaction = social score
                 int socialScore = citizenSatisfaction + citizenNumberScore;
                 //take current budget/5000000
-
+                int budget = ResourceManager.Instance.Budget / 5000000;
                 //sum budget + income = economic score
-                //show how many bgis are built 
+                int economicScore = budget + ResourceManager.Instance.Income;
+                //calculate avarage runoff reduction for built subcatchments
+                Subcatchment[] builtSubcatchment = MapManager.Instance.GetBuiltSubcatchments();
+                float avarageWeight = (float)builtSubcatchment.Length / 12f; //weighting with the built subcats over the total buildable subcats
+                float runoffReductionPercentageAggregated = 0;
+                foreach(Subcatchment subcat in builtSubcatchment)
+                {
+                    //calculating 
+                    float weightedRunoffReductionRain1 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 1) * avarageWeight;
+                    float weightedRunoffReductionRain2 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 2) * avarageWeight;
+                    float weightedRunoffReductionRain3 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 3) * avarageWeight;
+                    runoffReductionPercentageAggregated += weightedRunoffReductionRain1 + weightedRunoffReductionRain1 + weightedRunoffReductionRain3;
+                }
+                float runoffReductionWeightedMean = runoffReductionPercentageAggregated / (builtSubcatchment.Length * 3);
+                float socialScorePercentage = (float)socialScore / 29f;
+                float economicScorePercentage = (float)economicScore / 25f;
                 //show final score to player
+                endGamePanel.gameObject.SetActive(true);
+                endGamePanel.SetUpEndPanelStats(runoffReductionWeightedMean, socialScorePercentage, economicScorePercentage);
+                Debug.Log("Final score;\n" + "Runoff reduction score: " + runoffReductionWeightedMean + "%\n" + "Social score: " + socialScorePercentage + "%\n" + "Economic Score: " + economicScorePercentage + "%\n");
                 //end the game or replay
             }
         }

@@ -166,7 +166,7 @@ public class CostsManager : MonoBehaviour
     public bool SubcatchmentDeactivation(Subcatchment subcat, int rainfallIntensity)
     {
         bool deactivation = false;
-        if (rainfallIntensity > 1)
+        if (rainfallIntensity > 1 && subcat.IsBuilt)
         {
             if (!subcat.IsHostingBGI)
             {
