@@ -147,6 +147,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""d9b752cc-1eab-4367-abb1-cc33cd30a4c5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -158,6 +167,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MouseLeftButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c0817a99-0569-45df-a7e7-6a62b0fcef6c"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -174,6 +194,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         // GameplayActions
         m_GameplayActions = asset.FindActionMap("GameplayActions", throwIfNotFound: true);
         m_GameplayActions_MouseLeftButton = m_GameplayActions.FindAction("MouseLeftButton", throwIfNotFound: true);
+        m_GameplayActions_Pause = m_GameplayActions.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -283,11 +304,13 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_GameplayActions;
     private IGameplayActionsActions m_GameplayActionsActionsCallbackInterface;
     private readonly InputAction m_GameplayActions_MouseLeftButton;
+    private readonly InputAction m_GameplayActions_Pause;
     public struct GameplayActionsActions
     {
         private @PlayerInput m_Wrapper;
         public GameplayActionsActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @MouseLeftButton => m_Wrapper.m_GameplayActions_MouseLeftButton;
+        public InputAction @Pause => m_Wrapper.m_GameplayActions_Pause;
         public InputActionMap Get() { return m_Wrapper.m_GameplayActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -300,6 +323,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @MouseLeftButton.started -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnMouseLeftButton;
                 @MouseLeftButton.performed -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnMouseLeftButton;
                 @MouseLeftButton.canceled -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnMouseLeftButton;
+                @Pause.started -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_GameplayActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -307,6 +333,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @MouseLeftButton.started += instance.OnMouseLeftButton;
                 @MouseLeftButton.performed += instance.OnMouseLeftButton;
                 @MouseLeftButton.canceled += instance.OnMouseLeftButton;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -320,5 +349,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     public interface IGameplayActionsActions
     {
         void OnMouseLeftButton(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

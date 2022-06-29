@@ -65,6 +65,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float fadeOutTime;
     [Tooltip("parent obj of all info panels")]
     [SerializeField] Transform InfoPanels;
+    [SerializeField] GameObject PauseMenu;
+    
 
     [Header("Floating text references")]
     [SerializeField] GameObject floatingTextParent;
@@ -88,6 +90,19 @@ public class UIManager : MonoBehaviour
 
     //InputProvider reference
     InputProvider input;
+
+    private void Update()
+    {
+        if (input.PauseButton())
+        {
+            TogglePauseMenu();
+        }
+    }
+
+    public void TogglePauseMenu()
+    {
+        PauseMenu.SetActive(!PauseMenu.activeInHierarchy);
+    }
 
     private void OnEnable()
     {
