@@ -11,8 +11,8 @@ public class EndGamePanel : MonoBehaviour
     
     public void SetUpEndPanelStats(float rrs, float sss, float es)
     {
-        RRscoreTxt.text = rrs.ToString() + "%";
-        SSscoreTxt.text = sss.ToString() + "%";
-        EscoreTxt.text = es.ToString() + "%";
+        RRscoreTxt.text = rrs.ToString("0.0") + "%";
+        SSscoreTxt.text = sss.ToString("0.0") + "%";
+        EscoreTxt.text = es.ToString("0.0") + "%";
     }
 }

@@ -260,15 +260,15 @@ public class FloodCostsPerSqrmt
         {
             cost = RB;
         }
-        if (infrastructure.Equals(nameof(GR) + nameof(PP)))
+        if (infrastructure.Equals(nameof(GR) + nameof(PP)) || infrastructure.Equals(nameof(PP) + nameof(GR)))
         {
             cost = GR_PP;
         }
-        if (infrastructure.Equals(nameof(GR) + nameof(RB)))
+        if (infrastructure.Equals(nameof(GR) + nameof(RB)) || infrastructure.Equals(nameof(RB) + nameof(GR)))
         {
             cost = GR_RB;
         }
-        if (infrastructure.Equals(nameof(RB) + nameof(PP)))
+        if (infrastructure.Equals(nameof(RB) + nameof(PP)) || infrastructure.Equals(nameof(PP) + nameof(RB)))
         {
             cost = RB_PP;
         }

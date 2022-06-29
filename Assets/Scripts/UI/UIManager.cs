@@ -436,13 +436,13 @@ public class UIManager : MonoBehaviour
     {
         Vector3 tmpTxtPos = Camera.main.WorldToScreenPoint(subcatAffected.GetInfoPanelPosition());
         Vector3 txtPos = new Vector3(tmpTxtPos.x, tmpTxtPos.y, 0f);
-        foreach(Transform tmp in floatingTextParent.transform)
+        /*foreach(Transform tmp in floatingTextParent.transform)
         {
             if (tmp.name.Contains(subcatAffected.SubcatchmentNumber.ToString()))
             {
                 txtPos = tmp.position;
             }
-        }
+        }*/
         GameObject floatingTxtInstance = Instantiate(floatingTextPrefab, txtPos, Quaternion.identity, InfoPanels.transform.parent);
         //GameObject floatingTxtInstance = Instantiate(floatingTextPrefab, Vector3.zero, Quaternion.identity, InfoPanels.transform.parent);
         //floatingTxtInstance.transform.position = txtPos;

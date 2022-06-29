@@ -77,8 +77,8 @@ public class RoundManager : MonoBehaviour
                     runoffReductionPercentageAggregated += weightedRunoffReductionRain1 + weightedRunoffReductionRain1 + weightedRunoffReductionRain3;
                 }
                 float runoffReductionWeightedMean = runoffReductionPercentageAggregated / (builtSubcatchment.Length * 3);
-                float socialScorePercentage = (float)socialScore / 29f;
-                float economicScorePercentage = (float)economicScore / 25f;
+                float socialScorePercentage = (float)100f*(socialScore / 29f);
+                float economicScorePercentage = (float)100f*(economicScore / 25f);
                 //show final score to player
                 endGamePanel.gameObject.SetActive(true);
                 endGamePanel.SetUpEndPanelStats(runoffReductionWeightedMean, socialScorePercentage, economicScorePercentage);

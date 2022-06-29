@@ -83,12 +83,12 @@ public class RainEventsManager : MonoBehaviour
         //pick 2 random subcats
         int subcatNum1 = UnityEngine.Random.Range(1, 12 + 1);
         int subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
-        Debug.Log("Subcat affected: " + subcatNum1 + "; " + subcatNum2 + ";");
 
         while (subcatNum1 == subcatNum2)
         {
             subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
         }
+        Debug.Log("Subcat affected: " + subcatNum1 + "; " + subcatNum2 + ";");
         Subcatchment subcat1 = MapManager.Instance.GetSubcatchment(subcatNum1);
         Subcatchment subcat2 = MapManager.Instance.GetSubcatchment(subcatNum2);
         //get budget loss
