@@ -178,29 +178,40 @@ public class Subcatchment : MonoBehaviour
     public void ShowInfos(InfrastructureType infrastructure)
     {
         int budgetCost = 0;
+        int income = 0;
         int apCost = 0;
+        int citizenSatisfactionIncrease = 0;
+        int citizenNumberIncrease = 0;
         if (infrastructure.Equals(InfrastructureType.House) || infrastructure.Equals(InfrastructureType.Business))
         {
             BasicInfrastructureStats stats = CostsManager.Instance.GetInfrastructureStats(infrastructure);
+            citizenSatisfactionIncrease = stats.BCitizenSatisfaction;
             if (_size.Equals(AreaSize.Small))
             {
                 budgetCost = stats.CBudgetSmall;
+                income = stats.BIncomeSmall;
+                citizenNumberIncrease= stats.BCitizenNumberSmall;
             }
             else if (_size.Equals(AreaSize.Medium))
             {
 
                 budgetCost = stats.CBudgetMedium;
+                income = stats.BIncomeMedium;
+                citizenNumberIncrease= stats.BCitizenNumberMedium;
             }
             else if (_size.Equals(AreaSize.Large))
             {
 
                 budgetCost = stats.CBudgetLarge;
+                income = stats.BIncomeLarge;
+                citizenNumberIncrease= stats.BCitizenNumberLarge;
             }
             apCost = stats.CActionPoints;
         }
         else
         {
             BasicBGIStats stats = CostsManager.Instance.GetBGIStats(infrastructure);
+            citizenSatisfactionIncrease = stats.BCitizenSatisfaction;
             if (Usage.Equals(AreaUsage.Residential))
             {
                 if (_size.Equals(AreaSize.Small))
@@ -240,7 +251,7 @@ public class Subcatchment : MonoBehaviour
         }
         Vector3 position = GetInfoPanelPosition();
 
-        UIManager.Instance.ShowInfoPanel(position, apCost, budgetCost);
+        UIManager.Instance.ShowInfoPanel(position, apCost, budgetCost, income, citizenSatisfactionIncrease, citizenNumberIncrease);
     }
 
     public Vector3 GetInfoPanelPosition()

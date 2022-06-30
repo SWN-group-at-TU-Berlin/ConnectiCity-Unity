@@ -59,14 +59,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject PPButtonDefault;
     [SerializeField] GameObject PPButtonDown;
 
-    [Header("Info boards references")]
+    [Header("Info boards references and properties")]
     [SerializeField] GameObject MessageBoard;
     [SerializeField] private float staticTime;
     [SerializeField] private float fadeOutTime;
     [Tooltip("parent obj of all info panels")]
     [SerializeField] Transform InfoPanels;
     [SerializeField] GameObject PauseMenu;
-    
+    [SerializeField] Color CanonGreen;
+    [SerializeField] Color CanonRed;
+
 
     [Header("Floating text references")]
     [SerializeField] GameObject floatingTextParent;
@@ -351,27 +353,41 @@ public class UIManager : MonoBehaviour
     public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
     public void UpdateRoundTxt(int currentRound) { CurrentRound.text = "Round" + currentRound.ToString(); }
 
-    public void ShowInfoPanel(Vector3 position, int actionPoints, int budget)
+    public void ShowInfoPanel(Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
     {
         if (infoPanelsNotInUse.Count > 0)
         {
 
             Transform infoPanel = infoPanelsNotInUse.Dequeue();
             infoPanel.gameObject.SetActive(true);
-            TextMeshProUGUI bdg;
-            TextMeshProUGUI ap;
-            if (infoPanel.GetChild(0).name.Equals("AP"))
+            foreach (Transform textField in infoPanel)
             {
-                ap = infoPanel.GetChild(0).GetComponent<TextMeshProUGUI>();
-                bdg = infoPanel.GetChild(1).GetComponent<TextMeshProUGUI>();
+                if (textField.name.Equals("AP"))
+                {
+                    textField.GetComponent<TextMeshProUGUI>().text = "-" + actionPoints.ToString();
+                    textField.GetComponent<TextMeshProUGUI>().color = CanonRed;
+                }
+                if (textField.name.Equals("CS"))
+                {
+                    textField.GetComponent<TextMeshProUGUI>().text = "+" + citizenSatisfaction.ToString();
+                    textField.GetComponent<TextMeshProUGUI>().color = CanonGreen;
+                }
+                if (textField.name.Equals("CN"))
+                {
+                    textField.GetComponent<TextMeshProUGUI>().text = "+" + citizenNumber.ToString();
+                    textField.GetComponent<TextMeshProUGUI>().color = CanonGreen;
+                }
+                if (textField.name.Equals("Budget"))
+                {
+                    textField.GetComponent<TextMeshProUGUI>().text = "-" + budget.ToString();
+                    textField.GetComponent<TextMeshProUGUI>().color = CanonRed;
+                }
+                if (textField.name.Equals("Income"))
+                {
+                    textField.GetComponent<TextMeshProUGUI>().text = "+" + income;
+                    textField.GetComponent<TextMeshProUGUI>().color = CanonGreen;
+                }
             }
-            else
-            {
-                ap = infoPanel.GetChild(1).GetComponent<TextMeshProUGUI>();
-                bdg = infoPanel.GetChild(0).GetComponent<TextMeshProUGUI>();
-            }
-            ap.text = actionPoints.ToString();
-            bdg.text = budget.ToString();
 
             infoPanel.transform.position = Camera.main.WorldToScreenPoint(position);
             infoPanel.transform.position = new Vector3(infoPanel.position.x, infoPanel.position.y, 0f);
@@ -465,11 +481,11 @@ public class UIManager : MonoBehaviour
         TextMeshProUGUI textMesh = floatingTxtInstance.GetComponent<TextMeshProUGUI>();
         if (valueToShow > 0)
         {
-            textMesh.color = Color.green;
+            textMesh.color = CanonGreen;
         }
         else
         {
-            textMesh.color = Color.red;
+            textMesh.color = CanonRed;
         }
 
         floatingTxtInstance.GetComponent<FloatingText>().SetupFloatingText(valueToShow.ToString(), floatingSpeed, fadeOutTime, 0.01f, resourceAffected);
