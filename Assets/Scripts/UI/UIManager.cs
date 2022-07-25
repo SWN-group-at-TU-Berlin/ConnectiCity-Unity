@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 using System;
 
@@ -68,6 +69,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject PauseMenu;
     [SerializeField] Color CanonGreen;
     [SerializeField] Color CanonRed;
+    [SerializeField] float tooltipCooldown = 2;
 
 
     [Header("Floating text references")]
@@ -89,12 +91,14 @@ public class UIManager : MonoBehaviour
     Color fullAlphaMessage;
     Queue<Transform> infoPanelsNotInUse; // deactivated
     Queue<Transform> infoPanelsInUse; // active
+    float tooltipCooldownTimer;
 
     //InputProvider reference
     InputProvider input;
 
     private void Update()
     {
+        //TooltipShow();
         if (input.PauseButton())
         {
             TogglePauseMenu();
@@ -416,7 +420,7 @@ public class UIManager : MonoBehaviour
     IEnumerator FadeInfoBoardOut(GameObject boardToFade, float staticTime, float fadeTime)
     {
 
-        MessageBoard.SetActive(true);
+        boardToFade.SetActive(true);
 
         //get components of objs to fade
         Image background = boardToFade.GetComponent<Image>();
@@ -458,7 +462,7 @@ public class UIManager : MonoBehaviour
         }
 
         //deactivate message board to avoid it covering clickable stuff
-        MessageBoard.SetActive(false);
+        boardToFade.SetActive(false);
 
     }
 
@@ -490,5 +494,35 @@ public class UIManager : MonoBehaviour
 
         floatingTxtInstance.GetComponent<FloatingText>().SetupFloatingText(valueToShow.ToString(), floatingSpeed, fadeOutTime, 0.01f, resourceAffected);
 
+    }
+
+    void TooltipShow()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = input.MousePosition();
+
+        List<RaycastResult> raycastResultList = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raycastResultList);
+        if (raycastResultList.Count > 0)
+        {
+            if (tooltipCooldownTimer > tooltipCooldown)
+            {
+                for (int i = 0; i < raycastResultList.Count; i++)
+                {
+                    if (raycastResultList[i].gameObject.GetComponent<ToolTipUser>() != null)
+                    {
+                        raycastResultList[i].gameObject.GetComponent<ToolTipUser>().ShowTooltip();
+                    }
+                }
+            } else
+            {
+                tooltipCooldownTimer += Time.deltaTime;
+            }
+        }
+        else
+        {
+            tooltipCooldown = 0;
+            //StartCoroutine(Tooltip.Instance.Deactivate());
+        }
     }
 }

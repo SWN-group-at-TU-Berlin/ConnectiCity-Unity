@@ -122,6 +122,7 @@ public class InfrastructureBuilder : MonoBehaviour
                         {
                             UIManager.Instance.MissingBudgetMessage();
                             UIManager.Instance.BusinessButtonPressed();
+                            return;
                         }
                     }
                     else
