@@ -51,7 +51,7 @@ public class DataReader : MonoBehaviour
         rainCosts.Add(1, rainLevel1Table);
         rainCosts.Add(2, rainLevel2Table);
         rainCosts.Add(3, rainLevel3Table);
-        
+
     }
 
     public void GetRainEventCost()
@@ -60,17 +60,18 @@ public class DataReader : MonoBehaviour
         Debug.Log("Rain cost for rain level: " + rainIntensity + " | subcat: " + subcat + " | build status: " + buildStatus.ToString() + " = " + cost);
     }
 
+    /*DEBUG THIS FUNCTION FOR ROW 12 OF RAIN LV3 TABLE*/
     private Dictionary<SubcatchmentKey, float> GenerateDictionaryFromTable(string[] table, string[] lables)
     {
         //instatiate a new dictionary
         Dictionary<SubcatchmentKey, float> newDictionary = new Dictionary<SubcatchmentKey, float>();
-        
+
         //for each row in the array
         foreach (string row in table)
         {
             //split the row into single data units using the "," separator and store them into an array x (name is irrelevant) 
             string[] singleRowCells = row.Split(',');
-            
+
             //scroll throught each element of the lables array with a specific index i (name is irrelevant), starting from i = 1 -> avoids the "Subcatchment" lable
             for (int i = 2; i < lables.Length; i++)
             {
@@ -78,9 +79,9 @@ public class DataReader : MonoBehaviour
                 //initialize key with x[0] as subcatchment number and labels array [i] as build status
                 string lable = lables[i].Trim('\r');
                 BuildStatus status = ConvertStringToStatus(lable);
-                
+
                 SubcatchmentKey newKey = new SubcatchmentKey(int.Parse(singleRowCells[0]), status);
-                
+
                 //store a new element into the dictionary as [key][x[i]]
                 newDictionary.Add(newKey, int.Parse(singleRowCells[i]));
             }
@@ -114,7 +115,10 @@ public class DataReader : MonoBehaviour
                 }
             }
         }
-        toCleanClone.Remove(toClean[toClean.Length - 1]);
+        if (toClean[toClean.Length - 1].Equals(""))
+        {
+            toCleanClone.Remove(toClean[toClean.Length - 1]);
+        }
         return toCleanClone.ToArray();
     }
 }
