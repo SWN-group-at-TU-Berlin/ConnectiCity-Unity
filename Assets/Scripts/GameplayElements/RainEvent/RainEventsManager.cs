@@ -47,11 +47,6 @@ public class RainEventsManager : MonoBehaviour
         rainEventInfoPanel.GetComponent<Animator>().enabled = false;
     }
 
-    /*TEST THIS FUNCTION:
-     to test this function you need to
-    1. set all the runoff reduction values manually in the inspector of this game object
-    3. create a button that allow testing
-    */
     public IEnumerator RainEvent()
     {
         float rainEventChance = UnityEngine.Random.Range(0f, 1f);
@@ -84,17 +79,21 @@ public class RainEventsManager : MonoBehaviour
         int subcatNum1 = UnityEngine.Random.Range(1, 12 + 1);
         int subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
 
+        //Avoid selection of same subcatchment
         while (subcatNum1 == subcatNum2)
         {
             subcatNum2 = UnityEngine.Random.Range(1, 12 + 1);
         }
+
         Debug.Log("Subcat affected: " + subcatNum1 + "; " + subcatNum2 + ";");
         Subcatchment subcat1 = MapManager.Instance.GetSubcatchment(subcatNum1);
         Subcatchment subcat2 = MapManager.Instance.GetSubcatchment(subcatNum2);
+
         //get budget loss
         int budgetLossSubcat1 = CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat1, rainEventIntesity);
         int budgetLossSubcat2 = CostsManager.Instance.GetRainfallDamagesCostsPerSubcatchment(subcat2, rainEventIntesity);
         int budgetLoss = budgetLossSubcat1 + budgetLossSubcat2;
+
         //get deactivation
         //get citizen satisfaction loss
         float runoffReductionPercentageSubcat1 = GetRunoffReductionPercentage(subcat1, rainEventIntesity);
