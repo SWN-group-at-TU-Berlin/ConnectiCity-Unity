@@ -1074,7 +1074,7 @@ RectTransform:
   m_GameObject: {fileID: 127565570}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.51433, y: 0.51433, z: 0.51433}
   m_Children:
   - {fileID: 523833565}
   - {fileID: 598256177}
@@ -1086,8 +1086,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -541.76013, y: 51}
-  m_SizeDelta: {x: 224.4797, y: 42.09}
+  m_AnchoredPosition: {x: -219, y: 10.4111}
+  m_SizeDelta: {x: 249.6953, y: 36.8179}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &127565572
 MonoBehaviour:
@@ -1366,7 +1366,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Rain event cost
+  m_text: Subcat area
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1567,6 +1567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rainCostsTables: {fileID: 4900000, guid: 976a5c4afec12284292549b7f76d2249, type: 3}
   runoffReductionTables: {fileID: 4900000, guid: 886501dbbb2ec034d9fdeb1c4cef27ce, type: 3}
+  buildingCostsTable: {fileID: 4900000, guid: 11fe4735709fd7041b2d98443c0cd652, type: 3}
   rainIntensity: 1
   subcat: 2
   buildStatus: 0
@@ -4239,7 +4240,7 @@ RectTransform:
   m_GameObject: {fileID: 669241006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.51433, y: 0.51433, z: 0.51433}
   m_Children:
   - {fileID: 2116379788}
   - {fileID: 1193301557}
@@ -4251,8 +4252,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -541.76013, y: 390}
-  m_SizeDelta: {x: 224.4797, y: 42.09}
+  m_AnchoredPosition: {x: -218, y: 162}
+  m_SizeDelta: {x: 249.6953, y: 36.8179}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &669241008
 MonoBehaviour:
@@ -8353,7 +8354,7 @@ RectTransform:
   m_GameObject: {fileID: 1542659202}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.51433, y: 0.51433, z: 0.51433}
   m_Children:
   - {fileID: 176577721}
   - {fileID: 371688137}
@@ -8363,8 +8364,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -541.76013, y: -252}
-  m_SizeDelta: {x: 224.4797, y: 42.09}
+  m_AnchoredPosition: {x: -212, y: -135}
+  m_SizeDelta: {x: 249.6953, y: 36.8179}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1542659204
 MonoBehaviour:
@@ -9867,7 +9868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}

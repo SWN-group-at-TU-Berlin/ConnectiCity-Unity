@@ -12,6 +12,7 @@ public class DataReader : MonoBehaviour
 
     [SerializeField] TextAsset rainCostsTables;
     [SerializeField] TextAsset runoffReductionTables;
+    [SerializeField] TextAsset buildingCostsTable;
     [SerializeField] int rainIntensity;
     [SerializeField] int subcat;
     [SerializeField] BuildStatus buildStatus;
@@ -27,6 +28,8 @@ public class DataReader : MonoBehaviour
     #region getter
     public Dictionary<int, Dictionary<SubcatchmentKey, float>> RunoffReductionPercentagesDictionaries { get { return runoffReductionPercentagesDictionaries; } }
     #endregion
+
+    Dictionary<SubcatchmentKey, float> buildingCosts;
 
     Dictionary<int, float> subcatchmentsAreas;
     #region getter
@@ -44,27 +47,61 @@ public class DataReader : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
         //Dictionaries initialization 
         rainCostsDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
         runoffReductionPercentagesDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
+        buildingCosts = new Dictionary<SubcatchmentKey, float>();
         subcatchmentsAreas = new Dictionary<int, float>();
-        
+
         //Dictionaries population
         PopulateDictionaryFromRainLevelTables(rainCostsDictionaries, rainCostsTables);
         PopulateDictionaryFromRainLevelTables(runoffReductionPercentagesDictionaries, runoffReductionTables);
+        buildingCosts = PopulateDictionaryFromBuildCostsTables(buildingCostsTable);
+        /*TO TEST BUILDING COSTS POPULATION*/
+        for (int i = 1; i <= 12; i++)
+        {
+            string subcatCosts = "Subcat " + i;
+            foreach (BuildStatus stat in Enum.GetValues(typeof(BuildStatus)))
+            {
+                if (buildingCosts.ContainsKey(new SubcatchmentKey(i, stat)))
+                {
+                    subcatCosts += " | " + stat + ": " + buildingCosts[new SubcatchmentKey(i, stat)] + " //";
+                }
+            }
+            Debug.Log(subcatCosts);
+        }
+    }
+
+    private Dictionary<SubcatchmentKey, float> PopulateDictionaryFromBuildCostsTables(TextAsset table)
+    {
+        //Set up arrays to generate rain level table dictionaries
+        //split data into 3 different strings contained in one array, one per rain level
+        string buildCostData = table.text; //the csv file needs a specific separator for the rain level = '/'
+        string[] buildCostsDataTable;
+        string[] buildCostsDataTablesLables;
+        SetUpDataTablesIntoArray(buildCostData, out buildCostsDataTable, out buildCostsDataTablesLables);
+
+        /*Generate one dictionary per rain level data tables*/
+        Dictionary<SubcatchmentKey, float> dictionaryToPopulate = new Dictionary<SubcatchmentKey, float>();
+        return dictionaryToPopulate = GenerateDictionaryFromTable(buildCostsDataTable, buildCostsDataTablesLables);
     }
 
     private void PopulateDictionaryFromRainLevelTables(Dictionary<int, Dictionary<SubcatchmentKey, float>> dictionaryToPopulate, TextAsset table)
     {
         //Set up arrays to generate rain level table dictionaries
-        string[] dataRainLevel1DataTable, dataRainLevel2DataTable, dataRainLevel3DataTable, rainDataTablesLables;
-        SetUpDataTablesIntoArrays(table, out dataRainLevel1DataTable, out dataRainLevel2DataTable, out dataRainLevel3DataTable, out rainDataTablesLables);
+        //split data into 3 different strings contained in one array, one per rain level
+        string[] dataPerRainLevel = table.text.Split('/'); //the csv file needs a specific separator for the rain level = '/'
+        string[] dataRainLevel1DataTable, dataRainLevel2DataTable, dataRainLevel3DataTable;
+        string[] rainDataTablesLables1, rainDataTablesLables2, rainDataTablesLables3;
+        SetUpDataTablesIntoArray(dataPerRainLevel[1], out dataRainLevel1DataTable, out rainDataTablesLables1);
+        SetUpDataTablesIntoArray(dataPerRainLevel[2], out dataRainLevel2DataTable, out rainDataTablesLables2);
+        SetUpDataTablesIntoArray(dataPerRainLevel[3], out dataRainLevel3DataTable, out rainDataTablesLables3);
 
         /*Generate one dictionary per rain level data tables*/
-        Dictionary<SubcatchmentKey, float> rainLevel1TableDictionary = GenerateDictionaryFromTable(dataRainLevel1DataTable, rainDataTablesLables);
-        Dictionary<SubcatchmentKey, float> rainLevel2TableDictionary = GenerateDictionaryFromTable(dataRainLevel2DataTable, rainDataTablesLables);
-        Dictionary<SubcatchmentKey, float> rainLevel3TableDictionary = GenerateDictionaryFromTable(dataRainLevel3DataTable, rainDataTablesLables);
+        Dictionary<SubcatchmentKey, float> rainLevel1TableDictionary = GenerateDictionaryFromTable(dataRainLevel1DataTable, rainDataTablesLables1);
+        Dictionary<SubcatchmentKey, float> rainLevel2TableDictionary = GenerateDictionaryFromTable(dataRainLevel2DataTable, rainDataTablesLables2);
+        Dictionary<SubcatchmentKey, float> rainLevel3TableDictionary = GenerateDictionaryFromTable(dataRainLevel3DataTable, rainDataTablesLables3);
 
         /*Storing rain level data tables dictionaries into a rain level dictionary*/
         dictionaryToPopulate.Add(1, rainLevel1TableDictionary);
@@ -72,30 +109,23 @@ public class DataReader : MonoBehaviour
         dictionaryToPopulate.Add(3, rainLevel3TableDictionary);
     }
 
-    private void SetUpDataTablesIntoArrays(TextAsset dataTable, out string[] dataRainLevel1, out string[] dataRainLevel2, out string[] dataRainLevel3, out string[] lables)
+    private void SetUpDataTablesIntoArray(string dataPerRainLevel, out string[] dataRainLevel1, out string[] lables)
     {
         /*SETTING UP THE ARRAYS*/
-        //split data into 3 different strings contained in one array, one per rain level
-        string[] dataPerRainLevel = dataTable.text.Split('/'); //the csv file needs a specific separator for the rain level = '/'
-
         //Split each string into a row array using "\n" as separator
-        dataRainLevel1 = dataPerRainLevel[1].Split('\n');
-        dataRainLevel2 = dataPerRainLevel[2].Split('\n');
-        dataRainLevel3 = dataPerRainLevel[3].Split('\n');
+        dataRainLevel1 = dataPerRainLevel.Split('\n');
+
 
         //take lables from one of the arrays
         lables = dataRainLevel1[1].Split(',');
 
+
         //clean the arays from anything that isn't a number
         List<string> rainLevel1List = new List<string>(dataRainLevel1);
-        List<string> rainLevel2List = new List<string>(dataRainLevel2);
-        List<string> rainLevel3List = new List<string>(dataRainLevel3);
 
         string[] termsToClean = { "Subcatchment", ",,," };
 
         dataRainLevel1 = CleanParsedData(dataRainLevel1, rainLevel1List, termsToClean);
-        dataRainLevel2 = CleanParsedData(dataRainLevel2, rainLevel2List, termsToClean);
-        dataRainLevel3 = CleanParsedData(dataRainLevel3, rainLevel3List, termsToClean);
     }
 
     public float GetRainEventCost(int rainInt, SubcatchmentKey subcatKey)
@@ -150,7 +180,8 @@ public class DataReader : MonoBehaviour
                 else if (subcatchmentsAreas.Count < 12)
                 {
                     //if the lable is "Area", store it in the area dictionary
-                    subcatchmentsAreas.Add(int.Parse(singleRowCells[0]), float.Parse(singleRowCells[i].Replace(".", ",")));
+                    string adjustedArea = singleRowCells[i].Replace(".", ",");
+                    subcatchmentsAreas.Add(int.Parse(singleRowCells[0]), float.Parse(singleRowCells[i]));
                 }
             }
 
