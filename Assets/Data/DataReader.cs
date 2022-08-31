@@ -13,6 +13,10 @@ public class DataReader : MonoBehaviour
     [SerializeField] TextAsset rainCostsTables;
     [SerializeField] TextAsset runoffReductionTables;
     [SerializeField] TextAsset buildingCostsTable;
+    [SerializeField] TextAsset actionPointsTable;
+    [SerializeField] TextAsset incomeBenefitTable;
+    [SerializeField] TextAsset citizenSatisfactionBenefitTable;
+    [SerializeField] TextAsset citizenNumberBenefitTable;
     [SerializeField] int rainIntensity;
     [SerializeField] int subcat;
     [SerializeField] BuildStatus buildStatus;
@@ -29,7 +33,20 @@ public class DataReader : MonoBehaviour
     public Dictionary<int, Dictionary<SubcatchmentKey, float>> RunoffReductionPercentagesDictionaries { get { return runoffReductionPercentagesDictionaries; } }
     #endregion
 
+    Dictionary<Benefit, Dictionary<SubcatchmentKey, float>> benefits;
+    #region getter
+    public Dictionary<Benefit, Dictionary<SubcatchmentKey, float>> Benefits { get { return benefits; } }
+    #endregion
+
     Dictionary<SubcatchmentKey, float> buildingCosts;
+    #region getter
+    public Dictionary<SubcatchmentKey, float> BuildingCosts { get { return buildingCosts; } }
+    #endregion
+
+    Dictionary<SubcatchmentKey, float> actionPointsCosts;
+    #region getter
+    public Dictionary<SubcatchmentKey, float> ActionPointsCosts { get { return actionPointsCosts; } }
+    #endregion
 
     Dictionary<int, float> subcatchmentsAreas;
     #region getter
@@ -53,27 +70,39 @@ public class DataReader : MonoBehaviour
         runoffReductionPercentagesDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
         buildingCosts = new Dictionary<SubcatchmentKey, float>();
         subcatchmentsAreas = new Dictionary<int, float>();
+        benefits = new Dictionary<Benefit, Dictionary<SubcatchmentKey, float>>();
 
-        //Dictionaries population
+         //Dictionaries population
         PopulateDictionaryFromRainLevelTables(rainCostsDictionaries, rainCostsTables);
         PopulateDictionaryFromRainLevelTables(runoffReductionPercentagesDictionaries, runoffReductionTables);
-        buildingCosts = PopulateDictionaryFromBuildCostsTables(buildingCostsTable);
+        buildingCosts = PopulateDictionaryFromSubcatchmentsTables(buildingCostsTable);
+        actionPointsCosts = PopulateDictionaryFromSubcatchmentsTables(actionPointsTable);
+        Dictionary<SubcatchmentKey, float> incomeBenefits = PopulateDictionaryFromSubcatchmentsTables(incomeBenefitTable);
+        Dictionary<SubcatchmentKey, float> citizenSatisfactionBenefits = PopulateDictionaryFromSubcatchmentsTables(citizenSatisfactionBenefitTable);
+        Dictionary<SubcatchmentKey, float> citizenNumberBenefits = PopulateDictionaryFromSubcatchmentsTables(citizenNumberBenefitTable);
+        benefits.Add(Benefit.income, incomeBenefits);
+        benefits.Add(Benefit.citizenNumber, citizenNumberBenefits);
+        benefits.Add(Benefit.citizenSatisfaction, citizenSatisfactionBenefits);
         /*TO TEST BUILDING COSTS POPULATION*/
-        for (int i = 1; i <= 12; i++)
+        foreach (Benefit benefit in Enum.GetValues(typeof(Benefit)))
         {
-            string subcatCosts = "Subcat " + i;
-            foreach (BuildStatus stat in Enum.GetValues(typeof(BuildStatus)))
+            Dictionary<SubcatchmentKey, float> b = benefits[benefit];
+            for (int i = 1; i <= 12; i++)
             {
-                if (buildingCosts.ContainsKey(new SubcatchmentKey(i, stat)))
+                string subcatCosts = "Subcat " + i;
+                foreach (BuildStatus stat in Enum.GetValues(typeof(BuildStatus)))
                 {
-                    subcatCosts += " | " + stat + ": " + buildingCosts[new SubcatchmentKey(i, stat)] + " //";
+                    if (b.ContainsKey(new SubcatchmentKey(i, stat)))
+                    {
+                        subcatCosts += " | " + stat + ": " + b[new SubcatchmentKey(i, stat)] + " //";
+                    }
                 }
+                Debug.Log(subcatCosts);
             }
-            Debug.Log(subcatCosts);
         }
     }
 
-    private Dictionary<SubcatchmentKey, float> PopulateDictionaryFromBuildCostsTables(TextAsset table)
+    private Dictionary<SubcatchmentKey, float> PopulateDictionaryFromSubcatchmentsTables(TextAsset table)
     {
         //Set up arrays to generate rain level table dictionaries
         //split data into 3 different strings contained in one array, one per rain level
@@ -115,10 +144,8 @@ public class DataReader : MonoBehaviour
         //Split each string into a row array using "\n" as separator
         dataRainLevel1 = dataPerRainLevel.Split('\n');
 
-
         //take lables from one of the arrays
         lables = dataRainLevel1[1].Split(',');
-
 
         //clean the arays from anything that isn't a number
         List<string> rainLevel1List = new List<string>(dataRainLevel1);
@@ -175,7 +202,10 @@ public class DataReader : MonoBehaviour
                     SubcatchmentKey newKey = new SubcatchmentKey(int.Parse(singleRowCells[0]), status);
 
                     //store a new element into the dictionary as [key][x[i]]
-                    newDictionary.Add(newKey, int.Parse(singleRowCells[i]));
+                    
+                    //singleRowCells[i] = singleRowCells[i].Replace(".", ",");
+                    
+                    newDictionary.Add(newKey, float.Parse(singleRowCells[i]));
                 }
                 else if (subcatchmentsAreas.Count < 12)
                 {
@@ -234,29 +264,4 @@ public struct SubcatchmentKey
     }
 }
 
-public enum BuildStatus
-{
-    Unbuild,
-    Built,
-    PP,
-    RB1,
-    RB2,
-    GR25,
-    GR50,
-    GR75,
-    GR100,
-    RB1_PP,
-    RB2_PP,
-    GR25_PP,
-    GR50_PP,
-    GR75_PP,
-    GR100_PP,
-    GR25_RB1,
-    GR50_RB1,
-    GR75_RB1,
-    GR100_RB1,
-    GR25_RB2,
-    GR50_RB2,
-    GR75_RB2,
-    GR100_RB2,
-}
+

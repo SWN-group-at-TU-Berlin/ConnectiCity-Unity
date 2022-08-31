@@ -26,6 +26,36 @@ public class CostsManager : MonoBehaviour
     public List<FloodCostsPerSqrmt> ResidentialFloodCosts;
     public List<FloodCostsPerSqrmt> CommercialFloodCosts;
 
+    //RAIN COSTS
+    Dictionary<int, Dictionary<SubcatchmentKey, float>> rainCosts;
+    #region getter
+    public Dictionary<int, Dictionary<SubcatchmentKey, float>> RainCosts{ get { return rainCosts; } }
+    #endregion
+
+    //BUILDING COSTS
+    Dictionary<SubcatchmentKey, float> buildingCosts;
+    #region getter
+    public Dictionary<SubcatchmentKey, float> BuildingCosts { get { return buildingCosts; } }
+    #endregion
+
+    //BENEFITS
+    Dictionary<Benefit, Dictionary<SubcatchmentKey, float>> benefits;
+    #region getter
+    public Dictionary<Benefit, Dictionary<SubcatchmentKey, float>> Benefits { get { return benefits; } }
+    #endregion
+
+    /*Dictionaries of data
+     * citizen satisfaction loss
+     */
+
+    /*Functions to get costs
+     * get rain costs per subcatchment (rain level, subcatchment)
+     * get building costs (subcatchment number)
+     * get building income increase (subcatchment number)
+     * getbuilding citizen number increase (subcatchment number)
+     * get building citizen satisfaction increase (subcatchment number)
+     */
+
     public BasicInfrastructureStats GetInfrastructureStats(InfrastructureType infrastructure)
     {
         BasicInfrastructureStats infrastructureStats = Array.Find(InfrastructuresStats.ToArray(), stats => stats.Name.Equals(infrastructure.ToString()));
