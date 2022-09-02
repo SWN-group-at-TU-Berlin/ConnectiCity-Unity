@@ -5,6 +5,7 @@ using UnityEngine;
 public enum InfrastructureType
 {
     Null,
+    Building,
     House,
     Business,
     PP,

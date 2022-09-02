@@ -1,0 +1,196 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5789113054795367700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5789113054795367702}
+  - component: {fileID: 5789113054795367701}
+  m_Layer: 0
+  m_Name: RainEventsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5789113054795367702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5789113054795367700}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 23.789171, y: 548.54944, z: 500.12402}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5789113054795367701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5789113054795367700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4ee086a019eee148bcbb3e5d35840e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rainEventInfoPanel: {fileID: 0}
+  rainParticles: {fileID: 0}
+  maxRainEvent1Threshold: 87
+  maxRainEvent2Threshold: 56
+  maxRainEvent3Threshold: 46
+  _singleBGIRunoffReduction:
+  - _rainfallIntensity: 1
+    _subcatchmentType: 0
+    _bgi: 4
+    _runoffReductionPercentage: 62.12
+  - _rainfallIntensity: 1
+    _subcatchmentType: 0
+    _bgi: 3
+    _runoffReductionPercentage: 33.09
+  - _rainfallIntensity: 1
+    _subcatchmentType: 0
+    _bgi: 5
+    _runoffReductionPercentage: 29.66
+  - _rainfallIntensity: 1
+    _subcatchmentType: 1
+    _bgi: 4
+    _runoffReductionPercentage: 61.47
+  - _rainfallIntensity: 1
+    _subcatchmentType: 1
+    _bgi: 3
+    _runoffReductionPercentage: 37.95
+  - _rainfallIntensity: 1
+    _subcatchmentType: 1
+    _bgi: 5
+    _runoffReductionPercentage: 28.12
+  - _rainfallIntensity: 2
+    _subcatchmentType: 0
+    _bgi: 5
+    _runoffReductionPercentage: 12.33
+  - _rainfallIntensity: 2
+    _subcatchmentType: 0
+    _bgi: 4
+    _runoffReductionPercentage: 34.45
+  - _rainfallIntensity: 2
+    _subcatchmentType: 0
+    _bgi: 3
+    _runoffReductionPercentage: 35.75
+  - _rainfallIntensity: 2
+    _subcatchmentType: 1
+    _bgi: 4
+    _runoffReductionPercentage: 31.09
+  - _rainfallIntensity: 2
+    _subcatchmentType: 1
+    _bgi: 3
+    _runoffReductionPercentage: 39.13
+  - _rainfallIntensity: 2
+    _subcatchmentType: 1
+    _bgi: 5
+    _runoffReductionPercentage: 10.8
+  - _rainfallIntensity: 3
+    _subcatchmentType: 0
+    _bgi: 4
+    _runoffReductionPercentage: 21.24
+  - _rainfallIntensity: 3
+    _subcatchmentType: 0
+    _bgi: 3
+    _runoffReductionPercentage: 36.73
+  - _rainfallIntensity: 3
+    _subcatchmentType: 0
+    _bgi: 5
+    _runoffReductionPercentage: 10.62
+  - _rainfallIntensity: 3
+    _subcatchmentType: 1
+    _bgi: 4
+    _runoffReductionPercentage: 21.39
+  - _rainfallIntensity: 3
+    _subcatchmentType: 1
+    _bgi: 3
+    _runoffReductionPercentage: 39.48
+  - _rainfallIntensity: 3
+    _subcatchmentType: 1
+    _bgi: 5
+    _runoffReductionPercentage: 8.7
+  _BGIComboRunoffReduction:
+  - _rainfallIntensity: 1
+    _subcatchmentType: 0
+    _bgiCombo: 1
+    _runoffReductionPercentage: 53.43
+  - _rainfallIntensity: 1
+    _subcatchmentType: 0
+    _bgiCombo: 2
+    _runoffReductionPercentage: 84
+  - _rainfallIntensity: 1
+    _subcatchmentType: 0
+    _bgiCombo: 3
+    _runoffReductionPercentage: 76.94
+  - _rainfallIntensity: 1
+    _subcatchmentType: 1
+    _bgiCombo: 1
+    _runoffReductionPercentage: 53
+  - _rainfallIntensity: 1
+    _subcatchmentType: 1
+    _bgiCombo: 2
+    _runoffReductionPercentage: 87
+  - _rainfallIntensity: 1
+    _subcatchmentType: 1
+    _bgiCombo: 3
+    _runoffReductionPercentage: 71.56
+  - _rainfallIntensity: 2
+    _subcatchmentType: 0
+    _bgiCombo: 1
+    _runoffReductionPercentage: 43.63
+  - _rainfallIntensity: 2
+    _subcatchmentType: 0
+    _bgiCombo: 2
+    _runoffReductionPercentage: 55.6
+  - _rainfallIntensity: 2
+    _subcatchmentType: 0
+    _bgiCombo: 3
+    _runoffReductionPercentage: 39.11
+  - _rainfallIntensity: 2
+    _subcatchmentType: 1
+    _bgiCombo: 1
+    _runoffReductionPercentage: 48.48
+  - _rainfallIntensity: 2
+    _subcatchmentType: 1
+    _bgiCombo: 2
+    _runoffReductionPercentage: 48.15
+  - _rainfallIntensity: 2
+    _subcatchmentType: 1
+    _bgiCombo: 3
+    _runoffReductionPercentage: 36.1
+  - _rainfallIntensity: 3
+    _subcatchmentType: 0
+    _bgiCombo: 1
+    _runoffReductionPercentage: 53.43
+  - _rainfallIntensity: 3
+    _subcatchmentType: 0
+    _bgiCombo: 2
+    _runoffReductionPercentage: 34.51
+  - _rainfallIntensity: 3
+    _subcatchmentType: 0
+    _bgiCombo: 3
+    _runoffReductionPercentage: 24
+  - _rainfallIntensity: 3
+    _subcatchmentType: 1
+    _bgiCombo: 1
+    _runoffReductionPercentage: 46
+  - _rainfallIntensity: 3
+    _subcatchmentType: 1
+    _bgiCombo: 2
+    _runoffReductionPercentage: 46
+  - _rainfallIntensity: 3
+    _subcatchmentType: 1
+    _bgiCombo: 3
+    _runoffReductionPercentage: 24

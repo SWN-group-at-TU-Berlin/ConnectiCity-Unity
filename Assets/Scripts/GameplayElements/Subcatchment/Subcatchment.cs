@@ -20,6 +20,21 @@ public class Subcatchment : MonoBehaviour
     public AreaSize Size { get { return _size; } }
     #endregion
 
+    [SerializeField] BuildStatus _buildStatus;
+    #region getter
+    public BuildStatus BuildStatus { get { return _buildStatus; } }
+    #endregion
+
+    [SerializeField] BuildStatus _grPercentage;
+    #region getter
+    public BuildStatus GRPercentage { get { return _grPercentage; } }
+    #endregion
+
+    [SerializeField] BuildStatus _rbType;
+    #region getter
+    public BuildStatus RBType { get { return _rbType; } }
+    #endregion
+
     [Header("Highlighted Materials")]
     [SerializeField] Material _highlightedMaterial;
     [SerializeField] Material _deactivatedMaterial;
@@ -60,6 +75,7 @@ public class Subcatchment : MonoBehaviour
 
     private void Awake()
     {
+        _buildStatus = BuildStatus.Unbuild;
         defaultMaterial = GetComponent<MeshRenderer>().material;
         highlightSelectionColor = GetComponent<Outline>().OutlineColor;
         _BGIHosted = new List<InfrastructureType>();
@@ -103,7 +119,8 @@ public class Subcatchment : MonoBehaviour
 
                 if (input.MouseLeftButton())
                 {
-                    InfrastructureBuilder.Instance.BuildInfrastructure(GetComponent<Subcatchment>());
+                    //InfrastructureBuilder.Instance.BuildInfrastructure(GetComponent<Subcatchment>());
+                    CallUIInfoTab();
                 }
             }
             else
@@ -126,6 +143,52 @@ public class Subcatchment : MonoBehaviour
                 outline.enabled = IsHovered;
             }
         }
+    }
+
+    private void CallUIInfoTab()
+    {
+        InfrastructureType infrastructureTypeToBuild = InfrastructureType.Null;
+        if (UIManager.Instance.InfrastructureTypeButtonPressed.Equals(InfrastructureType.Building))
+        {
+            if (Usage.Equals(AreaUsage.Commercial))
+            {
+                infrastructureTypeToBuild = InfrastructureType.Business;
+            }
+            else
+            {
+                infrastructureTypeToBuild = InfrastructureType.House;
+            }
+        }
+        else
+        {
+            infrastructureTypeToBuild = UIManager.Instance.InfrastructureTypeButtonPressed;
+        }
+        BuildStatus infrastructureToBuild = ConvertInfrastructureTypeToBuildStatus(UIManager.Instance.InfrastructureTypeButtonPressed);
+        float buildigCost = CostsManager.Instance.GetSubcatchmentBuildCosts(SubcatchmentNumber, infrastructureToBuild);
+        float apCost = CostsManager.Instance.GetActionPointCosts(SubcatchmentNumber, infrastructureToBuild);
+        UIManager.Instance.ShowInfoTab(_subcatchmentNumber, infrastructureTypeToBuild, buildigCost, apCost);
+    }
+
+    BuildStatus ConvertInfrastructureTypeToBuildStatus(InfrastructureType toConvert)
+    {
+        BuildStatus converted;
+        if (toConvert.Equals(InfrastructureType.Building) || toConvert.Equals(InfrastructureType.House) || toConvert.Equals(InfrastructureType.Business))
+        {
+            converted = BuildStatus.Built;
+        }
+        else if (toConvert.Equals(InfrastructureType.GR))
+        {
+            converted = GRPercentage;
+        }
+        else if (toConvert.Equals(InfrastructureType.RB))
+        {
+            converted = RBType;
+        }
+        else
+        {
+            converted = BuildStatus.PP;
+        }
+        return converted;
     }
 
     private void ShowInfrastructure(InfrastructureType infrastructure)
@@ -175,6 +238,29 @@ public class Subcatchment : MonoBehaviour
         return canHostBGI;
     }
 
+    public void ShowBuildInfoPanels(BuildStatus buildStatus)
+    {
+        //get build cost
+        float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(_subcatchmentNumber, buildStatus);
+
+        //get ap cost
+        float apCost = CostsManager.Instance.GetActionPointCosts(_subcatchmentNumber, buildStatus);
+
+        //get income benefit
+        float incomeBenefit = CostsManager.Instance.GetBuildBenefit(Benefit.income, _subcatchmentNumber, buildStatus);
+
+        //get cn benefit
+        float citizenNumberBenefit = CostsManager.Instance.GetBuildBenefit(Benefit.citizenNumber, _subcatchmentNumber, buildStatus);
+
+        //get cs benefit
+        float citizenSatisfactionBenefit = CostsManager.Instance.GetBuildBenefit(Benefit.citizenSatisfaction, _subcatchmentNumber, buildStatus);
+
+        //call UIManager to show info panel with previous info
+        Vector3 position = GetInfoPanelPosition();
+        UIManager.Instance.ShowInfoPanel(position, ((int)apCost), ((int)buildCost), ((int)incomeBenefit), ((int)citizenSatisfactionBenefit), ((int)citizenNumberBenefit));
+    }
+
+    //DEPRECATED
     public void ShowInfos(InfrastructureType infrastructure)
     {
         int budgetCost = 0;
@@ -190,21 +276,21 @@ public class Subcatchment : MonoBehaviour
             {
                 budgetCost = stats.CBudgetSmall;
                 income = stats.BIncomeSmall;
-                citizenNumberIncrease= stats.BCitizenNumberSmall;
+                citizenNumberIncrease = stats.BCitizenNumberSmall;
             }
             else if (_size.Equals(AreaSize.Medium))
             {
 
                 budgetCost = stats.CBudgetMedium;
                 income = stats.BIncomeMedium;
-                citizenNumberIncrease= stats.BCitizenNumberMedium;
+                citizenNumberIncrease = stats.BCitizenNumberMedium;
             }
             else if (_size.Equals(AreaSize.Large))
             {
 
                 budgetCost = stats.CBudgetLarge;
                 income = stats.BIncomeLarge;
-                citizenNumberIncrease= stats.BCitizenNumberLarge;
+                citizenNumberIncrease = stats.BCitizenNumberLarge;
             }
             apCost = stats.CActionPoints;
         }

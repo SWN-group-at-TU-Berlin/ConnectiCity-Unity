@@ -62,6 +62,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Info boards references and properties")]
     [SerializeField] GameObject MessageBoard;
+    [SerializeField] GameObject InfoTab;
     [SerializeField] private float staticTime;
     [SerializeField] private float fadeOutTime;
     [Tooltip("parent obj of all info panels")]
@@ -77,8 +78,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject floatingTextPrefab;
     [SerializeField] float floatingSpeed;
     [SerializeField] float txtFadeOutTime;
+
     //Button variables
     List<GameObject> DefaultButtons;
+    InfrastructureType infrastructureTypeButtonPressed;
+    #region getter
+    public InfrastructureType InfrastructureTypeButtonPressed { get { return infrastructureTypeButtonPressed; } }
+    #endregion
     bool _houseButtonPressed = false;
     bool _businessButtonPressed = false;
     bool _GRButtonPressed = false;
@@ -173,6 +179,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void InfrastructureButtoPressed()
+    {
+        infrastructureTypeButtonPressed = InfrastructureType.Building;
+    }
+
     public void BusinessButtonPressed()
     {
         _businessButtonPressed = !_businessButtonPressed;
@@ -212,11 +223,13 @@ public class UIManager : MonoBehaviour
         GRButtonDefault.SetActive(!_GRButtonPressed);
         if (GRButtonDefault.activeInHierarchy)
         {
+            infrastructureTypeButtonPressed = InfrastructureType.GR;
             ActivateDefaultButtons(GRButtonDefault);
             HideInfoPanels();
         }
         else
         {
+            infrastructureTypeButtonPressed = InfrastructureType.Null;
             DeactivateDefaultButtons(GRButtonDefault);
         }
     }
@@ -228,11 +241,13 @@ public class UIManager : MonoBehaviour
         PPButtonDefault.SetActive(!_PPButtonPressed);
         if (PPButtonDefault.activeInHierarchy)
         {
+            infrastructureTypeButtonPressed = InfrastructureType.PP;
             ActivateDefaultButtons(PPButtonDefault);
             HideInfoPanels();
         }
         else
         {
+            infrastructureTypeButtonPressed = InfrastructureType.Null;
             DeactivateDefaultButtons(PPButtonDefault);
         }
     }
@@ -244,11 +259,13 @@ public class UIManager : MonoBehaviour
         RBButtonDefault.SetActive(!_RBButtonPressed);
         if (RBButtonDefault.activeInHierarchy)
         {
+            infrastructureTypeButtonPressed = InfrastructureType.RB;
             ActivateDefaultButtons(RBButtonDefault);
             HideInfoPanels();
         }
         else
         {
+            infrastructureTypeButtonPressed = InfrastructureType.Null;
             DeactivateDefaultButtons(RBButtonDefault);
         }
     }
@@ -368,7 +385,7 @@ public class UIManager : MonoBehaviour
             {
                 if (textField.name.Equals("AP"))
                 {
-                    textField.GetComponent<TextMeshProUGUI>().text = "-" + actionPoints.ToString();
+                    textField.GetComponent<TextMeshProUGUI>().text = actionPoints.ToString();
                     textField.GetComponent<TextMeshProUGUI>().color = CanonRed;
                 }
                 if (textField.name.Equals("CS"))
@@ -514,7 +531,8 @@ public class UIManager : MonoBehaviour
                         raycastResultList[i].gameObject.GetComponent<ToolTipUser>().ShowTooltip();
                     }
                 }
-            } else
+            }
+            else
             {
                 tooltipCooldownTimer += Time.deltaTime;
             }
@@ -524,5 +542,56 @@ public class UIManager : MonoBehaviour
             tooltipCooldown = 0;
             //StartCoroutine(Tooltip.Instance.Deactivate());
         }
+    }
+
+    public void ShowInfoTab(float subcatchmentNumber, InfrastructureType infrastructureType, float buildCost, float apCost)
+    {
+        if (!InfoTab.activeInHierarchy)
+        {
+            InfoTab.SetActive(true);
+        }
+
+        /*THIS IS A QUICK N DIRTY FIX TO CONVERT THE ENUM INTO A STRING
+         IT SHOULD BE ADDRESSED IN A MORE GENERAL WAY PLZ*/
+        string infrastructureTypeStr = "";
+
+        switch (infrastructureType)
+        {
+            case InfrastructureType.Business:
+                {
+                    infrastructureTypeStr = "Commercial Building";
+                    break;
+                }
+            case InfrastructureType.House:
+                {
+                    infrastructureTypeStr = "Residential Building";
+                    break;
+                }
+            case InfrastructureType.GR:
+                {
+                    infrastructureTypeStr = "Gree Roof";
+                    break;
+                }
+            case InfrastructureType.PP:
+                {
+                    infrastructureTypeStr = "Permeable Pavement";
+                    break;
+                }
+            case InfrastructureType.RB:
+                {
+                    infrastructureTypeStr = "Rain Barrel";
+                    break;
+                }
+        }
+
+        float currentBudget = ResourceManager.Instance.Budget;
+        float currentap = ResourceManager.Instance.ActionPoints;
+        InfoTab.GetComponent<InfoTab>().UpdateTextFields(subcatchmentNumber, infrastructureTypeStr, currentBudget, buildCost, currentap, apCost);
+
+    }
+
+    public void HideInfoTab()
+    {
+        InfoTab.SetActive(false);
     }
 }

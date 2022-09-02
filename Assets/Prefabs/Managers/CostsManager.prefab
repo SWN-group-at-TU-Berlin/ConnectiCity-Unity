@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6849916732814468500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6849916732814468502}
+  - component: {fileID: 6849916732814468501}
+  m_Layer: 0
+  m_Name: CostsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6849916732814468502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6849916732814468500}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -136.04173, y: -369.47516, z: -89.364105}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6849916732814468501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6849916732814468500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4dfc550d4a2ff948906ce7e21e06f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfrastructuresStats:
+  - _name: House
+    _cActionPoints: 6
+    _cBudgetSmall: 1100000
+    _cBudgetMedium: 1600000
+    _cBudgetLarge: 2700000
+    _bCitizenNumberSmall: 1
+    _bCitizenNumberMedium: 2
+    _bCitizenNumberLarge: 3
+    _bCitizenSatisfaction: 1
+    _bIncomeSmall: 0
+    _bIncomeMedium: 0
+    _bIncomeLarge: 0
+  - _name: Business
+    _cActionPoints: 5
+    _cBudgetSmall: 3100000
+    _cBudgetMedium: 4500000
+    _cBudgetLarge: 7500000
+    _bCitizenNumberSmall: 0
+    _bCitizenNumberMedium: 0
+    _bCitizenNumberLarge: 0
+    _bCitizenSatisfaction: 0
+    _bIncomeSmall: 1
+    _bIncomeMedium: 2
+    _bIncomeLarge: 3
+  BGIStats:
+  - _name: GR
+    _cActionPoints: 3
+    _cBudgetResidentialSmall: 70000
+    _cBudgetResidentialMedium: 110000
+    _cBudgetResidentialLarge: 180000
+    _cBudgetCommercialSmall: 160000
+    _cBudgetCommercialMedium: 240000
+    _cBudgetCommercialLarge: 400000
+    _bCitizenSatisfaction: 1
+  - _name: PP
+    _cActionPoints: 2
+    _cBudgetResidentialSmall: 50000
+    _cBudgetResidentialMedium: 70000
+    _cBudgetResidentialLarge: 170000
+    _cBudgetCommercialSmall: 70000
+    _cBudgetCommercialMedium: 110000
+    _cBudgetCommercialLarge: 170000
+    _bCitizenSatisfaction: 0
+  - _name: RB
+    _cActionPoints: 1
+    _cBudgetResidentialSmall: 10000
+    _cBudgetResidentialMedium: 14000
+    _cBudgetResidentialLarge: 20000
+    _cBudgetCommercialSmall: 18000
+    _cBudgetCommercialMedium: 27000
+    _cBudgetCommercialLarge: 44000
+    _bCitizenSatisfaction: 0
+  ResidentialFloodCosts:
+  - _rainfallIntensity: 1
+    _unbuild: 30
+    _infrastructure: 60
+    _gr: 24
+    _pp: 36
+    _rb: 42
+    _gr_pp: 6
+    _gr_rb: 18
+    _rb_pp: 24
+  - _rainfallIntensity: 2
+    _unbuild: 60
+    _infrastructure: 120
+    _gr: 84
+    _pp: 72
+    _rb: 108
+    _gr_pp: 54
+    _gr_rb: 78
+    _rb_pp: 60
+  - _rainfallIntensity: 3
+    _unbuild: 90
+    _infrastructure: 180
+    _gr: 144
+    _pp: 108
+    _rb: 42
+    _gr_pp: 99
+    _gr_rb: 135
+    _rb_pp: 99
+  CommercialFloodCosts:
+  - _rainfallIntensity: 1
+    _unbuild: 37
+    _infrastructure: 75
+    _gr: 23
+    _pp: 49
+    _rb: 53
+    _gr_pp: 11
+    _gr_rb: 19
+    _rb_pp: 34
+  - _rainfallIntensity: 2
+    _unbuild: 75
+    _infrastructure: 150
+    _gr: 98
+    _pp: 98
+    _rb: 135
+    _gr_pp: 75
+    _gr_rb: 90
+    _rb_pp: 83
+  - _rainfallIntensity: 3
+    _unbuild: 112
+    _infrastructure: 225
+    _gr: 180
+    _pp: 146
+    _rb: 203
+    _gr_pp: 135
+    _gr_rb: 169
+    _rb_pp: 124

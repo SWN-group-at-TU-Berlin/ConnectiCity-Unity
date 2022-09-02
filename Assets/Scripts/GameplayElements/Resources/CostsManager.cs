@@ -18,6 +18,12 @@ public class CostsManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        //allocate memory for dictionaries
+        rainCosts = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
+        buildingCosts = new Dictionary<SubcatchmentKey, float>();
+        benefits = new Dictionary<Benefit, Dictionary<SubcatchmentKey, float>>();
+        actionPoints = new Dictionary<SubcatchmentKey, float>();
     }
     #endregion
 
@@ -44,6 +50,12 @@ public class CostsManager : MonoBehaviour
     public Dictionary<Benefit, Dictionary<SubcatchmentKey, float>> Benefits { get { return benefits; } }
     #endregion
 
+    //ACTION POINT
+    Dictionary<SubcatchmentKey, float> actionPoints;
+    #region getter
+    public Dictionary<SubcatchmentKey, float> ActionPointsCosts { get { return actionPoints; } }
+    #endregion
+
     /*Dictionaries of data
      * citizen satisfaction loss
      */
@@ -55,6 +67,35 @@ public class CostsManager : MonoBehaviour
      * getbuilding citizen number increase (subcatchment number)
      * get building citizen satisfaction increase (subcatchment number)
      */
+
+    private void Start()
+    {
+        //initialize data dictionaries
+        rainCosts = DataReader.Instance.RainCostsDictionaries;
+        buildingCosts = DataReader.Instance.BuildingCosts;
+        benefits = DataReader.Instance.Benefits;
+        actionPoints = DataReader.Instance.ActionPointsCosts;
+    }
+
+    public float GetSubcatchmentRainCost(int rainLv, int subcatchmentNumber, BuildStatus subcatchmentBuildStatus)
+    {
+        return rainCosts[rainLv][new SubcatchmentKey(subcatchmentNumber, subcatchmentBuildStatus)];
+    }
+
+    public float GetSubcatchmentBuildCosts(int subcatchmentNumber, BuildStatus subcatchmentBuildStatus)
+    {
+        return buildingCosts[new SubcatchmentKey(subcatchmentNumber, subcatchmentBuildStatus)];
+    }
+
+    public float GetBuildBenefit(Benefit benefitType, int subcatchmentNumber, BuildStatus infrastructureType)
+    {
+        return benefits[benefitType][new SubcatchmentKey(subcatchmentNumber, infrastructureType)];
+    }
+
+    public float GetActionPointCosts(int subcatchmentNumber, BuildStatus infrastructureType)
+    {
+        return actionPoints[new SubcatchmentKey(subcatchmentNumber, infrastructureType)];
+    }
 
     public BasicInfrastructureStats GetInfrastructureStats(InfrastructureType infrastructure)
     {
