@@ -13,10 +13,11 @@ public class DataReader : MonoBehaviour
     [SerializeField] TextAsset rainCostsTables;
     [SerializeField] TextAsset runoffReductionTables;
     [SerializeField] TextAsset buildingCostsTable;
-    [SerializeField] TextAsset actionPointsTable;
-    [SerializeField] TextAsset incomeBenefitTable;
-    [SerializeField] TextAsset citizenSatisfactionBenefitTable;
-    [SerializeField] TextAsset citizenNumberBenefitTable;
+    [SerializeField] TextAsset subcatchmentBenefitsTable;
+    [SerializeField] TextAsset actionPointsTable;//CHECK IF DEPRECATED
+    [SerializeField] TextAsset incomeBenefitTable;//CHECK IF DEPRECATED
+    [SerializeField] TextAsset citizenSatisfactionBenefitTable;//CHECK IF DEPRECATED
+    [SerializeField] TextAsset citizenNumberBenefitTable;//CHECK IF DEPRECATED
     [SerializeField] int rainIntensity;
     [SerializeField] int subcat;
     [SerializeField] BuildStatus buildStatus;
@@ -53,6 +54,11 @@ public class DataReader : MonoBehaviour
     public Dictionary<int, float> SubcatchmentsAreas { get { return subcatchmentsAreas; } }
     #endregion
 
+    Dictionary<int, float> subcatchmentsBenefits;
+    #region getter
+    public Dictionary<int, float> SubcatchmentsBenefits { get { return subcatchmentsBenefits; } }
+    #endregion
+
     private void Awake()
     {
         //SINGLETON
@@ -70,9 +76,11 @@ public class DataReader : MonoBehaviour
         runoffReductionPercentagesDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
         buildingCosts = new Dictionary<SubcatchmentKey, float>();
         subcatchmentsAreas = new Dictionary<int, float>();
+        subcatchmentsBenefits = new Dictionary<int, float>();
         benefits = new Dictionary<Benefit, Dictionary<SubcatchmentKey, float>>();
 
-         //Dictionaries population
+        //Dictionaries population
+        subcatchmentsBenefits = PopulateOneValuePerSubcatchmentDictionary(subcatchmentBenefitsTable);
         PopulateDictionaryFromRainLevelTables(rainCostsDictionaries, rainCostsTables);
         PopulateDictionaryFromRainLevelTables(runoffReductionPercentagesDictionaries, runoffReductionTables);
         buildingCosts = PopulateDictionaryFromSubcatchmentsTables(buildingCostsTable);
@@ -83,23 +91,39 @@ public class DataReader : MonoBehaviour
         benefits.Add(Benefit.income, incomeBenefits);
         benefits.Add(Benefit.citizenNumber, citizenNumberBenefits);
         benefits.Add(Benefit.citizenSatisfaction, citizenSatisfactionBenefits);
-        /*TO TEST BUILDING COSTS POPULATION*/
-        foreach (Benefit benefit in Enum.GetValues(typeof(Benefit)))
+    }
+
+    /*Reads a table that stores one value per subcatchment:
+        - the table must contain the labels in the first row
+     */
+    public Dictionary<int, float> PopulateOneValuePerSubcatchmentDictionary(TextAsset table)
+    {
+        //instantiate dictionary
+        Dictionary<int, float> toPopulate = new Dictionary<int, float>();
+
+        //read table from textasset into string
+        string tableTxt = table.text;
+
+        //split by "\n" into string array s
+        string[] tableContent = tableTxt.Split('\n');
+
+        //remove labels
+        List<string> tmp = new List<string>(tableContent);
+        tmp.RemoveAt(0);
+        tableContent = tmp.ToArray();
+
+        //for each string in s
+        foreach(string row in tableContent)
         {
-            Dictionary<SubcatchmentKey, float> b = benefits[benefit];
-            for (int i = 1; i <= 12; i++)
-            {
-                string subcatCosts = "Subcat " + i;
-                foreach (BuildStatus stat in Enum.GetValues(typeof(BuildStatus)))
-                {
-                    if (b.ContainsKey(new SubcatchmentKey(i, stat)))
-                    {
-                        subcatCosts += " | " + stat + ": " + b[new SubcatchmentKey(i, stat)] + " //";
-                    }
-                }
-                Debug.Log(subcatCosts);
-            }
+            //split string by "," in array a of dim 2
+            string[] rowValues = row.Split(',');
+
+            //store a[0] as key and a[1] as val in dictionary
+            toPopulate.Add(int.Parse(rowValues[0]), float.Parse(rowValues[1]));
         }
+
+        //return dictionary
+        return toPopulate;
     }
 
     private Dictionary<SubcatchmentKey, float> PopulateDictionaryFromSubcatchmentsTables(TextAsset table)

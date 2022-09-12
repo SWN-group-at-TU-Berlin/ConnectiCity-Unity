@@ -71,6 +71,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Color CanonGreen;
     [SerializeField] Color CanonRed;
     [SerializeField] float tooltipCooldown = 2;
+    [SerializeField] Sprite jobs;
+    [SerializeField] Sprite house;
 
 
     [Header("Floating text references")]
@@ -374,7 +376,7 @@ public class UIManager : MonoBehaviour
     public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
     public void UpdateRoundTxt(int currentRound) { CurrentRound.text = "Round" + currentRound.ToString(); }
 
-    public void ShowInfoPanel(Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
+    public void ShowInfoPanel(AreaUsage subcatType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
     {
         if (infoPanelsNotInUse.Count > 0)
         {
@@ -403,10 +405,17 @@ public class UIManager : MonoBehaviour
                     textField.GetComponent<TextMeshProUGUI>().text = "-" + budget.ToString();
                     textField.GetComponent<TextMeshProUGUI>().color = CanonRed;
                 }
-                if (textField.name.Equals("Income"))
+                if (textField.name.Equals("Benefit"))
                 {
                     textField.GetComponent<TextMeshProUGUI>().text = "+" + income;
                     textField.GetComponent<TextMeshProUGUI>().color = CanonGreen;
+                    if (subcatType.Equals(AreaUsage.Residential))
+                    {
+                        textField.GetChild(0).GetComponent<Image>().sprite = house;
+                    } else
+                    {
+                        textField.GetChild(0).GetComponent<Image>().sprite = jobs;
+                    }
                 }
             }
 

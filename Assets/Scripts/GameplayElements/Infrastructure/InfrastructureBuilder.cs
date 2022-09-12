@@ -182,35 +182,40 @@ public class InfrastructureBuilder : MonoBehaviour
         List<Subcatchment> buildableSubcatchments = new List<Subcatchment>();
 
         //foreach subcatchment:
-        foreach(Subcatchment subcatchment in MapManager.Instance.GetSubcatchments())
+        foreach (Subcatchment subcatchment in MapManager.Instance.GetSubcatchments())
         {
-            //show info panels
-            subcatchment.ShowBuildInfoPanels(BuildStatus.Built);
-
-            //get budget from current resources
-            float currentBudget = ResourceManager.Instance.Budget;
-
-            //get ap from current resources
-            float currentAp = ResourceManager.Instance.ActionPoints;
-
-            //get build costs for current subcatchment
-            float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
-            
-            //get ap costs for current subcatchment
-            float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
-
-            //if: ap costs < ap AND build costs < budget
-            if(apCost <= currentAp && buildCost <= currentBudget)
+            //if subcat not built
+            if (!subcatchment.IsBuilt)
             {
-                //add subcatchment to buildable subcatchments
-                buildableSubcatchments.Add(subcatchment);
+
+                //show info panels
+                subcatchment.ShowBuildInfoPanels(BuildStatus.Built);
+
+                //get budget from current resources
+                float currentBudget = ResourceManager.Instance.Budget;
+
+                //get ap from current resources
+                float currentAp = ResourceManager.Instance.ActionPoints;
+
+                //get build costs for current subcatchment
+                float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
+
+                //get ap costs for current subcatchment
+                float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
+
+                //if: ap costs < ap AND build costs < budget
+                if (apCost <= currentAp && buildCost <= currentBudget)
+                {
+                    //add subcatchment to buildable subcatchments
+                    buildableSubcatchments.Add(subcatchment);
+                }
             }
 
         }
         //highlight those for which you have enough resources to build
         MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
     }
-   
+
 
     public void CheckGRSubcatchmentAvailabilities()
     {

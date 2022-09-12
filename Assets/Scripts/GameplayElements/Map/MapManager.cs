@@ -34,6 +34,19 @@ public class MapManager : MonoBehaviour
 
     float lightIntensity;
 
+    private void Start()
+    {
+        //setup benefits in each subcatchement
+
+        //foreach subcatchment
+        foreach(Subcatchment subcat in _subcatchments)
+        {
+            //set subcatchment benefit from dictionary
+            subcat.SubcatchmentBenefit = (int)DataReader.Instance.SubcatchmentsBenefits[subcat.SubcatchmentNumber];
+            Debug.Log("Setup subcat: " + subcat.SubcatchmentNumber + " | with benefit: " + subcat.SubcatchmentBenefit);
+        }
+    }
+
     private void DeactivateSubcatchmentsChildren()
     {
         foreach (Subcatchment subcat in _subcatchments)
