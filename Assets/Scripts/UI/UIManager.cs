@@ -412,7 +412,8 @@ public class UIManager : MonoBehaviour
                     if (subcatType.Equals(AreaUsage.Residential))
                     {
                         textField.GetChild(0).GetComponent<Image>().sprite = house;
-                    } else
+                    }
+                    else
                     {
                         textField.GetChild(0).GetComponent<Image>().sprite = jobs;
                     }
@@ -553,7 +554,42 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowInfoTab(float subcatchmentNumber, InfrastructureType infrastructureType, float buildCost, float apCost)
+    public void ShowInfoTabInfrastructure(float subcatchmentNumber, InfrastructureType infrastructureType, BuildStatus infrastructureToBuild, float buildCost, float benefit)
+    {
+        if (!InfoTab.activeInHierarchy)
+        {
+            InfoTab.SetActive(true);
+        }
+
+        /*THIS IS A QUICK N DIRTY FIX TO CONVERT THE ENUM INTO A STRING
+         IT SHOULD BE ADDRESSED IN A MORE GENERAL WAY PLZ*/
+        string infrastructureTypeStr = "";
+        string benefitLable = "";
+        float currentBenefit = ResourceManager.Instance.Jobs;
+
+        switch (infrastructureType)
+        {
+            case InfrastructureType.Business:
+                {
+                    infrastructureTypeStr = "Commercial Building";
+                    benefitLable = "Jobs increase:";
+                    break;
+                }
+            case InfrastructureType.House:
+                {
+                    infrastructureTypeStr = "Residential Building";
+                    benefitLable = "Hostable people increase:";
+                    currentBenefit = ResourceManager.Instance.HostablePeople;
+                    break;
+                }
+        }
+
+        float currentBudget = ResourceManager.Instance.Budget;
+        InfoTab.GetComponent<InfoTab>().UpdateTextFieldsInfrastructure(subcatchmentNumber, infrastructureTypeStr, currentBudget, buildCost, currentBenefit, benefit, benefitLable);
+
+    }
+
+    public void ShowInfoTabBGI(float subcatchmentNumber, InfrastructureType infrastructureType, BuildStatus infrastructureToBuild, float buildCost, Dictionary<int, float> newRunoffReductions, Dictionary<int, float> currentRunoffReductions)
     {
         if (!InfoTab.activeInHierarchy)
         {
@@ -566,19 +602,12 @@ public class UIManager : MonoBehaviour
 
         switch (infrastructureType)
         {
-            case InfrastructureType.Business:
-                {
-                    infrastructureTypeStr = "Commercial Building";
-                    break;
-                }
-            case InfrastructureType.House:
-                {
-                    infrastructureTypeStr = "Residential Building";
-                    break;
-                }
             case InfrastructureType.GR:
                 {
-                    infrastructureTypeStr = "Gree Roof";
+                    //recover gr percentage of subcat
+                    string specs = IdentifySpecsOfBGI(infrastructureToBuild);
+                    //add it to the infrastructure type str
+                    infrastructureTypeStr = "Gree Roof + " + specs + "% coverage";
                     break;
                 }
             case InfrastructureType.PP:
@@ -588,19 +617,46 @@ public class UIManager : MonoBehaviour
                 }
             case InfrastructureType.RB:
                 {
-                    infrastructureTypeStr = "Rain Barrel";
+                    //recover rb type (1 or 2)
+                    string specs = IdentifySpecsOfBGI(infrastructureToBuild);
+                    //add it to the infrastructure type str
+                    infrastructureTypeStr = "Rain Barrel " + specs;
                     break;
                 }
         }
 
         float currentBudget = ResourceManager.Instance.Budget;
         float currentap = ResourceManager.Instance.ActionPoints;
-        InfoTab.GetComponent<InfoTab>().UpdateTextFields(subcatchmentNumber, infrastructureTypeStr, currentBudget, buildCost, currentap, apCost);
+        InfoTab.GetComponent<InfoTab>().UpdateTextFieldsBGI(subcatchmentNumber, infrastructureTypeStr, currentBudget, buildCost, currentRunoffReductions, newRunoffReductions);
 
     }
 
     public void HideInfoTab()
     {
         InfoTab.SetActive(false);
+    }
+
+
+    /*This function returns the specifi percentage of coverage of roofs
+      in case of a GR or the specific type in case of a RB
+     */
+    string IdentifySpecsOfBGI(BuildStatus bgi)
+    {
+        string specs = "";
+        //if it's a GR
+        if (bgi.ToString().Contains("GR"))
+        {
+            specs = bgi.ToString().TrimStart('G');
+            specs = specs.ToString().TrimStart('R');
+        }//if it's a RB
+        else if (bgi.ToString().Equals("RB1"))
+        {
+            specs = "small tanks";
+        } else if (bgi.ToString().Equals("RB2"))
+        {
+            specs = "big tanks";
+        }
+
+        return specs;
     }
 }

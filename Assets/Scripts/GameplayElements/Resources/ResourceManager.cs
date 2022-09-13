@@ -52,6 +52,16 @@ public class ResourceManager : MonoBehaviour
     public int ActionPoints { get { return _actionPoints; } }
     #endregion
 
+    [SerializeField] int _jobs;
+    #region getter
+    public int Jobs { get { return _jobs; } }
+    #endregion
+
+    [SerializeField] int _hostablePeople;
+    #region getter
+    public int HostablePeople { get { return _hostablePeople; } }
+    #endregion
+
     int defaultAP;
 
     public void UpdateCitizenNumber(int valToAdd)
@@ -85,6 +95,19 @@ public class ResourceManager : MonoBehaviour
         _budget += valToAdd;
         UIManager.Instance.UpdateBudgetTxt(Budget);
     }
+
+    public void UpdateJobs(int valToAdd)
+    {
+        _jobs += valToAdd;
+        //update jobs UI
+    }
+
+    public void UpdateHostablePeople(int valToAdd)
+    {
+        _hostablePeople += valToAdd;
+        //update hostable ppl UI
+    }
+
     public void UpdateActionPoints(int valToAdd)
     {
         _actionPoints += valToAdd;

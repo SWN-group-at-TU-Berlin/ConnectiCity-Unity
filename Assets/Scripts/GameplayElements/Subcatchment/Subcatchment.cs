@@ -153,8 +153,10 @@ public class Subcatchment : MonoBehaviour
     private void CallUIInfoTab()
     {
         InfrastructureType infrastructureTypeToBuild = InfrastructureType.Null;
+        bool buildingInfrastructure = false;
         if (UIManager.Instance.InfrastructureTypeButtonPressed.Equals(InfrastructureType.Building))
         {
+            buildingInfrastructure = true;
             if (Usage.Equals(AreaUsage.Commercial))
             {
                 infrastructureTypeToBuild = InfrastructureType.Business;
@@ -170,8 +172,31 @@ public class Subcatchment : MonoBehaviour
         }
         BuildStatus infrastructureToBuild = ConvertInfrastructureTypeToBuildStatus(UIManager.Instance.InfrastructureTypeButtonPressed);
         float buildigCost = CostsManager.Instance.GetSubcatchmentBuildCosts(SubcatchmentNumber, infrastructureToBuild);
-        float apCost = CostsManager.Instance.GetActionPointCosts(SubcatchmentNumber, infrastructureToBuild);
-        UIManager.Instance.ShowInfoTab(_subcatchmentNumber, infrastructureTypeToBuild, buildigCost, apCost);
+        if (buildingInfrastructure)
+        {
+            UIManager.Instance.ShowInfoTabInfrastructure(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildigCost, SubcatchmentBenefit);
+        } else if(!_buildStatus.Equals(BuildStatus.Unbuild) && !_buildStatus.Equals(BuildStatus.Built))
+        {
+            //recover runoff reductions change
+            float BGIRainReductionLv1_n = DataReader.Instance.GetRunoffReductionPercentage(1, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
+            float BGIRainReductionLv2_n = DataReader.Instance.GetRunoffReductionPercentage(2, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
+            float BGIRainReductionLv3_n = DataReader.Instance.GetRunoffReductionPercentage(3, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
+            //store them in dictionary
+            Dictionary<int, float> newRunoffReductions = new Dictionary<int, float>();
+            newRunoffReductions.Add(1, BGIRainReductionLv1_n);
+            newRunoffReductions.Add(2, BGIRainReductionLv2_n);
+            newRunoffReductions.Add(3, BGIRainReductionLv3_n);
+
+            //recover current runoff reductions
+            float BGIRuonffReductionLv1_c = DataReader.Instance.GetRunoffReductionPercentage(1, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
+            float BGIRuonffReductionLv2_c = DataReader.Instance.GetRunoffReductionPercentage(2, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
+            float BGIRuonffReductionLv3_c = DataReader.Instance.GetRunoffReductionPercentage(3, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
+            //store them in dictionary
+            Dictionary<int, float> currentRunoffReductions = new Dictionary<int, float>();
+            currentRunoffReductions.Add(1, BGIRuonffReductionLv1_c);
+            currentRunoffReductions.Add(2, BGIRuonffReductionLv2_c);
+            currentRunoffReductions.Add(3, BGIRuonffReductionLv3_c);
+        }
     }
 
     BuildStatus ConvertInfrastructureTypeToBuildStatus(InfrastructureType toConvert)
