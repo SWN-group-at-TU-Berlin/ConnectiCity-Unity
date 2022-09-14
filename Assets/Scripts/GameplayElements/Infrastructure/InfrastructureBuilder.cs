@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -189,7 +190,7 @@ public class InfrastructureBuilder : MonoBehaviour
             {
 
                 //show info panels
-                subcatchment.ShowBuildInfoPanels(BuildStatus.Built);
+                subcatchment.ShowBuildInfoPanels(InfrastructureType.Building);
 
                 //get budget from current resources
                 float currentBudget = ResourceManager.Instance.Budget;
@@ -216,6 +217,46 @@ public class InfrastructureBuilder : MonoBehaviour
         MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
     }
 
+    public void EnterBGIBuildStatus(InfrastructureType BGIToBuild)
+    {
+
+        //instantiate a list of buildable subcatchments
+        List<Subcatchment> buildableSubcatchments = new List<Subcatchment>();
+
+        //foreach subcatchment:
+        foreach (Subcatchment subcatchment in MapManager.Instance.GetSubcatchments())
+        {
+            //if subcat not built
+            if (!subcatchment.SubcatchmentHostsBGI(BGIToBuild))
+            {
+
+                //show info panels
+                subcatchment.ShowBuildInfoPanels(BGIToBuild);
+
+                //get budget from current resources
+                float currentBudget = ResourceManager.Instance.Budget;
+
+                //get ap from current resources
+                float currentAp = ResourceManager.Instance.ActionPoints;
+
+                //get build costs for current subcatchment
+                float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
+
+                //get ap costs for current subcatchment
+                float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
+
+                //if: ap costs < ap AND build costs < budget
+                if (apCost <= currentAp && buildCost <= currentBudget && subcatchment.IsBuilt)
+                {
+                    //add subcatchment to buildable subcatchments
+                    buildableSubcatchments.Add(subcatchment);
+                }
+            }
+
+        }
+        //highlight those for which you have enough resources to build
+        MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
+    }
 
     public void CheckGRSubcatchmentAvailabilities()
     {

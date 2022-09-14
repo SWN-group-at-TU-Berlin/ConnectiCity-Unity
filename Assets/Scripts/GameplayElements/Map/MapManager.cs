@@ -28,6 +28,12 @@ public class MapManager : MonoBehaviour
     #endregion
 
     [SerializeField] List<Subcatchment> _subcatchments;
+    [SerializeField] int GR100 = 2;
+    [SerializeField] int GR75 = 4;
+    [SerializeField] int GR50 = 4;
+    [SerializeField] int GR25 = 2;
+    [SerializeField] int RB1 = 6;
+    [SerializeField] int RB2 = 6;
     [SerializeField] Light light;
     [Range(0.1f, 1f)]
     [SerializeField] float lightFatctor;
@@ -39,12 +45,12 @@ public class MapManager : MonoBehaviour
         //setup benefits in each subcatchement
 
         //foreach subcatchment
-        foreach(Subcatchment subcat in _subcatchments)
+        foreach (Subcatchment subcat in _subcatchments)
         {
             //set subcatchment benefit from dictionary
             subcat.SubcatchmentBenefit = (int)DataReader.Instance.SubcatchmentsBenefits[subcat.SubcatchmentNumber];
-            Debug.Log("Setup subcat: " + subcat.SubcatchmentNumber + " | with benefit: " + subcat.SubcatchmentBenefit);
         }
+        RandomBGIInitialization();
     }
 
     private void DeactivateSubcatchmentsChildren()
@@ -78,7 +84,7 @@ public class MapManager : MonoBehaviour
     public int GetNumberOfHousesSubcatchmentsBuilt()
     {
         int builtHouseSubcats = 0;
-        foreach(Subcatchment subcat in GetHousesSubcatchments())
+        foreach (Subcatchment subcat in GetHousesSubcatchments())
         {
             if (subcat.IsBuilt)
             {
@@ -141,7 +147,7 @@ public class MapManager : MonoBehaviour
     public IEnumerator FadeOffLights()
     {
         float lowLightIntesntiy = lightIntensity * lightFatctor;
-        while(light.intensity > lowLightIntesntiy)
+        while (light.intensity > lowLightIntesntiy)
         {
             light.intensity -= 0.05f;
             yield return new WaitForSeconds(0.05f);
@@ -177,5 +183,40 @@ public class MapManager : MonoBehaviour
         }
 
         return bgisNum;
+    }
+
+    /*Gives each subcatchment a random gr coverage and rb type*/
+    void RandomBGIInitialization()
+    {
+        RandomInitializationLoop(GR100, BuildStatus.GR100);
+        RandomInitializationLoop(GR75, BuildStatus.GR75);
+        RandomInitializationLoop(GR50, BuildStatus.GR50);
+        RandomInitializationLoop(GR25, BuildStatus.GR25);
+        RandomInitializationLoop(RB1, BuildStatus.RB1);
+        RandomInitializationLoop(RB2, BuildStatus.RB2);
+    }
+
+    private void RandomInitializationLoop(int BGIOccurrencies, BuildStatus BGIToInitialize)
+    {
+        for (int i = 0; i < BGIOccurrencies; i++)
+        {
+            Subcatchment BGISubcat = _subcatchments[UnityEngine.Random.Range(0, _subcatchments.Count)];
+            if (BGIToInitialize.ToString().Contains("GR"))
+            {
+                while (!BGISubcat.GRPercentage.Equals(BuildStatus.Unbuild))
+                {
+                    BGISubcat = _subcatchments[UnityEngine.Random.Range(0, _subcatchments.Count)];
+                }
+                BGISubcat.GRPercentage = BGIToInitialize;
+            }
+            else if (BGIToInitialize.ToString().Contains("RB"))
+            {
+                while (!BGISubcat.RBType.Equals(BuildStatus.Unbuild))
+                {
+                    BGISubcat = _subcatchments[UnityEngine.Random.Range(0, _subcatchments.Count)];
+                }
+                BGISubcat.RBType = BGIToInitialize;
+            }
+        }
     }
 }

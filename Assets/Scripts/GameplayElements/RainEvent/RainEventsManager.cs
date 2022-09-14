@@ -30,6 +30,11 @@ public class RainEventsManager : MonoBehaviour
     [SerializeField] int maxRainEvent2Threshold;
     [SerializeField] int maxRainEvent3Threshold;
 
+    [SerializeField] int currentRainIntensity;
+    #region getter
+    public int CurrentRainIntensity { get { return currentRainIntensity; } }
+    #endregion
+
     [SerializeField] List<RunoffReductionPercentageSingleBGI> _singleBGIRunoffReduction;
     #region getter
     public List<RunoffReductionPercentageSingleBGI> SingleBGIRunoffReduction { get { return _singleBGIRunoffReduction; } }
@@ -43,6 +48,7 @@ public class RainEventsManager : MonoBehaviour
 
     private void Start()
     {
+        currentRainIntensity = 1;
         rainParticles.GetComponent<ParticleSystem>().Stop();
         rainEventInfoPanel.GetComponent<Animator>().enabled = false;
     }

@@ -32,12 +32,12 @@ public class Subcatchment : MonoBehaviour
 
     [SerializeField] BuildStatus _grPercentage;
     #region getter
-    public BuildStatus GRPercentage { get { return _grPercentage; } }
+    public BuildStatus GRPercentage { get { return _grPercentage; } set { _grPercentage = value; } }
     #endregion
 
     [SerializeField] BuildStatus _rbType;
     #region getter
-    public BuildStatus RBType { get { return _rbType; } }
+    public BuildStatus RBType { get { return _rbType; } set { _rbType = value; } }
     #endregion
 
     [Header("Highlighted Materials")]
@@ -232,6 +232,19 @@ public class Subcatchment : MonoBehaviour
         }
     }
 
+    public bool SubcatchmentHostsBGI(InfrastructureType bgi)
+    {
+        bool hostingBGI = false;
+        foreach(InfrastructureType infra in BGIHosted)
+        {
+            if (infra.Equals(bgi))
+            {
+                hostingBGI = true;
+            }
+        }
+        return hostingBGI;
+    }
+
     public void BuildInfrastructureOnSubcatchment(InfrastructureType infrastructure)
     {
         ShowInfrastructure(infrastructure);
@@ -268,26 +281,63 @@ public class Subcatchment : MonoBehaviour
         return canHostBGI;
     }
 
-    public void ShowBuildInfoPanels(BuildStatus buildStatus)
+    public void ShowBuildInfoPanels(InfrastructureType infrastructureType)
     {
+        //convert infratructure type to build status
+        BuildStatus buildStatus = BuildStatus.Unbuild;
+        switch (infrastructureType)
+        {
+            case InfrastructureType.Building:
+                {
+                    buildStatus = BuildStatus.Built;
+                    break;
+                }
+            case InfrastructureType.GR:
+                {
+                    buildStatus = _grPercentage;
+                    break;
+                }
+            case InfrastructureType.RB:
+                {
+                    buildStatus = _rbType;
+                    break;
+                }
+            case InfrastructureType.PP:
+                {
+                    buildStatus = BuildStatus.PP;
+                    break;
+                }
+            default:
+                {
+                    Debug.LogWarning("The infrastructure type: " + infrastructureType + " is not considered buildable");
+                    return;
+                    break;
+                }
+        }
+
         //get build cost
         float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(_subcatchmentNumber, buildStatus);
 
-        //get ap cost
+        //get ap cost [DEPRECATED]
         float apCost = CostsManager.Instance.GetActionPointCosts(_subcatchmentNumber, buildStatus);
 
         //get income benefit
-        float incomeBenefit = CostsManager.Instance.GetBuildBenefit(Benefit.income, _subcatchmentNumber, buildStatus);
+        float benefit = SubcatchmentBenefit;
 
-        //get cn benefit
+        if (!buildStatus.Equals(BuildStatus.Built))
+        {
+            benefit = DataReader.Instance.RunoffReductionPercentagesDictionaries[RainEventsManager.Instance.CurrentRainIntensity][new SubcatchmentKey(SubcatchmentNumber, buildStatus)];
+        }
+
+        //get cn benefit [DEPRECATED]
         float citizenNumberBenefit = CostsManager.Instance.GetBuildBenefit(Benefit.citizenNumber, _subcatchmentNumber, buildStatus);
 
-        //get cs benefit
+        //get cs benefit [DEPRECATED]
         float citizenSatisfactionBenefit = CostsManager.Instance.GetBuildBenefit(Benefit.citizenSatisfaction, _subcatchmentNumber, buildStatus);
 
         //call UIManager to show info panel with previous info
         Vector3 position = GetInfoPanelPosition();
-        UIManager.Instance.ShowInfoPanel(Usage, position, ((int)apCost), ((int)buildCost), ((int)SubcatchmentBenefit), ((int)citizenSatisfactionBenefit), ((int)citizenNumberBenefit));
+        UIManager.Instance.ShowInfoPanel(Usage, position, ((int)apCost), ((int)buildCost), ((int)benefit), ((int)citizenSatisfactionBenefit), ((int)citizenNumberBenefit));
     }
 
     //DEPRECATED
