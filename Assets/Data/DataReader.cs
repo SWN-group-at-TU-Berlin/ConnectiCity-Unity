@@ -188,8 +188,14 @@ public class DataReader : MonoBehaviour
 
     public float GetRunoffReductionPercentage(int rainInt, SubcatchmentKey subcatKey)
     {
-        float runoff = runoffReductionPercentagesDictionaries[rainInt][subcatKey];
-        Debug.Log("Runoff reduction for rain level: " + rainIntensity + " | subcat: " + subcat + " | build status: " + buildStatus.ToString() + " = " + runoff);
+        float runoff = 0;
+        if (runoffReductionPercentagesDictionaries.ContainsKey(rainInt))
+        {
+            if (runoffReductionPercentagesDictionaries[rainInt].ContainsKey(subcatKey))
+            {
+                runoff = runoffReductionPercentagesDictionaries[rainInt][subcatKey];
+            }
+        }
         return runoff;
     }
 

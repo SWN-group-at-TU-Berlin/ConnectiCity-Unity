@@ -208,12 +208,10 @@ public class UIManager : MonoBehaviour
 
         if (_buildMode)
         {
-            if (infoPanelsNotInUse.Count == 0)
+            infoPanelsNotInUse.Clear();
+            foreach (Transform infoPanel in InfoPanels)
             {
-                foreach (Transform infoPanel in InfoPanels)
-                {
-                    infoPanelsNotInUse.Enqueue(infoPanel);
-                }
+                infoPanelsNotInUse.Enqueue(infoPanel);
             }
             infrastructureTypeButtonPressed = InfrastructureType.Building;
             InfrastructureBuilder.Instance.EnterInfrastructureBuildStatus();
@@ -296,13 +294,12 @@ public class UIManager : MonoBehaviour
 
         if (_buildMode)
         {
-            if (infoPanelsNotInUse.Count == 0)
+            infoPanelsNotInUse.Clear();
+            foreach (Transform infoPanel in InfoPanels)
             {
-                foreach (Transform infoPanel in InfoPanels)
-                {
-                    infoPanelsNotInUse.Enqueue(infoPanel);
-                }
+                infoPanelsNotInUse.Enqueue(infoPanel);
             }
+
             infrastructureTypeButtonPressed = InfrastructureType.GR;
             InfrastructureBuilder.Instance.EnterBGIBuildStatus(infrastructureTypeButtonPressed);
         }
@@ -341,12 +338,10 @@ public class UIManager : MonoBehaviour
 
         if (_buildMode)
         {
-            if (infoPanelsNotInUse.Count == 0)
+            infoPanelsNotInUse.Clear();
+            foreach (Transform infoPanel in InfoPanels)
             {
-                foreach (Transform infoPanel in InfoPanels)
-                {
-                    infoPanelsNotInUse.Enqueue(infoPanel);
-                }
+                infoPanelsNotInUse.Enqueue(infoPanel);
             }
             infrastructureTypeButtonPressed = InfrastructureType.PP;
             InfrastructureBuilder.Instance.EnterBGIBuildStatus(infrastructureTypeButtonPressed);
@@ -386,12 +381,10 @@ public class UIManager : MonoBehaviour
 
         if (_buildMode)
         {
-            if (infoPanelsNotInUse.Count == 0)
+            infoPanelsNotInUse.Clear();
+            foreach (Transform infoPanel in InfoPanels)
             {
-                foreach(Transform infoPanel in InfoPanels)
-                {
-                    infoPanelsNotInUse.Enqueue(infoPanel);
-                }
+                infoPanelsNotInUse.Enqueue(infoPanel);
             }
             infrastructureTypeButtonPressed = InfrastructureType.RB;
             InfrastructureBuilder.Instance.EnterBGIBuildStatus(infrastructureTypeButtonPressed);
@@ -737,7 +730,7 @@ public class UIManager : MonoBehaviour
                     //recover gr percentage of subcat
                     string specs = IdentifySpecsOfBGI(infrastructureToBuild);
                     //add it to the infrastructure type str
-                    infrastructureTypeStr = "Gree Roof + " + specs + "% coverage";
+                    infrastructureTypeStr = "Gree Roof " + specs + "% coverage";
                     break;
                 }
             case InfrastructureType.PP:

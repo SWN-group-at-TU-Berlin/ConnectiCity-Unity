@@ -214,6 +214,7 @@ public class InfrastructureBuilder : MonoBehaviour
 
         }
         //highlight those for which you have enough resources to build
+        MapManager.Instance.DehighlightBuildableSubcatchments();
         MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
     }
 
@@ -255,6 +256,7 @@ public class InfrastructureBuilder : MonoBehaviour
 
         }
         //highlight those for which you have enough resources to build
+        MapManager.Instance.DehighlightBuildableSubcatchments();
         MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
     }
 

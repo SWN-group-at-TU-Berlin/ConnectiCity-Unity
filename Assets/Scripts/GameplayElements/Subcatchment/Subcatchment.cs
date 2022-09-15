@@ -27,7 +27,7 @@ public class Subcatchment : MonoBehaviour
 
     [SerializeField] BuildStatus _buildStatus;
     #region getter
-    public BuildStatus BuildStatus { get { return _buildStatus; } }
+    public BuildStatus BuildStatus { get { return _buildStatus; } set { _buildStatus = value; } }
     #endregion
 
     [SerializeField] BuildStatus _grPercentage;
@@ -94,6 +94,7 @@ public class Subcatchment : MonoBehaviour
         {
 
             InfrastructureBuilder.Instance.BuildInfrastructure(this);
+            _buildStatus = BuildStatus.Built;
         }
     }
 
@@ -171,11 +172,11 @@ public class Subcatchment : MonoBehaviour
             infrastructureTypeToBuild = UIManager.Instance.InfrastructureTypeButtonPressed;
         }
         BuildStatus infrastructureToBuild = ConvertInfrastructureTypeToBuildStatus(UIManager.Instance.InfrastructureTypeButtonPressed);
-        float buildigCost = CostsManager.Instance.GetSubcatchmentBuildCosts(SubcatchmentNumber, infrastructureToBuild);
+        float buildingCost = CostsManager.Instance.GetSubcatchmentBuildCosts(SubcatchmentNumber, infrastructureToBuild);
         if (buildingInfrastructure)
         {
-            UIManager.Instance.ShowInfoTabInfrastructure(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildigCost, SubcatchmentBenefit);
-        } else if(!_buildStatus.Equals(BuildStatus.Unbuild) && !_buildStatus.Equals(BuildStatus.Built))
+            UIManager.Instance.ShowInfoTabInfrastructure(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildingCost, SubcatchmentBenefit);
+        } else if(!_buildStatus.Equals(BuildStatus.Unbuild))
         {
             //recover runoff reductions change
             float BGIRainReductionLv1_n = DataReader.Instance.GetRunoffReductionPercentage(1, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
@@ -188,14 +189,15 @@ public class Subcatchment : MonoBehaviour
             newRunoffReductions.Add(3, BGIRainReductionLv3_n);
 
             //recover current runoff reductions
-            float BGIRuonffReductionLv1_c = DataReader.Instance.GetRunoffReductionPercentage(1, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
-            float BGIRuonffReductionLv2_c = DataReader.Instance.GetRunoffReductionPercentage(2, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
-            float BGIRuonffReductionLv3_c = DataReader.Instance.GetRunoffReductionPercentage(3, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
+            float BGIRuonffReductionLv1_c = DataReader.Instance.GetRunoffReductionPercentage(1, new SubcatchmentKey(SubcatchmentNumber, _buildStatus));
+            float BGIRuonffReductionLv2_c = DataReader.Instance.GetRunoffReductionPercentage(2, new SubcatchmentKey(SubcatchmentNumber, _buildStatus));
+            float BGIRuonffReductionLv3_c = DataReader.Instance.GetRunoffReductionPercentage(3, new SubcatchmentKey(SubcatchmentNumber, _buildStatus));
             //store them in dictionary
             Dictionary<int, float> currentRunoffReductions = new Dictionary<int, float>();
             currentRunoffReductions.Add(1, BGIRuonffReductionLv1_c);
             currentRunoffReductions.Add(2, BGIRuonffReductionLv2_c);
             currentRunoffReductions.Add(3, BGIRuonffReductionLv3_c);
+            UIManager.Instance.ShowInfoTabBGI(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildingCost, newRunoffReductions, currentRunoffReductions);
         }
     }
 
