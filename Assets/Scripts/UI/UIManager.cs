@@ -74,6 +74,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] float tooltipCooldown = 2;
     [SerializeField] Sprite jobs;
     [SerializeField] Sprite house;
+    [SerializeField] Sprite runoff;
 
 
     [Header("Floating text references")]
@@ -499,7 +500,7 @@ public class UIManager : MonoBehaviour
     public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
     public void UpdateRoundTxt(int currentRound) { CurrentRound.text = "Round" + currentRound.ToString(); }
 
-    public void ShowInfoPanel(AreaUsage subcatType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
+    public void ShowInfoPanel(AreaUsage subcatType, InfrastructureType infrastructureType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
     {
         if (infoPanelsNotInUse.Count > 0)
         {
@@ -532,13 +533,21 @@ public class UIManager : MonoBehaviour
                 {
                     textField.GetComponent<TextMeshProUGUI>().text = "+" + income;
                     textField.GetComponent<TextMeshProUGUI>().color = CanonGreen;
-                    if (subcatType.Equals(AreaUsage.Residential))
+                    if (infrastructureType.Equals(InfrastructureType.Building))
                     {
-                        textField.GetChild(0).GetComponent<Image>().sprite = house;
+
+                        if (subcatType.Equals(AreaUsage.Residential))
+                        {
+                            textField.GetChild(0).GetComponent<Image>().sprite = house;
+                        }
+                        else if (subcatType.Equals(AreaUsage.Commercial))
+                        {
+                            textField.GetChild(0).GetComponent<Image>().sprite = jobs;
+                        }
                     }
                     else
                     {
-                        textField.GetChild(0).GetComponent<Image>().sprite = jobs;
+                        textField.GetChild(0).GetComponent<Image>().sprite = runoff;
                     }
                 }
             }

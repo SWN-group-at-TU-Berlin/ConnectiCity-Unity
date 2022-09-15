@@ -339,7 +339,7 @@ public class Subcatchment : MonoBehaviour
 
         //call UIManager to show info panel with previous info
         Vector3 position = GetInfoPanelPosition();
-        UIManager.Instance.ShowInfoPanel(Usage, position, ((int)apCost), ((int)buildCost), ((int)benefit), ((int)citizenSatisfactionBenefit), ((int)citizenNumberBenefit));
+        UIManager.Instance.ShowInfoPanel(Usage, infrastructureType, position, ((int)apCost), ((int)buildCost), ((int)benefit), ((int)citizenSatisfactionBenefit), ((int)citizenNumberBenefit));
     }
 
     //DEPRECATED
@@ -419,7 +419,7 @@ public class Subcatchment : MonoBehaviour
         }
         Vector3 position = GetInfoPanelPosition();
 
-        UIManager.Instance.ShowInfoPanel(Usage, position, apCost, budgetCost, SubcatchmentBenefit, citizenSatisfactionIncrease, citizenNumberIncrease);
+        //UIManager.Instance.ShowInfoPanel(Usage, infrastructureType, position, apCost, budgetCost, SubcatchmentBenefit, citizenSatisfactionIncrease, citizenNumberIncrease);
     }
 
     public Vector3 GetInfoPanelPosition()
