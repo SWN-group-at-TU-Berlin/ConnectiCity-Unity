@@ -151,6 +151,14 @@ public class Subcatchment : MonoBehaviour
         }
     }
 
+    public void UpdateInfoTabInfrastructure()
+    {
+        if (_isHighlighted)
+        {
+            CallUIInfoTab();
+        }
+    }
+
     private void CallUIInfoTab()
     {
         InfrastructureType infrastructureTypeToBuild = InfrastructureType.Null;
@@ -199,6 +207,7 @@ public class Subcatchment : MonoBehaviour
             currentRunoffReductions.Add(3, BGIRuonffReductionLv3_c);
             UIManager.Instance.ShowInfoTabBGI(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildingCost, newRunoffReductions, currentRunoffReductions);
         }
+        InfrastructureBuilder.Instance.SubcatchmentSelected = this;
     }
 
     BuildStatus ConvertInfrastructureTypeToBuildStatus(InfrastructureType toConvert)

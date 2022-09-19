@@ -103,6 +103,7 @@ public class UIManager : MonoBehaviour
     Queue<Transform> infoPanelsNotInUse; // deactivated
     Queue<Transform> infoPanelsInUse; // active
     float tooltipCooldownTimer;
+    int lastSubcatchmentCallingInfoTab = -1;
 
     //InputProvider reference
     InputProvider input;
@@ -198,10 +199,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void InfrastructureButtoPressed()
+
+    private void EnteringBuildMode(InfrastructureType infrastructureTypeToHandle)
     {
         //infrastructure type button pressed is null if you exited build mode without switching between infrastructure an bgis
-        if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Null) || infrastructureTypeButtonPressed.Equals(InfrastructureType.Building))
+        if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Null) || infrastructureTypeButtonPressed.Equals(infrastructureTypeToHandle))
         {
             _buildMode = !_buildMode;
         }
@@ -214,13 +216,38 @@ public class UIManager : MonoBehaviour
             {
                 infoPanelsNotInUse.Enqueue(infoPanel);
             }
-            infrastructureTypeButtonPressed = InfrastructureType.Building;
-            InfrastructureBuilder.Instance.EnterInfrastructureBuildStatus();
+            infrastructureTypeButtonPressed = infrastructureTypeToHandle;
+            if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Building))
+            {
+                InfrastructureBuilder.Instance.EnterInfrastructureBuildStatus();
+            }
+            else
+            {
+                InfrastructureBuilder.Instance.EnterBGIBuildStatus(infrastructureTypeButtonPressed);
+            }
+            //switch to new info tab info
+            if (InfoTab.activeInHierarchy)
+            {
+                if (MapManager.Instance.GetSubcatchment(lastSubcatchmentCallingInfoTab).IsHighlighted)
+                {
+                    MapManager.Instance.GetSubcatchment(lastSubcatchmentCallingInfoTab).UpdateInfoTabInfrastructure();
+                }
+                else
+                {
+                    HideInfoTab();
+                }
+            }
+
         }
         else
         {
             ExitBuildMode();
         }
+    }
+
+    public void InfrastructureButtoPressed()
+    {
+        EnteringBuildMode(InfrastructureType.Building);
     }
 
     private void ExitBuildMode()
@@ -266,134 +293,20 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /*public void GRButtonPressed()     OLD VER TO DELETE 
-    {
-        _GRButtonPressed = !_GRButtonPressed;
-        GRButtonDown.SetActive(_GRButtonPressed);
-        GRButtonDefault.SetActive(!_GRButtonPressed);
-        if (GRButtonDefault.activeInHierarchy)
-        {
-            infrastructureTypeButtonPressed = InfrastructureType.GR;
-            ActivateDefaultButtons(GRButtonDefault);
-            HideInfoPanels();
-        }
-        else
-        {
-            infrastructureTypeButtonPressed = InfrastructureType.Null;
-            DeactivateDefaultButtons(GRButtonDefault);
-        }
-    }*/
-
     public void GRButtonPressed()
     {
-        //infrastructure type button pressed is null if you exited build mode without switching between infrastructure an bgis
-        if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Null) || infrastructureTypeButtonPressed.Equals(InfrastructureType.GR))
-        {
-            _buildMode = !_buildMode;
-        }
-
-
-        if (_buildMode)
-        {
-            infoPanelsNotInUse.Clear();
-            foreach (Transform infoPanel in InfoPanels)
-            {
-                infoPanelsNotInUse.Enqueue(infoPanel);
-            }
-
-            infrastructureTypeButtonPressed = InfrastructureType.GR;
-            InfrastructureBuilder.Instance.EnterBGIBuildStatus(infrastructureTypeButtonPressed);
-        }
-        else
-        {
-            ExitBuildMode();
-        }
+        EnteringBuildMode(InfrastructureType.GR);
     }
-
-    /* public void PPButtonPressed()
-     {
-         _PPButtonPressed = !_PPButtonPressed;
-         PPButtonDown.SetActive(_PPButtonPressed);
-         PPButtonDefault.SetActive(!_PPButtonPressed);
-         if (PPButtonDefault.activeInHierarchy)
-         {
-             infrastructureTypeButtonPressed = InfrastructureType.PP;
-             ActivateDefaultButtons(PPButtonDefault);
-             HideInfoPanels();
-         }
-         else
-         {
-             infrastructureTypeButtonPressed = InfrastructureType.Null;
-             DeactivateDefaultButtons(PPButtonDefault);
-         }
-     }*/
 
     public void PPButtonPressed()
     {
-        //infrastructure type button pressed is null if you exited build mode without switching between infrastructure an bgis
-        if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Null) || infrastructureTypeButtonPressed.Equals(InfrastructureType.PP))
-        {
-            _buildMode = !_buildMode;
-        }
-
-
-        if (_buildMode)
-        {
-            infoPanelsNotInUse.Clear();
-            foreach (Transform infoPanel in InfoPanels)
-            {
-                infoPanelsNotInUse.Enqueue(infoPanel);
-            }
-            infrastructureTypeButtonPressed = InfrastructureType.PP;
-            InfrastructureBuilder.Instance.EnterBGIBuildStatus(infrastructureTypeButtonPressed);
-        }
-        else
-        {
-            ExitBuildMode();
-        }
+        EnteringBuildMode(InfrastructureType.PP);
     }
-
-    /*public void RBButtonPressed()
-    {
-        _RBButtonPressed = !_RBButtonPressed;
-        RBButtonDown.SetActive(_RBButtonPressed);
-        RBButtonDefault.SetActive(!_RBButtonPressed);
-        if (RBButtonDefault.activeInHierarchy)
-        {
-            infrastructureTypeButtonPressed = InfrastructureType.RB;
-            ActivateDefaultButtons(RBButtonDefault);
-            HideInfoPanels();
-        }
-        else
-        {
-            infrastructureTypeButtonPressed = InfrastructureType.Null;
-            DeactivateDefaultButtons(RBButtonDefault);
-        }
-    }*/
 
     public void RBButtonPressed()
     {
-        //infrastructure type button pressed is null if you exited build mode without switching between infrastructure an bgis
-        if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Null) || infrastructureTypeButtonPressed.Equals(InfrastructureType.RB))
-        {
-            _buildMode = !_buildMode;
-        }
+        EnteringBuildMode(InfrastructureType.RB);
 
-
-        if (_buildMode)
-        {
-            infoPanelsNotInUse.Clear();
-            foreach (Transform infoPanel in InfoPanels)
-            {
-                infoPanelsNotInUse.Enqueue(infoPanel);
-            }
-            infrastructureTypeButtonPressed = InfrastructureType.RB;
-            InfrastructureBuilder.Instance.EnterBGIBuildStatus(infrastructureTypeButtonPressed);
-        }
-        else
-        {
-            ExitBuildMode();
-        }
     }
 
     public void MissingActionPointMessage()
@@ -691,6 +604,7 @@ public class UIManager : MonoBehaviour
         if (!InfoTab.activeInHierarchy)
         {
             InfoTab.SetActive(true);
+            lastSubcatchmentCallingInfoTab = (int)subcatchmentNumber;
         }
 
         /*THIS IS A QUICK N DIRTY FIX TO CONVERT THE ENUM INTO A STRING
@@ -726,6 +640,7 @@ public class UIManager : MonoBehaviour
         if (!InfoTab.activeInHierarchy)
         {
             InfoTab.SetActive(true);
+            lastSubcatchmentCallingInfoTab = (int)subcatchmentNumber;
         }
 
         /*THIS IS A QUICK N DIRTY FIX TO CONVERT THE ENUM INTO A STRING
