@@ -250,7 +250,7 @@ public class UIManager : MonoBehaviour
         EnteringBuildMode(InfrastructureType.Building);
     }
 
-    private void ExitBuildMode()
+    public void ExitBuildMode()
     {
         _buildMode = false;
         MapManager.Instance.DehighlightBuildableSubcatchments();

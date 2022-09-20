@@ -24,12 +24,12 @@ public class InfrastructureBuilder : MonoBehaviour
 
     private void Start()
     {
-        ResourceManager.Instance.UpdateActionPoints(6);
-        UIManager.Instance.HouseButtonPressed();
+        //ResourceManager.Instance.UpdateActionPoints(6);
+        //UIManager.Instance.HouseButtonPressed();
     }
 
     public InfrastructureType SelectedInfrastructure { get; set; }
-    public Subcatchment SubcatchmentSelected { get; set; }
+    public Subcatchment SelectedSubcatchment { get; set; }
     public bool isBuilding { get; set; }
 
     /*Purpose of the function:
@@ -130,17 +130,50 @@ public class InfrastructureBuilder : MonoBehaviour
         isBuilding = false;
     }
 
-    public void BuildInfrastructure(Subcatchment subcatToBuildOn)
+    public void BuildInfrastructure()
     {
-        //recover costs
-        //recover benefit
-        //if house
-            //update hostable spots
-        //if business
-            //updatejobs
-        //update build status of subcatchment
+        //recover infrastructure to build
+        BuildStatus infrastructureToBuild = SelectedSubcatchment.ConvertInfrastructureTypeToBuildStatus(SelectedInfrastructure);
 
-        //check for different tipe of infrastructure to build
+        //recover the newBuildStatus of the subcat (AKA: BGI combinations)
+        BuildStatus newBuildStatus = SelectedSubcatchment.NewBuildStatus(infrastructureToBuild);
+
+        //recover costs
+        float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(SelectedSubcatchment.SubcatchmentNumber, infrastructureToBuild);
+
+        //update budget
+        ResourceManager.Instance.UpdateBudget((int)buildCost);
+
+        if (SelectedInfrastructure.Equals(InfrastructureType.Building))
+        {
+            //recover benefit
+            float benefit = SelectedSubcatchment.SubcatchmentBenefit;
+            //if business
+            if (SelectedSubcatchment.Usage.Equals(AreaUsage.Commercial))
+            {
+                //update jobs
+                ResourceManager.Instance.UpdateJobs((int)benefit);
+            }
+            else
+            {
+                //update hostable spots
+                ResourceManager.Instance.UpdateHostablePeople((int)benefit);
+            }
+        }
+
+        //update build status of subcatchment
+        SelectedSubcatchment.BuildStatus = newBuildStatus;
+
+        //update subcat visual
+        SelectedSubcatchment.BuildInfrastructureOnSubcatchment(SelectedInfrastructure);
+
+        //Dehighlight subcat
+        MapManager.Instance.DehighlightBuildableSubcatchments();
+
+        //reset selected infra
+        ResetSelectedInfrastructure();
+
+        /*//check for different tipe of infrastructure to build
         switch (SelectedInfrastructure)
         {
             case InfrastructureType.House:
@@ -198,9 +231,10 @@ public class InfrastructureBuilder : MonoBehaviour
                 Debug.LogWarning("No infrstructure selected");
                 return;
 
-        }
+        }*/
 
-        //update resources
+        //exit build mode
+        UIManager.Instance.ExitBuildMode();
         //Dehighlight subcat
         MapManager.Instance.DehighlightBuildableSubcatchments();
         //reset selected infra

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -92,8 +93,9 @@ public class Subcatchment : MonoBehaviour
     {
         if (SubcatchmentNumber == 7)
         {
-
-            InfrastructureBuilder.Instance.BuildInfrastructure(this);
+            InfrastructureBuilder.Instance.SelectedInfrastructure = InfrastructureType.Building;
+            InfrastructureBuilder.Instance.SelectedSubcatchment = this;
+            InfrastructureBuilder.Instance.BuildInfrastructure();
             _buildStatus = BuildStatus.Built;
         }
     }
@@ -184,8 +186,12 @@ public class Subcatchment : MonoBehaviour
         if (buildingInfrastructure)
         {
             UIManager.Instance.ShowInfoTabInfrastructure(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildingCost, SubcatchmentBenefit);
-        } else if(!_buildStatus.Equals(BuildStatus.Unbuild))
+        }
+        else if (!_buildStatus.Equals(BuildStatus.Unbuild))
         {
+            //take into account the bgi combinations
+            infrastructureToBuild = NewBuildStatus(infrastructureToBuild);
+
             //recover runoff reductions change
             float BGIRainReductionLv1_n = DataReader.Instance.GetRunoffReductionPercentage(1, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
             float BGIRainReductionLv2_n = DataReader.Instance.GetRunoffReductionPercentage(2, new SubcatchmentKey(SubcatchmentNumber, infrastructureToBuild));
@@ -207,10 +213,10 @@ public class Subcatchment : MonoBehaviour
             currentRunoffReductions.Add(3, BGIRuonffReductionLv3_c);
             UIManager.Instance.ShowInfoTabBGI(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildingCost, newRunoffReductions, currentRunoffReductions);
         }
-        InfrastructureBuilder.Instance.SubcatchmentSelected = this;
+        InfrastructureBuilder.Instance.SelectedSubcatchment = this;
     }
 
-    BuildStatus ConvertInfrastructureTypeToBuildStatus(InfrastructureType toConvert)
+    public BuildStatus ConvertInfrastructureTypeToBuildStatus(InfrastructureType toConvert)
     {
         BuildStatus converted;
         if (toConvert.Equals(InfrastructureType.Building) || toConvert.Equals(InfrastructureType.House) || toConvert.Equals(InfrastructureType.Business))
@@ -232,11 +238,56 @@ public class Subcatchment : MonoBehaviour
         return converted;
     }
 
-    private void ShowInfrastructure(InfrastructureType infrastructure)
+    /*this function returns the build status to update in case of construction
+     of the infrastructure given as parameter "infrastructureToBuild" */
+    public BuildStatus NewBuildStatus(BuildStatus infrastructureToBuild)
+    {
+        BuildStatus newBuildStatus = _buildStatus;
+        if (infrastructureToBuild.Equals(BuildStatus.Built))
+        {
+            if (_buildStatus.Equals(BuildStatus.Unbuild))
+            {
+                newBuildStatus = infrastructureToBuild;
+            }
+        }
+        else if (!infrastructureToBuild.Equals(BuildStatus.Unbuild))
+        {
+            //only if buid status is not "Built", since it means that there is alreadz one BGI
+            if (!_buildStatus.Equals(BuildStatus.Built))
+            {
+                /*to understand which combination of BGI would be the next build status
+                 *we are going to compare the combination of the current _buildStatus 
+                 *concatenated with the infrastructureToBuild.
+                 *There are only two possible combinations that these variables can form:*/
+
+                //first combination
+                string combo1 = _buildStatus + "_" + infrastructureToBuild;
+
+                //second combo
+                string combo2 = infrastructureToBuild + "_" + _buildStatus;
+
+                //now we compare them with every element.ToString() of the BuildStatus array
+                foreach (BuildStatus status in Enum.GetValues(typeof(BuildStatus)))
+                {
+                    if (status.ToString().Equals(combo1) || status.ToString().Equals(combo2))
+                    {
+                        newBuildStatus = status;
+                    }
+                }
+            }
+            else //if it's the first BGI on the subcat
+            {
+                newBuildStatus = infrastructureToBuild;
+            }
+        }
+        return newBuildStatus;
+    }
+
+    private void ShowInfrastructure(string infrastructure)
     {
         foreach (Transform child in transform)
         {
-            if (child.name.Equals(infrastructure.ToString()))
+            if (child.name.Equals(infrastructure))
             {
                 child.gameObject.SetActive(true);
             }
@@ -246,7 +297,7 @@ public class Subcatchment : MonoBehaviour
     public bool SubcatchmentHostsBGI(InfrastructureType bgi)
     {
         bool hostingBGI = false;
-        foreach(InfrastructureType infra in BGIHosted)
+        foreach (InfrastructureType infra in BGIHosted)
         {
             if (infra.Equals(bgi))
             {
@@ -258,16 +309,25 @@ public class Subcatchment : MonoBehaviour
 
     public void BuildInfrastructureOnSubcatchment(InfrastructureType infrastructure)
     {
-        ShowInfrastructure(infrastructure);
-        if (infrastructure.Equals(InfrastructureType.House) || infrastructure.Equals(InfrastructureType.Business))
+        string infrastructureStr = infrastructure.ToString();
+        if (infrastructure.Equals(InfrastructureType.Building))
         {
             _isBuilt = true;
+            if (_usage.Equals(AreaUsage.Commercial))
+            {
+                infrastructureStr = InfrastructureType.Building.ToString();
+            }
+            else
+            {
+                infrastructureStr = InfrastructureType.House.ToString();
+            }
         }
         else
         {
             BGIHosted.Add(infrastructure);
             _isHostingBGI = true;
         }
+        ShowInfrastructure(infrastructureStr);
     }
 
     public bool CanHostBGI(InfrastructureType BGI)

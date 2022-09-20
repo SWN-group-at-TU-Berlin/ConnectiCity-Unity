@@ -92,7 +92,7 @@ public class ResourceManager : MonoBehaviour
     }
     public void UpdateBudget(int valToAdd)
     {
-        _budget += valToAdd;
+        _budget -= valToAdd;
         UIManager.Instance.UpdateBudgetTxt(Budget);
     }
 
