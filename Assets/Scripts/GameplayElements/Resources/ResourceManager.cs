@@ -22,9 +22,19 @@ public class ResourceManager : MonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        PopulationIncreaseInitialization();
+    }
+
     [SerializeField] int _citizenNumber;
     #region getter
     public int CitizenNumber { get { return _citizenNumber; } }
+    #endregion
+
+    [SerializeField] int _finalRoundCitizenIncrease = 370;
+    #region getter
+    public int FinalRoundCitizenIncrease { get { return _finalRoundCitizenIncrease; } }
     #endregion
 
     [SerializeField] int _citizenSatisfaction;
@@ -63,6 +73,8 @@ public class ResourceManager : MonoBehaviour
     #endregion
 
     int defaultAP;
+
+    Dictionary<int, int> populationIncreasePerRound;
 
     public void UpdateCitizenNumber(int valToAdd)
     {
@@ -121,4 +133,22 @@ public class ResourceManager : MonoBehaviour
 
     }
 
+    private void PopulationIncreaseInitialization()
+    {
+        populationIncreasePerRound = new Dictionary<int, int>();
+        int maxRounds = RoundManager.Instance.MaxRounds;
+        int round = maxRounds;
+        for (; round >= 0; round--)
+        {
+            int denominator = maxRounds + 1 - round;
+            int popIncrease = Mathf.CeilToInt(FinalRoundCitizenIncrease / denominator);
+            populationIncreasePerRound.Add(round, popIncrease);
+        }
+    }
+
+
+    public void IncreaseCitizens()
+    {
+        _citizenNumber += populationIncreasePerRound[RoundManager.Instance.CurrentRound];
+    }
 }

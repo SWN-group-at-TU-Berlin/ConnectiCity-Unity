@@ -30,6 +30,11 @@ public class RoundManager : MonoBehaviour
 
     [SerializeField] EndGamePanel endGamePanel;
 
+    [SerializeField] int maxRounds = 10;
+    #region getter
+    public int MaxRounds { get { return maxRounds; } }
+    #endregion
+
     int _currentRound;
     #region getter
     public int CurrentRound { get { return _currentRound; } }
@@ -44,9 +49,13 @@ public class RoundManager : MonoBehaviour
     {
         if (!Phase.Equals(RoundPhase.RainEvent))
         {
-            if (_currentRound < 10)
+            if (_currentRound < maxRounds)
             {
                 _currentRound++;
+
+                //increase population
+                ResourceManager.Instance.IncreaseCitizens();
+
                 _phase = RoundPhase.RainEvent;
                 MapManager.Instance.ReactivateAllSubcatchments();
                 StartCoroutine(RainEventsManager.Instance.RainEvent());
