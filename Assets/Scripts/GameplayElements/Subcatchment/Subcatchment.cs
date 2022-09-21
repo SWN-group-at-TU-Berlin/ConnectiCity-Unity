@@ -91,6 +91,7 @@ public class Subcatchment : MonoBehaviour
 
     private void Start()
     {
+        _subcatchmentBenefit = (int)DataReader.Instance.SubcatchmentsBenefits[_subcatchmentNumber];
         if (SubcatchmentNumber == 7)
         {
             InfrastructureBuilder.Instance.SelectedInfrastructure = InfrastructureType.Building;
@@ -315,7 +316,7 @@ public class Subcatchment : MonoBehaviour
             _isBuilt = true;
             if (_usage.Equals(AreaUsage.Commercial))
             {
-                infrastructureStr = InfrastructureType.Building.ToString();
+                infrastructureStr = InfrastructureType.Business.ToString();
             }
             else
             {

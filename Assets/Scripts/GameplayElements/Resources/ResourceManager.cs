@@ -37,40 +37,72 @@ public class ResourceManager : MonoBehaviour
     public int FinalRoundCitizenIncrease { get { return _finalRoundCitizenIncrease; } }
     #endregion
 
-    [SerializeField] int _citizenSatisfaction;
-    #region getter
-    public int CitizenSatisfaction { get { return _citizenSatisfaction; } }
-    #endregion
-
-    [SerializeField] int _maxCitizenSatisfaction;
-    #region getter
-    public int MaxCitizenSatisfaction { get { return _maxCitizenSatisfaction; } }
-    #endregion
-
     [SerializeField] int _budget;
     #region getter
     public int Budget { get { return _budget; } }
+    #endregion 
+
+    [SerializeField] int _BGIbudget;
+    #region getter
+    public int BGIbudget { get { return _BGIbudget; } }
+    #endregion 
+
+    [SerializeField] int _hostablePeople;
+    #region getter
+    public int HostablePeople { get { return _hostablePeople; } }
+    #endregion
+   
+    [SerializeField] int _jobs;
+    #region getter
+    public int Jobs { get { return _jobs; } }
+    #endregion
+    
+    [SerializeField] float _workingPopulationRate = 0.54f;
+    #region getter
+    public float WorkingPopulationRate { get { return _workingPopulationRate; } }
+    #endregion
+
+    [SerializeField] int _avarageIncomePerPerson;
+    #region getter
+    public int AvarageIncomePerPerson { get { return _avarageIncomePerPerson; } }
+    #endregion
+
+    [SerializeField] float _taxationRate;
+    #region getter
+    public float TaxationRate { get { return _taxationRate; } }
+    #endregion
+
+    [SerializeField] float _totalBudgetRate;
+    #region getter
+    public float TotalBudgetRate { get { return _totalBudgetRate; } }
     #endregion
 
     [SerializeField] int _income;
     #region getter
     public int Income { get { return _income; } }
     #endregion
+    
 
-    [SerializeField] int _actionPoints;
+    
+
+    //DEPRECATED
+    int _citizenSatisfaction;
+    #region getter
+    public int CitizenSatisfaction { get { return _citizenSatisfaction; } }
+    #endregion
+
+    //DEPRECATED
+    int _maxCitizenSatisfaction;
+    #region getter
+    public int MaxCitizenSatisfaction { get { return _maxCitizenSatisfaction; } }
+    #endregion
+
+    //DEPRECATED
+    int _actionPoints;
     #region getter
     public int ActionPoints { get { return _actionPoints; } }
     #endregion
 
-    [SerializeField] int _jobs;
-    #region getter
-    public int Jobs { get { return _jobs; } }
-    #endregion
-
-    [SerializeField] int _hostablePeople;
-    #region getter
-    public int HostablePeople { get { return _hostablePeople; } }
-    #endregion
 
     int defaultAP;
 
@@ -112,12 +144,15 @@ public class ResourceManager : MonoBehaviour
     {
         _jobs += valToAdd;
         //update jobs UI
+        ScoreManager.Instance.UpdateUnemploymentPercentage();
     }
 
     public void UpdateHostablePeople(int valToAdd)
     {
         _hostablePeople += valToAdd;
         //update hostable ppl UI
+        ScoreManager.Instance.UpdatePopulationDensity();
+        ScoreManager.Instance.UpdateUnemploymentPercentage();
     }
 
     public void UpdateActionPoints(int valToAdd)
@@ -150,5 +185,10 @@ public class ResourceManager : MonoBehaviour
     public void IncreaseCitizens()
     {
         _citizenNumber += populationIncreasePerRound[RoundManager.Instance.CurrentRound];
+    }
+
+    public int GetWorkingPopulation()
+    {
+        return Mathf.CeilToInt(_citizenNumber * WorkingPopulationRate);
     }
 }

@@ -44,12 +44,12 @@ public class MapManager : MonoBehaviour
     {
         //setup benefits in each subcatchement
 
-        //foreach subcatchment
+        /*//foreach subcatchment
         foreach (Subcatchment subcat in _subcatchments)
         {
             //set subcatchment benefit from dictionary
             subcat.SubcatchmentBenefit = (int)DataReader.Instance.SubcatchmentsBenefits[subcat.SubcatchmentNumber];
-        }
+        }*/
         RandomBGIInitialization();
     }
 
