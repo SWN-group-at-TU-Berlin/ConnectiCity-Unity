@@ -83,6 +83,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] float floatingSpeed;
     [SerializeField] float txtFadeOutTime;
 
+    [Header("Score references")]
+    [SerializeField] Slider populationDensity;
+    [SerializeField] Slider unemploymentRate;
+
+
     //Button variables
     List<GameObject> DefaultButtons;
     InfrastructureType infrastructureTypeButtonPressed;
@@ -120,14 +125,10 @@ public class UIManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(input.MousePosition());
         if (!Physics.Raycast(ray, out hit) && !EventSystem.current.IsPointerOverGameObject())
         {
-            /** Debug.Log("ray hitting");
-             if (!hit.transform.gameObject.tag.Equals("Subcatchment") && !hit.transform.gameObject.layer.Equals(UILayer) && _buildMode)
-             {*/
             if (input.MouseLeftButton())
             {
                 ExitBuildMode();
             }
-            //}
         }
     }
 
@@ -706,5 +707,27 @@ public class UIManager : MonoBehaviour
         }
 
         return specs;
+    }
+
+    public void SetMaxMinPopulationDensity(float max, float min)
+    {
+        populationDensity.maxValue = max;
+        populationDensity.minValue = min;
+    }
+
+    public void SetMaxMinUnemployment(float max, float min)
+    {
+        unemploymentRate.maxValue = max;
+        unemploymentRate.minValue = min;
+    }
+
+    public void UpdatePopulationDesitySlider(float popDensity)
+    {
+        populationDensity.value = popDensity;
+    }
+
+    public void UpdateUnemploymentSlider(float unmlpRate)
+    {
+        unemploymentRate.value = unmlpRate;
     }
 }
