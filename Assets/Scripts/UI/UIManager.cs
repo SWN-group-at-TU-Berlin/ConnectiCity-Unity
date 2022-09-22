@@ -673,7 +673,7 @@ public class UIManager : MonoBehaviour
                 }
         }
 
-        float currentBudget = ResourceManager.Instance.Budget;
+        float currentBudget = ResourceManager.Instance.BGIbudget;
         float currentap = ResourceManager.Instance.ActionPoints;
         InfoTab.GetComponent<InfoTab>().UpdateTextFieldsBGI(subcatchmentNumber, infrastructureTypeStr, currentBudget, buildCost, currentRunoffReductions, newRunoffReductions);
 

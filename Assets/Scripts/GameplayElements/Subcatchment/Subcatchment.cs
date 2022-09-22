@@ -536,7 +536,7 @@ public class Subcatchment : MonoBehaviour
 
     public void SetSubcatchmentActive(bool activeState)
     {
-        if (activeState)
+        /*if (activeState)
         {
             //update income on activation
             if (_usage.Equals(AreaUsage.Commercial) && !_active && _isBuilt)
@@ -589,6 +589,6 @@ public class Subcatchment : MonoBehaviour
                     UIManager.Instance.ShowFloatingTxt(incomeUpdate, "i", this);
                 }
             }
-        }
+        }*/
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,13 +20,17 @@ public class ResourceManager : MonoBehaviour
         }
 
         defaultAP = _actionPoints;
+        InitializeBudgets();
     }
-    #endregion
-
     private void Start()
     {
         PopulationIncreaseInitialization();
     }
+
+    #endregion
+
+
+    [Header("Social")]
 
     [SerializeField] int _citizenNumber;
     #region getter
@@ -37,6 +42,13 @@ public class ResourceManager : MonoBehaviour
     public int FinalRoundCitizenIncrease { get { return _finalRoundCitizenIncrease; } }
     #endregion
 
+    [SerializeField] int _hostablePeople;
+    #region getter
+    public int HostablePeople { get { return _hostablePeople; } }
+    #endregion
+
+    [Header("Economics")]
+
     [SerializeField] int _budget;
     #region getter
     public int Budget { get { return _budget; } }
@@ -47,16 +59,16 @@ public class ResourceManager : MonoBehaviour
     public int BGIbudget { get { return _BGIbudget; } }
     #endregion 
 
-    [SerializeField] int _hostablePeople;
+    [SerializeField, Range(0, 1)] float _BGIbudgetPercentage;
     #region getter
-    public int HostablePeople { get { return _hostablePeople; } }
-    #endregion
-   
+    public float BGIbudgetPercentage { get { return _BGIbudgetPercentage; } }
+    #endregion 
+
     [SerializeField] int _jobs;
     #region getter
     public int Jobs { get { return _jobs; } }
     #endregion
-    
+
     [SerializeField] float _workingPopulationRate = 0.54f;
     #region getter
     public float WorkingPopulationRate { get { return _workingPopulationRate; } }
@@ -81,9 +93,9 @@ public class ResourceManager : MonoBehaviour
     #region getter
     public int Income { get { return _income; } }
     #endregion
-    
 
-    
+
+
 
     //DEPRECATED
     int _citizenSatisfaction;
@@ -108,6 +120,12 @@ public class ResourceManager : MonoBehaviour
 
     Dictionary<int, int> populationIncreasePerRound;
 
+    private void InitializeBudgets()
+    {
+        _BGIbudget = (int)((int)Budget * BGIbudgetPercentage);
+        _budget -= _BGIbudget;
+    }
+
     public void UpdateCitizenNumber(int valToAdd)
     {
         _citizenNumber += valToAdd * 1000;
@@ -122,13 +140,20 @@ public class ResourceManager : MonoBehaviour
             UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
         }
     }
-    public void UpdateIncome(int valToAdd)
+    public void UpdateIncome()
     {
-        if (_income >= 0)
+        /*if (_income >= 0)
         {
             _income += valToAdd;
             UIManager.Instance.UpdateIncomeTxt(Income);
-        }
+        }*/
+        _income = (int)((int)((GetWorkingPopulation() * AvarageIncomePerPerson)*TaxationRate) * TotalBudgetRate);
+        UIManager.Instance.UpdateIncomeTxt(Income);
+    }
+    public void UpdateBudgetsAtEndRound()
+    {
+        _BGIbudget += (int)(_income * BGIbudgetPercentage);
+        _budget += (Income - (int)(_income * BGIbudgetPercentage));
     }
     public void UpdateBudgetAtRoundStart()
     {
@@ -180,7 +205,6 @@ public class ResourceManager : MonoBehaviour
             populationIncreasePerRound.Add(round, popIncrease);
         }
     }
-
 
     public void IncreaseCitizens()
     {

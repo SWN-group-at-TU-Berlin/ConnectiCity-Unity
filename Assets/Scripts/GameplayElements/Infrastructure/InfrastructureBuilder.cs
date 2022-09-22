@@ -99,16 +99,18 @@ public class InfrastructureBuilder : MonoBehaviour
                 subcatchment.ShowBuildInfoPanels(BGIToBuild);
 
                 //get budget from current resources
-                float currentBudget = ResourceManager.Instance.Budget;
+                float currentBudget = ResourceManager.Instance.BGIbudget;
 
                 //get ap from current resources
                 float currentAp = ResourceManager.Instance.ActionPoints;
 
+                BuildStatus specificSubcatBGI = subcatchment.ConvertInfrastructureTypeToBuildStatus(BGIToBuild);
+
                 //get build costs for current subcatchment
-                float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
+                float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(subcatchment.SubcatchmentNumber, specificSubcatBGI);
 
                 //get ap costs for current subcatchment
-                float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
+                float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, specificSubcatBGI);
 
                 //if: ap costs < ap AND build costs < budget
                 if (apCost <= currentAp && buildCost <= currentBudget && subcatchment.IsBuilt)
@@ -167,71 +169,15 @@ public class InfrastructureBuilder : MonoBehaviour
         //update subcat visual
         SelectedSubcatchment.BuildInfrastructureOnSubcatchment(SelectedInfrastructure);
 
+        //update income
+        ResourceManager.Instance.UpdateIncome();
+
         //Dehighlight subcat
         MapManager.Instance.DehighlightBuildableSubcatchments();
 
+
         //reset selected infra
         ResetSelectedInfrastructure();
-
-        /*//check for different tipe of infrastructure to build
-        switch (SelectedInfrastructure)
-        {
-            case InfrastructureType.House:
-                {
-                    BasicInfrastructureStats stats = new BasicInfrastructureStats();
-                    stats = CostsManager.Instance.GetInfrastructureStats(InfrastructureType.House);
-                    if (ResourceManager.Instance.ActionPoints >= stats.CActionPoints)
-                    {
-                        GeneralInfrastructureResourceUpdate(subcatToBuildOn, stats);
-                        ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
-                        UIManager.Instance.HouseButtonPressed();
-                    }
-                    break;
-                }
-            case InfrastructureType.Business:
-                {
-                    BasicInfrastructureStats stats = new BasicInfrastructureStats();
-                    stats = CostsManager.Instance.GetInfrastructureStats(InfrastructureType.Business);
-                    if (ResourceManager.Instance.ActionPoints >= stats.CActionPoints)
-                    {
-                        GeneralInfrastructureResourceUpdate(subcatToBuildOn, stats);
-                        ResourceManager.Instance.UpdateIncome(stats.BCitizenSatisfaction);
-                        UIManager.Instance.BusinessButtonPressed();
-                    }
-                    break;
-                }
-            case InfrastructureType.RB:
-                {
-                    BasicBGIStats stats = new BasicBGIStats();
-                    stats = CostsManager.Instance.GetBGIStats(InfrastructureType.RB);
-
-                    BGIResourceUpdate(subcatToBuildOn, stats);
-                    UIManager.Instance.RBButtonPressed();
-                    break;
-                }
-            case InfrastructureType.GR:
-                {
-                    BasicBGIStats stats = new BasicBGIStats();
-                    stats = CostsManager.Instance.GetBGIStats(InfrastructureType.GR);
-
-                    BGIResourceUpdate(subcatToBuildOn, stats);
-                    UIManager.Instance.GRButtonPressed();
-                    break;
-                }
-            case InfrastructureType.PP:
-                {
-                    BasicBGIStats stats = new BasicBGIStats();
-                    stats = CostsManager.Instance.GetBGIStats(InfrastructureType.PP);
-
-                    BGIResourceUpdate(subcatToBuildOn, stats);
-                    UIManager.Instance.PPButtonPressed();
-                    break;
-                }
-            default:
-                Debug.LogWarning("No infrstructure selected");
-                return;
-
-        }*/
 
         //exit build mode
         UIManager.Instance.ExitBuildMode();
@@ -239,79 +185,5 @@ public class InfrastructureBuilder : MonoBehaviour
         MapManager.Instance.DehighlightBuildableSubcatchments();
         //reset selected infra
         ResetSelectedInfrastructure();
-    }
-
-    private void GeneralInfrastructureResourceUpdate(Subcatchment subcatToBuildOn, BasicInfrastructureStats stats)
-    {
-        ResourceManager.Instance.UpdateActionPoints(-stats.CActionPoints);
-        switch (subcatToBuildOn.Size)
-        {
-            case AreaSize.Small:
-                ResourceManager.Instance.UpdateBudget(-stats.CBudgetSmall);
-                ResourceManager.Instance.UpdateIncome(stats.BIncomeSmall);
-                ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberSmall);
-                break;
-            case AreaSize.Medium:
-                ResourceManager.Instance.UpdateBudget(-stats.CBudgetMedium);
-                ResourceManager.Instance.UpdateIncome(stats.BIncomeMedium);
-                ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberMedium);
-                break;
-            case AreaSize.Large:
-                ResourceManager.Instance.UpdateBudget(-stats.CBudgetLarge);
-                ResourceManager.Instance.UpdateIncome(stats.BIncomeLarge);
-                ResourceManager.Instance.UpdateCitizenNumber(stats.BCitizenNumberLarge);
-                break;
-
-        }
-        subcatToBuildOn.BuildInfrastructureOnSubcatchment(SelectedInfrastructure);
-    }
-
-    private void BGIResourceUpdate(Subcatchment subcatToBuildOn, BasicBGIStats stats)
-    {
-        int ap = stats.CActionPoints;
-        if (subcatToBuildOn.Usage.Equals(AreaUsage.Commercial))
-        {
-            ap += 1;
-        }
-        ResourceManager.Instance.UpdateActionPoints(-ap);
-        if (subcatToBuildOn.Usage.Equals(AreaUsage.Commercial))
-        {
-            switch (subcatToBuildOn.Size)
-            {
-                case AreaSize.Small:
-                    ResourceManager.Instance.UpdateBudget(-stats.CBudgetCommercialSmall);
-                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
-                    break;
-                case AreaSize.Medium:
-                    ResourceManager.Instance.UpdateBudget(-stats.CBudgetCommercialMedium);
-                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
-                    break;
-                case AreaSize.Large:
-                    ResourceManager.Instance.UpdateBudget(-stats.CBudgetCommercialLarge);
-                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
-                    break;
-
-            }
-        }
-        else
-        {
-            switch (subcatToBuildOn.Size)
-            {
-                case AreaSize.Small:
-                    ResourceManager.Instance.UpdateBudget(-stats.CBudgetResidentialSmall);
-                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
-                    break;
-                case AreaSize.Medium:
-                    ResourceManager.Instance.UpdateBudget(-stats.CBudgetResidentialMedium);
-                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
-                    break;
-                case AreaSize.Large:
-                    ResourceManager.Instance.UpdateBudget(-stats.CBudgetResidentialLarge);
-                    ResourceManager.Instance.UpdateCitizenSatisfaction(stats.BCitizenSatisfaction);
-                    break;
-
-            }
-        }
-        subcatToBuildOn.BuildInfrastructureOnSubcatchment(SelectedInfrastructure);
     }
 }
