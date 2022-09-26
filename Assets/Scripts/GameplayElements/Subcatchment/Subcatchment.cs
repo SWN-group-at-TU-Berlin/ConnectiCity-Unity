@@ -119,7 +119,7 @@ public class Subcatchment : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(input.MousePosition());
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.transform.gameObject.tag.Equals("Subcatchment") && hit.transform.gameObject.name.Equals("SC" + SubcatchmentNumber) && IsHighlighted)
+            if (hit.transform.gameObject.tag.Equals("Subcatchment") && hit.transform.gameObject.name.Equals("SC" + SubcatchmentNumber) && (IsHighlighted || UIManager.Instance.ShowingRunoffReduction))
             {
                 if (!IsHovered)
                 {
@@ -128,8 +128,14 @@ public class Subcatchment : MonoBehaviour
 
                 if (input.MouseLeftButton())
                 {
-                    //InfrastructureBuilder.Instance.BuildInfrastructure(GetComponent<Subcatchment>());
-                    CallUIInfoTab();
+                    if (IsHighlighted)
+                    {
+                        CallUIInfoTab();
+                    }
+                    else
+                    {
+                        UIManager.Instance.ShowRainInfoTab(_subcatchmentNumber, _buildStatus, GetBGIsBuiltOnSubcatchment());
+                    }
                 }
             }
             else
@@ -537,7 +543,7 @@ public class Subcatchment : MonoBehaviour
     public void ShowRunoffReductionReductionInfo()
     {
         Vector3 position = GetInfoPanelPosition();
-        float runoffReduction = RainEventsManager.Instance.GetRunoffReductionPercentage(_subcatchmentNumber, _buildStatus);
+        float runoffReduction = RainEventsManager.Instance.GetRunoffReductionPercentage(RainEventsManager.Instance.CurrentRainIntensity, _subcatchmentNumber, _buildStatus);
         UIManager.Instance.ShowRainInfoPanel(runoffReduction, position);
         //make subcat selectable
     }
@@ -598,5 +604,26 @@ public class Subcatchment : MonoBehaviour
                 }
             }
         }*/
+    }
+
+    public Dictionary<InfrastructureType, BuildStatus> GetBGIsBuiltOnSubcatchment()
+    {
+        Dictionary<InfrastructureType, BuildStatus> hostedBGIs = new Dictionary<InfrastructureType, BuildStatus>();
+        foreach (InfrastructureType bgi in BGIHosted)
+        {
+            if (bgi.ToString().Equals("GR"))
+            {
+                hostedBGIs.Add(bgi, _grPercentage);
+            }
+            if (bgi.ToString().Equals("RB"))
+            {
+                hostedBGIs.Add(bgi, _rbType);
+            }
+            if (bgi.ToString().Equals("PP"))
+            {
+                hostedBGIs.Add(bgi, BuildStatus.PP);
+            }
+        }
+        return hostedBGIs;
     }
 }

@@ -31,6 +31,9 @@ public class RainEventsManager : MonoBehaviour
     [SerializeField] GameObject rainEventInfoPanel;
     [SerializeField] GameObject rainParticles;
     [SerializeField] float flashFloodThreshold = 670;
+    #region getter
+    public float FlashFloodThreshold { get { return flashFloodThreshold; } }
+    #endregion
     [SerializeField] float totalRunoff;
     #region getter
     public float TotalRunoff { get { return totalRunoff; } }
@@ -239,7 +242,7 @@ public class RainEventsManager : MonoBehaviour
         RoundManager.Instance.StartRound();
     }
 
-    public float GetRunoffReductionPercentage(int subcatNumber, BuildStatus subcatStatus)
+    public float GetRunoffReductionPercentage(int rainLevelIntesity, int subcatNumber, BuildStatus subcatStatus)
     {
         float runoffReductionPercentage = 0;
         if(!subcatStatus.Equals(BuildStatus.Built) && !subcatStatus.Equals(BuildStatus.Unbuild))

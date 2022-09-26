@@ -65,6 +65,7 @@ public class UIManager : MonoBehaviour
     [Header("Info boards references and properties")]
     [SerializeField] GameObject MessageBoard;
     [SerializeField] GameObject InfoTab;
+    [SerializeField] GameObject RainInfoTab;
     [SerializeField] LayerMask UILayer;
     [SerializeField] private float staticTime;
     [SerializeField] private float fadeOutTime;
@@ -89,6 +90,7 @@ public class UIManager : MonoBehaviour
     [Header("Score references")]
     [SerializeField] Slider populationDensity;
     [SerializeField] Slider unemploymentRate;
+    [SerializeField] Slider flashFloodRisk;
 
 
     UIState uiState = UIState.Social;
@@ -106,6 +108,9 @@ public class UIManager : MonoBehaviour
     bool _RBButtonPressed = false;
     bool _buildMode = false;
     bool _showingRunoffReduction = false;
+    #region getter
+    public bool ShowingRunoffReduction { get { return _showingRunoffReduction; } }
+    #endregion
 
     //Info boards variables
     Color fullAlphaBackground;
@@ -122,6 +127,10 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
+
+        flashFloodRisk.minValue = 0;
+        flashFloodRisk.maxValue = RainEventsManager.Instance.FlashFloodThreshold;
+        flashFloodRisk.value = RainEventsManager.Instance.CalculateFlashFloorRisk();
     }
 
     private void Update()
@@ -138,7 +147,14 @@ public class UIManager : MonoBehaviour
         {
             if (input.MouseLeftButton())
             {
-                ExitBuildMode();
+                if (!_showingRunoffReduction)
+                {
+                    ExitBuildMode();
+                }
+                else
+                {
+                    RainInfoTab.SetActive(false);
+                }
             }
         }
     }
@@ -223,6 +239,7 @@ public class UIManager : MonoBehaviour
 
         if (_buildMode)
         {
+            SocialButtonPressed();
             infoPanelsNotInUse.Clear();
             foreach (Transform infoPanel in InfoPanels)
             {
@@ -535,10 +552,11 @@ public class UIManager : MonoBehaviour
 
     public void HideRunoffReductions()
     {
+        RainInfoTab.SetActive(false);
         _showingRunoffReduction = false;
         infoPanelsNotInUse.Clear();
         infoPanelsInUse.Clear();
-        foreach(Transform infoPanel in InfoPanels)
+        foreach (Transform infoPanel in InfoPanels)
         {
             infoPanel.gameObject.SetActive(false);
             infoPanelsNotInUse.Enqueue(infoPanel.transform);
@@ -714,6 +732,16 @@ public class UIManager : MonoBehaviour
 
         /*THIS IS A QUICK N DIRTY FIX TO CONVERT THE ENUM INTO A STRING
          IT SHOULD BE ADDRESSED IN A MORE GENERAL WAY PLZ*/
+        string infrastructureTypeStr = ConvertBGIToString(infrastructureType, infrastructureToBuild);
+
+        float currentBudget = ResourceManager.Instance.BGIbudget;
+        float currentap = ResourceManager.Instance.ActionPoints;
+        InfoTab.GetComponent<InfoTab>().UpdateTextFieldsBGI(subcatchmentNumber, infrastructureTypeStr, currentBudget, buildCost, currentRunoffReductions, newRunoffReductions);
+
+    }
+
+    private string ConvertBGIToString(InfrastructureType infrastructureType, BuildStatus infrastructureToBuild)
+    {
         string infrastructureTypeStr = "";
 
         switch (infrastructureType)
@@ -723,7 +751,7 @@ public class UIManager : MonoBehaviour
                     //recover gr percentage of subcat
                     string specs = IdentifySpecsOfBGI(infrastructureToBuild);
                     //add it to the infrastructure type str
-                    infrastructureTypeStr = "Gree Roof " + specs + "% coverage";
+                    infrastructureTypeStr = "Green Roof " + specs + "% coverage";
                     break;
                 }
             case InfrastructureType.PP:
@@ -741,10 +769,7 @@ public class UIManager : MonoBehaviour
                 }
         }
 
-        float currentBudget = ResourceManager.Instance.BGIbudget;
-        float currentap = ResourceManager.Instance.ActionPoints;
-        InfoTab.GetComponent<InfoTab>().UpdateTextFieldsBGI(subcatchmentNumber, infrastructureTypeStr, currentBudget, buildCost, currentRunoffReductions, newRunoffReductions);
-
+        return infrastructureTypeStr;
     }
 
     public void HideInfoTab()
@@ -816,6 +841,9 @@ public class UIManager : MonoBehaviour
             ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
             ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
             uiState = UIState.Social;
+            unemploymentRate.gameObject.SetActive(true);
+            populationDensity.gameObject.SetActive(true);
+            flashFloodRisk.gameObject.SetActive(false);
         }
     }
 
@@ -823,11 +851,45 @@ public class UIManager : MonoBehaviour
     {
         if (!uiState.Equals(UIState.Rain))
         {
+            ExitBuildMode();
             ShowRunoffReductions();
             uiState = UIState.Rain;
             ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
             ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
+            unemploymentRate.gameObject.SetActive(false);
+            populationDensity.gameObject.SetActive(false);
+            flashFloodRisk.gameObject.SetActive(true);
+            flashFloodRisk.value = RainEventsManager.Instance.CalculateFlashFloorRisk();
         }
+    }
+
+    public void ShowRainInfoTab(int subcatNumber, BuildStatus subcatBuildStatus, Dictionary<InfrastructureType, BuildStatus> bgisBuilt)
+    {
+        float runoffLv1 = RainEventsManager.Instance.GetRunoffReductionPercentage(1, subcatNumber, subcatBuildStatus);
+        float runoffLv2 = RainEventsManager.Instance.GetRunoffReductionPercentage(2, subcatNumber, subcatBuildStatus);
+        float runoffLv3 = RainEventsManager.Instance.GetRunoffReductionPercentage(3, subcatNumber, subcatBuildStatus);
+        string bgi1 = "No BGI";
+        string bgi2 = "No BGI";
+        if (bgisBuilt.Count > 0)
+        {
+            foreach (InfrastructureType key in Enum.GetValues(typeof(InfrastructureType)))
+            {
+                if (bgisBuilt.ContainsKey(key))
+                {
+                    if (bgi1.Equals("No BGI"))
+                    {
+                        bgi1 = ConvertBGIToString(key, bgisBuilt[key]);
+                    }
+                    else if (bgi2.Equals("No BGI"))
+                    {
+                        bgi2 = ConvertBGIToString(key, bgisBuilt[key]);
+                    }
+                }
+            }
+        }
+        RainInfoTab.SetActive(true);
+        RainInfoTab.GetComponent<RainInfoTab>().UpdateRainTextFields(runoffLv1, runoffLv2, runoffLv3, subcatNumber, bgi1, bgi2);
+
     }
 }
 

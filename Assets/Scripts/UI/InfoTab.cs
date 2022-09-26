@@ -9,8 +9,8 @@ public class InfoTab : MonoBehaviour
     [Header("Text Fields")]
     [SerializeField] GameObject BGIContainer;
     [SerializeField] GameObject InfrastructuresContainer;
-    [SerializeField] TextMeshProUGUI SubcatchmentNumber;
-    [SerializeField] TextMeshProUGUI InfrastructureType;
+    [SerializeField] protected TextMeshProUGUI SubcatchmentNumber;
+    [SerializeField] protected TextMeshProUGUI InfrastructureType;
     [SerializeField] TextMeshProUGUI BuildignCost_op1;
     [SerializeField] TextMeshProUGUI BuildignCost_op2;
     [SerializeField] TextMeshProUGUI BuildignCost_result;
@@ -18,16 +18,16 @@ public class InfoTab : MonoBehaviour
     [SerializeField] TextMeshProUGUI BenefitIncrease_op2;
     [SerializeField] TextMeshProUGUI Benefit_result;
     [SerializeField] TextMeshProUGUI InfrastructureBenefitLabel;
-    [SerializeField] TextMeshProUGUI BGIBenefitLabel;
+    [SerializeField] protected TextMeshProUGUI BGIBenefitLabel;
     [SerializeField] TextMeshProUGUI NewRunoffReductionLv1;
     [SerializeField] TextMeshProUGUI NewRunoffReductionLv2;
     [SerializeField] TextMeshProUGUI NewRunoffReductionLv3;
     [SerializeField] TextMeshProUGUI CurrentRunoffReductionLv1;
     [SerializeField] TextMeshProUGUI CurrentRunoffReductionLv2;
     [SerializeField] TextMeshProUGUI CurrentRunoffReductionLv3;
-    [SerializeField] TextMeshProUGUI ResultRunoffReductionLv1;
-    [SerializeField] TextMeshProUGUI ResultRunoffReductionLv2;
-    [SerializeField] TextMeshProUGUI ResultRunoffReductionLv3;
+    [SerializeField] protected TextMeshProUGUI ResultRunoffReductionLv1;
+    [SerializeField] protected TextMeshProUGUI ResultRunoffReductionLv2;
+    [SerializeField] protected TextMeshProUGUI ResultRunoffReductionLv3;
     [SerializeField] Image BenefitIcon;
     [SerializeField] Image CurrentBenefitIcon;
     [SerializeField] Image IncreaseBenefitIcon;
@@ -113,3 +113,5 @@ public class InfoTab : MonoBehaviour
         BuildignCost_result.text = "" + bcResult;
     }
 }
+
+
