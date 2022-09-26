@@ -80,10 +80,10 @@ public class RoundManager : MonoBehaviour
                 foreach(Subcatchment subcat in builtSubcatchment)
                 {
                     //calculating 
-                    float weightedRunoffReductionRain1 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 1) * avarageWeight;
-                    float weightedRunoffReductionRain2 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 2) * avarageWeight;
-                    float weightedRunoffReductionRain3 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 3) * avarageWeight;
-                    runoffReductionPercentageAggregated += weightedRunoffReductionRain1 + weightedRunoffReductionRain1 + weightedRunoffReductionRain3;
+                    //float weightedRunoffReductionRain1 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 1) * avarageWeight;
+                    //float weightedRunoffReductionRain2 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 2) * avarageWeight;
+                    //float weightedRunoffReductionRain3 = RainEventsManager.Instance.GetRunoffReductionPercentage(subcat, 3) * avarageWeight;
+                    //runoffReductionPercentageAggregated += weightedRunoffReductionRain1 + weightedRunoffReductionRain1 + weightedRunoffReductionRain3;
                 }
                 float runoffReductionWeightedMean = runoffReductionPercentageAggregated / (builtSubcatchment.Length * 3);
                 float socialScorePercentage = (float)100f*(socialScore / 29f);

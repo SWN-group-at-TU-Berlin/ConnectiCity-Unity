@@ -11,9 +11,12 @@ public class DataReader : MonoBehaviour
     #endregion
 
     [SerializeField] TextAsset rainCostsTables;
+    [SerializeField] TextAsset rainPerRoundTable;
     [SerializeField] TextAsset runoffReductionTables;
+    [SerializeField] TextAsset runoffsTables;
     [SerializeField] TextAsset buildingCostsTable;
     [SerializeField] TextAsset subcatchmentBenefitsTable;
+    [SerializeField] TextAsset subcatchmentRainDistributionTable;
     [SerializeField] TextAsset actionPointsTable;//CHECK IF DEPRECATED
     [SerializeField] TextAsset incomeBenefitTable;//CHECK IF DEPRECATED
     [SerializeField] TextAsset citizenSatisfactionBenefitTable;//CHECK IF DEPRECATED
@@ -32,6 +35,11 @@ public class DataReader : MonoBehaviour
     Dictionary<int, Dictionary<SubcatchmentKey, float>> runoffReductionPercentagesDictionaries;
     #region getter
     public Dictionary<int, Dictionary<SubcatchmentKey, float>> RunoffReductionPercentagesDictionaries { get { return runoffReductionPercentagesDictionaries; } }
+    #endregion
+
+    Dictionary<int, Dictionary<SubcatchmentKey, float>> runoffsDictionaries;
+    #region getter
+    public Dictionary<int, Dictionary<SubcatchmentKey, float>> RunoffsDictionaries { get { return runoffsDictionaries; } }
     #endregion
 
     Dictionary<Benefit, Dictionary<SubcatchmentKey, float>> benefits;
@@ -59,6 +67,16 @@ public class DataReader : MonoBehaviour
     public Dictionary<int, float> SubcatchmentsBenefits { get { return subcatchmentsBenefits; } }
     #endregion
 
+    Dictionary<int, float> subcatchmentsRainDistributionDictionary;
+    #region getter
+    public Dictionary<int, float> SubcatchmentsRainDistributionDictionary { get { return subcatchmentsRainDistributionDictionary; } }
+    #endregion
+
+    Dictionary<int, float> rainPerRoundDictionary;
+    #region getter
+    public Dictionary<int, float> RainPerRoundDictionary { get { return rainPerRoundDictionary; } }
+    #endregion
+
     private void Awake()
     {
         //SINGLETON
@@ -74,15 +92,21 @@ public class DataReader : MonoBehaviour
         //Dictionaries initialization 
         rainCostsDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
         runoffReductionPercentagesDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
+        runoffsDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
         buildingCosts = new Dictionary<SubcatchmentKey, float>();
         subcatchmentsAreas = new Dictionary<int, float>();
         subcatchmentsBenefits = new Dictionary<int, float>();
+        subcatchmentsRainDistributionDictionary = new Dictionary<int, float>();
+        rainPerRoundDictionary = new Dictionary<int, float>();
         benefits = new Dictionary<Benefit, Dictionary<SubcatchmentKey, float>>();
 
         //Dictionaries population
         subcatchmentsBenefits = PopulateOneValuePerSubcatchmentDictionary(subcatchmentBenefitsTable);
+        subcatchmentsRainDistributionDictionary = PopulateOneValuePerSubcatchmentDictionary(subcatchmentRainDistributionTable);
+        rainPerRoundDictionary = PopulateOneValuePerSubcatchmentDictionary(rainPerRoundTable);
         PopulateDictionaryFromRainLevelTables(rainCostsDictionaries, rainCostsTables);
         PopulateDictionaryFromRainLevelTables(runoffReductionPercentagesDictionaries, runoffReductionTables);
+        PopulateDictionaryFromRainLevelTables(runoffsDictionaries, runoffsTables);
         buildingCosts = PopulateDictionaryFromSubcatchmentsTables(buildingCostsTable);
         actionPointsCosts = PopulateDictionaryFromSubcatchmentsTables(actionPointsTable);
         Dictionary<SubcatchmentKey, float> incomeBenefits = PopulateDictionaryFromSubcatchmentsTables(incomeBenefitTable);
@@ -113,7 +137,7 @@ public class DataReader : MonoBehaviour
         tableContent = tmp.ToArray();
 
         //for each string in s
-        foreach(string row in tableContent)
+        foreach (string row in tableContent)
         {
             //split string by "," in array a of dim 2
             string[] rowValues = row.Split(',');
@@ -232,9 +256,9 @@ public class DataReader : MonoBehaviour
                     SubcatchmentKey newKey = new SubcatchmentKey(int.Parse(singleRowCells[0]), status);
 
                     //store a new element into the dictionary as [key][x[i]]
-                    
+
                     //singleRowCells[i] = singleRowCells[i].Replace(".", ",");
-                    
+
                     newDictionary.Add(newKey, float.Parse(singleRowCells[i]));
                 }
                 else if (subcatchmentsAreas.Count < 12)

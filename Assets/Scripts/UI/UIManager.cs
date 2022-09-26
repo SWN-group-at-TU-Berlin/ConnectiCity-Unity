@@ -59,6 +59,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject RBButtonDown;
     [SerializeField] GameObject PPButtonDefault;
     [SerializeField] GameObject PPButtonDown;
+    [SerializeField] GameObject SocialButton;
+    [SerializeField] GameObject RainButton;
 
     [Header("Info boards references and properties")]
     [SerializeField] GameObject MessageBoard;
@@ -75,6 +77,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Sprite jobs;
     [SerializeField] Sprite house;
     [SerializeField] Sprite runoff;
+    [SerializeField] Sprite money;
 
 
     [Header("Floating text references")]
@@ -88,6 +91,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider unemploymentRate;
 
 
+    UIState uiState = UIState.Social;
+
     //Button variables
     List<GameObject> DefaultButtons;
     InfrastructureType infrastructureTypeButtonPressed;
@@ -100,6 +105,7 @@ public class UIManager : MonoBehaviour
     bool _PPButtonPressed = false;
     bool _RBButtonPressed = false;
     bool _buildMode = false;
+    bool _showingRunoffReduction = false;
 
     //Info boards variables
     Color fullAlphaBackground;
@@ -112,6 +118,11 @@ public class UIManager : MonoBehaviour
 
     //InputProvider reference
     InputProvider input;
+
+    private void Start()
+    {
+        ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
+    }
 
     private void Update()
     {
@@ -414,7 +425,7 @@ public class UIManager : MonoBehaviour
     public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
     public void UpdateRoundTxt(int currentRound) { CurrentRound.text = "Round" + currentRound.ToString(); }
 
-    public void ShowInfoPanel(AreaUsage subcatType, InfrastructureType infrastructureType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
+    public void ShowSocialInfoPanel(AreaUsage subcatType, InfrastructureType infrastructureType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
     {
         if (infoPanelsNotInUse.Count > 0)
         {
@@ -440,6 +451,8 @@ public class UIManager : MonoBehaviour
                 }
                 if (textField.name.Equals("Budget"))
                 {
+                    textField.GetChild(0).gameObject.SetActive(true);
+                    textField.GetChild(0).GetComponent<Image>().sprite = money;
                     textField.GetComponent<TextMeshProUGUI>().text = "-" + budget.ToString();
                     textField.GetComponent<TextMeshProUGUI>().color = CanonRed;
                 }
@@ -447,6 +460,7 @@ public class UIManager : MonoBehaviour
                 {
                     textField.GetComponent<TextMeshProUGUI>().text = "+" + income;
                     textField.GetComponent<TextMeshProUGUI>().color = CanonGreen;
+                    textField.GetChild(0).gameObject.SetActive(true);
                     if (infrastructureType.Equals(InfrastructureType.Building))
                     {
 
@@ -475,6 +489,60 @@ public class UIManager : MonoBehaviour
             Debug.LogWarning("InfoPanelNotInUse empty");
         }
 
+    }
+
+    public void ShowRainInfoPanel(float runoffReduction, Vector3 position)
+    {
+        if (infoPanelsNotInUse.Count > 0)
+        {
+            Transform infoPanel = infoPanelsNotInUse.Dequeue();
+            infoPanel.gameObject.SetActive(true);
+            foreach (Transform textField in infoPanel)
+            {
+                if (textField.name.Equals("Budget"))
+                {
+                    textField.GetChild(0).GetComponent<Image>().sprite = runoff;
+                    textField.GetComponent<TextMeshProUGUI>().text = "Reduction";
+                }
+                if (textField.name.Equals("Benefit"))
+                {
+                    textField.GetComponent<TextMeshProUGUI>().color = Color.blue;
+                    textField.GetComponent<TextMeshProUGUI>().text = runoffReduction + "%";
+                    textField.GetChild(0).gameObject.SetActive(false);
+                }
+            }
+            infoPanel.transform.position = Camera.main.WorldToScreenPoint(position);
+            infoPanel.transform.position = new Vector3(infoPanel.position.x, infoPanel.position.y, 0f);
+            infoPanelsInUse.Enqueue(infoPanel);
+        }
+        else
+        {
+            Debug.LogWarning("InfoPanelNotInUse empty");
+        }
+    }
+
+    public void ShowRunoffReductions()
+    {
+        _showingRunoffReduction = true;
+        if (_showingRunoffReduction)
+        {
+            foreach (Subcatchment subcat in MapManager.Instance.GetBuiltSubcatchments())
+            {
+                subcat.ShowRunoffReductionReductionInfo();
+            }
+        }
+    }
+
+    public void HideRunoffReductions()
+    {
+        _showingRunoffReduction = false;
+        infoPanelsNotInUse.Clear();
+        infoPanelsInUse.Clear();
+        foreach(Transform infoPanel in InfoPanels)
+        {
+            infoPanel.gameObject.SetActive(false);
+            infoPanelsNotInUse.Enqueue(infoPanel.transform);
+        }
     }
 
     public void HideInfoPanels()
@@ -730,4 +798,42 @@ public class UIManager : MonoBehaviour
     {
         unemploymentRate.value = unmlpRate;
     }
+
+    public void ChangeButtonColorToPressed(Button btn)
+    {
+        Sprite currentSprite = btn.image.sprite;
+        SpriteState tmpState;
+        tmpState.pressedSprite = currentSprite;
+        btn.image.sprite = btn.spriteState.pressedSprite;
+        btn.spriteState = tmpState;
+    }
+
+    public void SocialButtonPressed()
+    {
+        if (!uiState.Equals(UIState.Social))
+        {
+            HideRunoffReductions();
+            ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
+            ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
+            uiState = UIState.Social;
+        }
+    }
+
+    public void RainButtonPressed()
+    {
+        if (!uiState.Equals(UIState.Rain))
+        {
+            ShowRunoffReductions();
+            uiState = UIState.Rain;
+            ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
+            ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
+        }
+    }
+}
+
+public enum UIState
+{
+    Social,
+    Rain,
+    Traffic
 }

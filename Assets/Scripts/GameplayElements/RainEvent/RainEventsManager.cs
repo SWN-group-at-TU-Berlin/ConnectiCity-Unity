@@ -21,13 +21,27 @@ public class RainEventsManager : MonoBehaviour
         {
             Destroy(this);
         }
+        rainParticles.GetComponent<ParticleSystem>().Stop();
+        runoffs = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
+        runoffReductionPercentages = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
+        rainPerRound = new Dictionary<int, float>();
+        subcatchmentsRainDistribution = new Dictionary<int, float>();
     }
 
     [SerializeField] GameObject rainEventInfoPanel;
     [SerializeField] GameObject rainParticles;
+    [SerializeField] float flashFloodThreshold = 670;
+    [SerializeField] float totalRunoff;
+    #region getter
+    public float TotalRunoff { get { return totalRunoff; } }
+    #endregion
 
+    //DEPRECATED
+    [HideInInspector]
     [SerializeField] int maxRainEvent1Threshold;
+    [HideInInspector]
     [SerializeField] int maxRainEvent2Threshold;
+    [HideInInspector]
     [SerializeField] int maxRainEvent3Threshold;
 
     [SerializeField] int currentRainIntensity;
@@ -35,36 +49,107 @@ public class RainEventsManager : MonoBehaviour
     public int CurrentRainIntensity { get { return currentRainIntensity; } }
     #endregion
 
+    Dictionary<int, Dictionary<SubcatchmentKey, float>> runoffs;
+    #region getter
+    public Dictionary<int, Dictionary<SubcatchmentKey, float>> Runoffs { get { return runoffs; } }
+    #endregion
+
+    Dictionary<int, Dictionary<SubcatchmentKey, float>> runoffReductionPercentages;
+    #region getter
+    public Dictionary<int, Dictionary<SubcatchmentKey, float>> RunoffReductionPercentages { get { return runoffReductionPercentages; } }
+    #endregion
+
+    Dictionary<int, float> subcatchmentsRainDistribution;
+    #region getter
+    public Dictionary<int, float> SubcatchmentsRainDistribution { get { return subcatchmentsRainDistribution; } }
+    #endregion
+
+    Dictionary<int, float> rainPerRound;
+    #region getter
+    public Dictionary<int, float> RainPerRound { get { return rainPerRound; } }
+    #endregion
+
+    //DEPRECATED
     [SerializeField] List<RunoffReductionPercentageSingleBGI> _singleBGIRunoffReduction;
     #region getter
     public List<RunoffReductionPercentageSingleBGI> SingleBGIRunoffReduction { get { return _singleBGIRunoffReduction; } }
     #endregion
+    //DEPRECATED
     [SerializeField] List<RunoffReductionPercentageBGICombo> _BGIComboRunoffReduction;
     #region getter
     public List<RunoffReductionPercentageBGICombo> BGIComboRunoffReduction { get { return _BGIComboRunoffReduction; } }
     #endregion
 
-    float runoffReductionPercentageAccumulated = 0;
-
     private void Start()
     {
         currentRainIntensity = 1;
-        rainParticles.GetComponent<ParticleSystem>().Stop();
         rainEventInfoPanel.GetComponent<Animator>().enabled = false;
+
+        runoffs = DataReader.Instance.RunoffsDictionaries;
+        runoffReductionPercentages = DataReader.Instance.RunoffReductionPercentagesDictionaries;
+        subcatchmentsRainDistribution = DataReader.Instance.SubcatchmentsRainDistributionDictionary;
+        rainPerRound = DataReader.Instance.RainPerRoundDictionary;
+    }
+
+    /*Purpose of the function:
+     *Sum all the runoffs of the built subcatchments at the current build status
+     */
+    public float CalculateTotalRunoff()
+    {
+        //initialize variable
+        float totRunoff = 0;
+        //retrieve built subcatchments
+        Subcatchment[] builtSubcats = MapManager.Instance.GetBuiltSubcatchments();
+
+        foreach (Subcatchment subcat in builtSubcats)
+        {
+            //set runoff reduction to 0
+            float runoffReductionpercentage = 0;
+            //retrieve runoff reduction only if subcat build status isn't Built or Unbuilt
+            if (!subcat.BuildStatus.Equals(BuildStatus.Built) && !subcat.BuildStatus.Equals(BuildStatus.Unbuild))
+            {
+                runoffReductionpercentage = runoffReductionPercentages[currentRainIntensity][new SubcatchmentKey(subcat.SubcatchmentNumber, subcat.BuildStatus)] / 100;
+            }
+
+            //Retrieve rain precipitation per round
+            float currentRain = rainPerRound[RoundManager.Instance.CurrentRound];
+            
+            //Calculate rain on subcatchment
+            float subcatRain = currentRain * subcatchmentsRainDistribution[subcat.SubcatchmentNumber];
+            
+            //Calculate runoff reduction of subcat for specific round and rain precipitation
+            float subcatRuonff = subcatRain - (subcatRain * runoffReductionpercentage);
+
+            //sum everything to total runoff
+            totRunoff += subcatRuonff;
+        }
+        return totRunoff;
+    }
+
+    public void UpdateTotalRunoff()
+    {
+        totalRunoff = CalculateTotalRunoff();
+        Debug.Log("Total runoff: " + TotalRunoff);
+    }
+
+    public float CalculateFlashFloorRisk()
+    {
+        UpdateTotalRunoff();
+        return (totalRunoff / flashFloodThreshold) * 100;
     }
 
     public IEnumerator RainEvent()
     {
         float rainEventChance = UnityEngine.Random.Range(0f, 1f);
         int rainEventIntesity = 1; //50% chance
-        if(rainEventChance < 0.5f)
+        if (rainEventChance < 0.5f)
         {
             rainEventIntesity = 2; // 30% chance
 
-                if(rainEventChance < 0.2f)
-                {
-                    rainEventIntesity = 3; //20% chance
-                }
+            if (rainEventChance < 0.2f)
+            {
+                rainEventIntesity = 3; //20% chance
+            }
         }
 
         //"turn off the light"
@@ -102,17 +187,17 @@ public class RainEventsManager : MonoBehaviour
 
         //get deactivation
         //get citizen satisfaction loss
-        float runoffReductionPercentageSubcat1 = GetRunoffReductionPercentage(subcat1, rainEventIntesity);
-        float runoffReductionPercentageSubcat2 = GetRunoffReductionPercentage(subcat2, rainEventIntesity);
+        //float runoffReductionPercentageSubcat1 = GetRunoffReductionPercentage(subcat1, rainEventIntesity);
+        //float runoffReductionPercentageSubcat2 = GetRunoffReductionPercentage(subcat2, rainEventIntesity);
         int citizenSatisfactionDecresase1 = 0;
         int citizenSatisfactionDecresase2 = 0;
         if (subcat1.IsBuilt)
         {
-            citizenSatisfactionDecresase1 = GetCitizenSatisfactionModifier(runoffReductionPercentageSubcat1, rainEventIntesity);
+            //citizenSatisfactionDecresase1 = GetCitizenSatisfactionModifier(runoffReductionPercentageSubcat1, rainEventIntesity);
         }
         if (subcat2.IsBuilt)
         {
-            citizenSatisfactionDecresase2 = GetCitizenSatisfactionModifier(runoffReductionPercentageSubcat2, rainEventIntesity);
+            //citizenSatisfactionDecresase2 = GetCitizenSatisfactionModifier(runoffReductionPercentageSubcat2, rainEventIntesity);
         }
 
         yield return new WaitForSeconds(4);
@@ -154,69 +239,12 @@ public class RainEventsManager : MonoBehaviour
         RoundManager.Instance.StartRound();
     }
 
-    public float GetRunoffReductionPercentage(Subcatchment subcat, int rainIntesity)
+    public float GetRunoffReductionPercentage(int subcatNumber, BuildStatus subcatStatus)
     {
         float runoffReductionPercentage = 0;
-        bool gr = false;
-        bool pp = false;
-        bool rb = false;
-        if (subcat.IsBuilt && subcat.BGIHosted.Count > 0)
+        if(!subcatStatus.Equals(BuildStatus.Built) && !subcatStatus.Equals(BuildStatus.Unbuild))
         {
-            foreach (InfrastructureType bgi in subcat.BGIHosted)
-            {
-                if (!gr)
-                {
-                    if (bgi.Equals(InfrastructureType.GR))
-                    {
-                        gr = true;
-                    }
-                }
-                if (!rb)
-                {
-                    if (bgi.Equals(InfrastructureType.GR))
-                    {
-                        rb = true;
-                    }
-                }
-                if (!pp)
-                {
-                    if (bgi.Equals(InfrastructureType.GR))
-                    {
-                        pp = true;
-                    }
-                }
-
-            }
-            if (subcat.BGIHosted.Count == 1)
-            {
-                if (gr)
-                {
-                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.GR) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
-                }
-                if (rb)
-                {
-                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.RB) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
-                }
-                if (pp)
-                {
-                    runoffReductionPercentage = Array.Find(SingleBGIRunoffReduction.ToArray(), elem => elem.BGI.Equals(InfrastructureType.PP) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
-                }
-            }
-            else
-            {
-                if (gr && pp)
-                {
-                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.GR_PP) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
-                }
-                if (gr && rb)
-                {
-                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.RB_GR) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
-                }
-                if (rb && pp)
-                {
-                    runoffReductionPercentage = Array.Find(BGIComboRunoffReduction.ToArray(), elem => elem.BGICombo.Equals(BGICombo.PP_RB) && elem.RainfallIntensity.Equals(rainIntesity)).RunoffReductionPercentage;
-                }
-            }
+            runoffReductionPercentage = runoffReductionPercentages[CurrentRainIntensity][new SubcatchmentKey(subcatNumber, subcatStatus)];
         }
         return runoffReductionPercentage;
     }

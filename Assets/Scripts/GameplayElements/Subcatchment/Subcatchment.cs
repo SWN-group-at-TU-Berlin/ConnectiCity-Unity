@@ -409,7 +409,7 @@ public class Subcatchment : MonoBehaviour
 
         //call UIManager to show info panel with previous info
         Vector3 position = GetInfoPanelPosition();
-        UIManager.Instance.ShowInfoPanel(Usage, infrastructureType, position, ((int)apCost), ((int)buildCost), ((int)benefit), ((int)citizenSatisfactionBenefit), ((int)citizenNumberBenefit));
+        UIManager.Instance.ShowSocialInfoPanel(Usage, infrastructureType, position, ((int)apCost), ((int)buildCost), ((int)benefit), ((int)citizenSatisfactionBenefit), ((int)citizenNumberBenefit));
     }
 
     //DEPRECATED
@@ -532,6 +532,14 @@ public class Subcatchment : MonoBehaviour
     {
         _isHighlighted = false;
         GetComponent<MeshRenderer>().material = defaultMaterial;
+    }
+
+    public void ShowRunoffReductionReductionInfo()
+    {
+        Vector3 position = GetInfoPanelPosition();
+        float runoffReduction = RainEventsManager.Instance.GetRunoffReductionPercentage(_subcatchmentNumber, _buildStatus);
+        UIManager.Instance.ShowRainInfoPanel(runoffReduction, position);
+        //make subcat selectable
     }
 
     public void SetSubcatchmentActive(bool activeState)
