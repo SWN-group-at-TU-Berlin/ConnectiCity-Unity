@@ -45,9 +45,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rainEventInfoPanel: {fileID: 0}
   rainParticles: {fileID: 0}
+  flashFloodThreshold: 670
+  totalRunoff: 0
   maxRainEvent1Threshold: 87
   maxRainEvent2Threshold: 56
   maxRainEvent3Threshold: 46
+  currentRainIntensity: 0
   _singleBGIRunoffReduction:
   - _rainfallIntensity: 1
     _subcatchmentType: 0

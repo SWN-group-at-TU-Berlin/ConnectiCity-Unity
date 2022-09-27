@@ -66,6 +66,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject MessageBoard;
     [SerializeField] GameObject InfoTab;
     [SerializeField] GameObject RainInfoTab;
+    [SerializeField] GameObject RainDistributionPanel;
+    [SerializeField] GameObject RainDistributionGraph;
     [SerializeField] LayerMask UILayer;
     [SerializeField] private float staticTime;
     [SerializeField] private float fadeOutTime;
@@ -107,6 +109,7 @@ public class UIManager : MonoBehaviour
     bool _PPButtonPressed = false;
     bool _RBButtonPressed = false;
     bool _buildMode = false;
+    bool _showingRainDistributionGraph = false;
     bool _showingRunoffReduction = false;
     #region getter
     public bool ShowingRunoffReduction { get { return _showingRunoffReduction; } }
@@ -844,6 +847,7 @@ public class UIManager : MonoBehaviour
             unemploymentRate.gameObject.SetActive(true);
             populationDensity.gameObject.SetActive(true);
             flashFloodRisk.gameObject.SetActive(false);
+            RainDistributionPanel.SetActive(false);
         }
     }
 
@@ -856,6 +860,7 @@ public class UIManager : MonoBehaviour
             uiState = UIState.Rain;
             ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
             ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
+            RainDistributionPanel.SetActive(true);
             unemploymentRate.gameObject.SetActive(false);
             populationDensity.gameObject.SetActive(false);
             flashFloodRisk.gameObject.SetActive(true);
@@ -890,6 +895,22 @@ public class UIManager : MonoBehaviour
         RainInfoTab.SetActive(true);
         RainInfoTab.GetComponent<RainInfoTab>().UpdateRainTextFields(runoffLv1, runoffLv2, runoffLv3, subcatNumber, bgi1, bgi2);
 
+    }
+
+    public void ShowRainDistributionGraph()
+    {
+        _showingRainDistributionGraph = !_showingRainDistributionGraph;
+
+        if (_showingRainDistributionGraph)
+        {
+            RainDistributionGraph.SetActive(true);
+            RainDistributionPanel.SetActive(false);
+        }
+        else
+        {
+            RainDistributionGraph.SetActive(false);
+            RainDistributionPanel.SetActive(true);
+        }
     }
 }
 
