@@ -402,9 +402,20 @@ public class Subcatchment : MonoBehaviour
         //get income benefit
         float benefit = SubcatchmentBenefit;
 
+        //if trying to build BGI
         if (!buildStatus.Equals(BuildStatus.Built))
         {
-            benefit = DataReader.Instance.RunoffReductionPercentagesDictionaries[RainEventsManager.Instance.CurrentRainIntensity][new SubcatchmentKey(SubcatchmentNumber, buildStatus)];
+            //benefit is the difference between the current runoff reduction of the subcat vs the new one after building the bgi
+            float currentBGIReduction = RainEventsManager.Instance.GetRunoffReductionPercentage(RainEventsManager.Instance.CurrentRainIntensity, _subcatchmentNumber, _buildStatus);
+            //retrieve eventual new biuild status
+            BuildStatus newBuildStatus = NewBuildStatus(buildStatus);
+            float newBGIReduction = RainEventsManager.Instance.GetRunoffReductionPercentage(RainEventsManager.Instance.CurrentRainIntensity, _subcatchmentNumber, buildStatus);
+            if (!newBuildStatus.Equals(_buildStatus))
+            {
+                newBGIReduction = RainEventsManager.Instance.GetRunoffReductionPercentage(RainEventsManager.Instance.CurrentRainIntensity, _subcatchmentNumber, NewBuildStatus(buildStatus));
+                newBGIReduction = newBGIReduction -currentBGIReduction;
+            }
+            benefit = newBGIReduction;
         }
 
         //get cn benefit [DEPRECATED]

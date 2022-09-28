@@ -84,12 +84,12 @@ public class InfoTab : MonoBehaviour
         //Change BenefitLabel to "Specific BGI runoff reduction:"
         BGIBenefitLabel.text = BenefitLabelStaticString;
 
-        //New runoff reduction rain lv1
-        NewRunoffReductionLv1.text = roReduction_after[1] + "%";
-        //New runoff reduction rain lv2
-        NewRunoffReductionLv2.text = roReduction_after[2] + "%";
-        //New runoff reduction rain lv3
-        NewRunoffReductionLv3.text = roReduction_after[3] + "%";
+        //Result of runoff reduction lv1
+        NewRunoffReductionLv1.text = (roReduction_after[1] - roReduction_before[1]) + "%";
+        //Result of runoff reduction lv2
+        NewRunoffReductionLv2.text = (roReduction_after[2] - roReduction_before[2]) + "%";
+        //Result of runoff reduction lv3
+        NewRunoffReductionLv3.text = (roReduction_after[3] - roReduction_before[3]) + "%";
 
         //Current runoff reduction rain lv1
         CurrentRunoffReductionLv1.text = roReduction_before[1] + "%";
@@ -99,11 +99,11 @@ public class InfoTab : MonoBehaviour
         CurrentRunoffReductionLv3.text = roReduction_before[3] + "%";
 
         //Result of runoff reduction lv1
-        ResultRunoffReductionLv1.text = (roReduction_after[1] + roReduction_before[1]) + "%";
+        ResultRunoffReductionLv1.text = (roReduction_after[1]) + "%";
         //Result of runoff reduction lv2
-        ResultRunoffReductionLv2.text = (roReduction_after[2] + roReduction_before[2]) + "%";
+        ResultRunoffReductionLv2.text = (roReduction_after[2]) + "%";
         //Result of runoff reduction lv3
-        ResultRunoffReductionLv3.text = (roReduction_after[3] + roReduction_before[3]) + "%";
+        ResultRunoffReductionLv3.text = (roReduction_after[3]) + "%";
 
         SubcatchmentNumber.text = "" + subcatchmentNumber;
         InfrastructureType.text = infrastcutureType;

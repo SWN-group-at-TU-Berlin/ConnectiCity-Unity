@@ -152,8 +152,11 @@ public class RainEventsManager : MonoBehaviour
             signModifierValue = -1;
         }
 
+        //determine actual random deviation on prediction based on rain prediction uncertanty
+        float predictionDeviaton = UnityEngine.Random.Range(0f, RainPredictionUncertanty);
+
         //multiply rain prediction uncertanty per current Rain to determine value to add to current rain
-        float predictionUncertantyRainValue = currentRain * RainPredictionUncertanty;
+        float predictionUncertantyRainValue = currentRain * predictionDeviaton;
         return predictionUncertantyRainValue;
     }
 

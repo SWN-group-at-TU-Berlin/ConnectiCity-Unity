@@ -89,10 +89,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] float floatingSpeed;
     [SerializeField] float txtFadeOutTime;
 
-    [Header("Score references")]
+    [Header("Score references and parameters")]
     [SerializeField] Slider populationDensity;
     [SerializeField] Slider unemploymentRate;
     [SerializeField] Slider flashFloodRisk;
+    [SerializeField] Slider predictedRunoff;
+    [SerializeField] Slider actualRunoff;
+    [SerializeField] TextMeshProUGUI actualPrecipitation;
+    [SerializeField] TextMeshProUGUI predictedPrecipitation;
+    [SerializeField] float sliderFillingTime = 3f;
+    [SerializeField] float flashFloodRiskSliderCap = 744f;
 
 
     UIState uiState = UIState.Social;
@@ -133,7 +139,7 @@ public class UIManager : MonoBehaviour
 
         flashFloodRisk.minValue = 0;
         flashFloodRisk.maxValue = RainEventsManager.Instance.FlashFloodThreshold;
-        flashFloodRisk.value = RainEventsManager.Instance.CalculateFlashFloorRisk();
+        flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateFlashFloorRisk(), 0f, flashFloodRiskSliderCap);
     }
 
     private void Update()
@@ -952,6 +958,38 @@ public class UIManager : MonoBehaviour
             RainDistributionPanel.SetActive(true);
         }
 
+    }
+
+    public IEnumerator FillSlidersAnimation(float totalSliderValue, float totalTextValue, Slider sliderToFill, TextMeshProUGUI textToFill)
+    {
+        float timeToWait = sliderFillingTime / totalSliderValue;
+        if (totalSliderValue < totalTextValue)
+        {
+            timeToWait = sliderFillingTime / totalTextValue;
+        }
+
+        float fillValue = timeToWait;
+        while (fillValue < totalSliderValue && fillValue < totalTextValue)
+        {
+            fillValue += timeToWait;
+            if (fillValue < totalSliderValue)
+            {
+                sliderToFill.value = fillValue;
+            }
+
+            if (fillValue < totalTextValue)
+            {
+                textToFill.text = fillValue.ToString();
+            }
+            yield return new WaitForSeconds(timeToWait);
+        }
+    }
+
+    public void TestFuctionForSliderFillAnimation()
+    {
+        float _actualRunoff = RainEventsManager.Instance.CalculateTotalRunoff(true);
+        float _actualPrecipitation = RainEventsManager.Instance.RainPerRound[RoundManager.Instance.CurrentRound];
+        StartCoroutine(FillSlidersAnimation(_actualRunoff, _actualPrecipitation, actualRunoff, actualPrecipitation));
     }
 }
 

@@ -113,7 +113,7 @@ public class InfrastructureBuilder : MonoBehaviour
                 float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, specificSubcatBGI);
 
                 //if: ap costs < ap AND build costs < budget
-                if (apCost <= currentAp && buildCost <= currentBudget && subcatchment.IsBuilt)
+                if (buildCost <= currentBudget && subcatchment.IsBuilt)
                 {
                     //add subcatchment to buildable subcatchments
                     buildableSubcatchments.Add(subcatchment);
