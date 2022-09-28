@@ -146,17 +146,44 @@ public class UIManager : MonoBehaviour
 
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(input.MousePosition());
+
+        //if mouse not hitting subcatchments or UI
         if (!Physics.Raycast(ray, out hit) && !EventSystem.current.IsPointerOverGameObject())
         {
+            //If mosue button pressed
             if (input.MouseLeftButton())
             {
+                //if you are not in runoff reduction showing mode
                 if (!_showingRunoffReduction)
                 {
+                    //then exit the build mode
                     ExitBuildMode();
                 }
-                else
+                else //if you are in runoff reduction mode
                 {
+                    //hide the info tab
                     RainInfoTab.SetActive(false);
+
+                    // if you are showing the graph
+                    if (_showingRainDistributionGraph)
+                    {
+                        //hide it [name of the function is counterintuitive]
+                        ShowRainDistributionGraph();
+                    }
+                }
+
+            }
+        } //If you are just not on the UI
+        else if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            //and pressig the mouse button
+            if (input.MouseLeftButton())
+            {
+                // if you are showing the graph
+                if (_showingRainDistributionGraph)
+                {
+                    //hide it [name of the function is counterintuitive]
+                    ShowRainDistributionGraph();
                 }
             }
         }
@@ -848,6 +875,8 @@ public class UIManager : MonoBehaviour
             populationDensity.gameObject.SetActive(true);
             flashFloodRisk.gameObject.SetActive(false);
             RainDistributionPanel.SetActive(false);
+            RainDistributionGraph.SetActive(false);
+            _showingRainDistributionGraph = false;
         }
     }
 
@@ -895,6 +924,12 @@ public class UIManager : MonoBehaviour
         RainInfoTab.SetActive(true);
         RainInfoTab.GetComponent<RainInfoTab>().UpdateRainTextFields(runoffLv1, runoffLv2, runoffLv3, subcatNumber, bgi1, bgi2);
 
+        //deactivate other stuff if in use
+        if (_showingRainDistributionGraph)
+        {
+            //hide it [name of the function is counterintuitive]
+            ShowRainDistributionGraph();
+        }
     }
 
     public void ShowRainDistributionGraph()
@@ -905,12 +940,18 @@ public class UIManager : MonoBehaviour
         {
             RainDistributionGraph.SetActive(true);
             RainDistributionPanel.SetActive(false);
+            //deactivate other stuff
+            if (RainInfoTab.activeInHierarchy)
+            {
+                RainInfoTab.SetActive(false);
+            }
         }
         else
         {
             RainDistributionGraph.SetActive(false);
             RainDistributionPanel.SetActive(true);
         }
+
     }
 }
 

@@ -34,7 +34,13 @@ public class RainEventsManager : MonoBehaviour
     #region getter
     public float FlashFloodThreshold { get { return flashFloodThreshold; } }
     #endregion
-    [SerializeField] float totalRunoff;
+
+    [SerializeField] float rainPredictionUncertanty = 0.05f;
+    #region getter
+    public float RainPredictionUncertanty { get { return rainPredictionUncertanty; } }
+    #endregion
+
+    float totalRunoff;
     #region getter
     public float TotalRunoff { get { return totalRunoff; } }
     #endregion
@@ -97,12 +103,22 @@ public class RainEventsManager : MonoBehaviour
     /*Purpose of the function:
      *Sum all the runoffs of the built subcatchments at the current build status
      */
-    public float CalculateTotalRunoff()
+    public float CalculateTotalRunoff(bool considerPredictionUncertanty = false)
     {
         //initialize variable
         float totRunoff = 0;
+        
         //retrieve built subcatchments
         Subcatchment[] builtSubcats = MapManager.Instance.GetBuiltSubcatchments();
+
+        //Retrieve rain precipitation per round
+        float currentRain = rainPerRound[RoundManager.Instance.CurrentRound];
+
+        //calculate and add the prediction uncertanty value to current rain of the round
+        if (considerPredictionUncertanty)
+        {
+            currentRain += CalculatePredictionUncertantyValue(currentRain); ;
+        }
 
         foreach (Subcatchment subcat in builtSubcats)
         {
@@ -114,12 +130,10 @@ public class RainEventsManager : MonoBehaviour
                 runoffReductionpercentage = runoffReductionPercentages[currentRainIntensity][new SubcatchmentKey(subcat.SubcatchmentNumber, subcat.BuildStatus)] / 100;
             }
 
-            //Retrieve rain precipitation per round
-            float currentRain = rainPerRound[RoundManager.Instance.CurrentRound];
-            
+
             //Calculate rain on subcatchment
             float subcatRain = currentRain * subcatchmentsRainDistribution[subcat.SubcatchmentNumber];
-            
+
             //Calculate runoff reduction of subcat for specific round and rain precipitation
             float subcatRuonff = subcatRain - (subcatRain * runoffReductionpercentage);
 
@@ -127,6 +141,20 @@ public class RainEventsManager : MonoBehaviour
             totRunoff += subcatRuonff;
         }
         return totRunoff;
+    }
+
+    private float CalculatePredictionUncertantyValue(float currentRain)
+    {
+        //random value to determine if prediction uncertanty value is positive or negative
+        int signModifierValue = 1;
+        if (UnityEngine.Random.Range(0f, 1f) <= 0.5f)
+        {
+            signModifierValue = -1;
+        }
+
+        //multiply rain prediction uncertanty per current Rain to determine value to add to current rain
+        float predictionUncertantyRainValue = currentRain * RainPredictionUncertanty;
+        return predictionUncertantyRainValue;
     }
 
     public void UpdateTotalRunoff()
@@ -245,7 +273,7 @@ public class RainEventsManager : MonoBehaviour
     public float GetRunoffReductionPercentage(int rainLevelIntesity, int subcatNumber, BuildStatus subcatStatus)
     {
         float runoffReductionPercentage = 0;
-        if(!subcatStatus.Equals(BuildStatus.Built) && !subcatStatus.Equals(BuildStatus.Unbuild))
+        if (!subcatStatus.Equals(BuildStatus.Built) && !subcatStatus.Equals(BuildStatus.Unbuild))
         {
             runoffReductionPercentage = runoffReductionPercentages[CurrentRainIntensity][new SubcatchmentKey(subcatNumber, subcatStatus)];
         }
@@ -297,6 +325,16 @@ public class RainEventsManager : MonoBehaviour
         return mod;
     }
 
+
+    public void ConfrontFlashFloodRisks()
+    {
+        float runoffBasedOnPrediction = CalculateTotalRunoff();
+        float actualrunoff = CalculateTotalRunoff(true);
+
+        bool flashflood = actualrunoff > flashFloodThreshold;
+
+        Debug.Log("Predicted runoff: " + runoffBasedOnPrediction + " | actrual runoff: " + actualrunoff + " | flash flood: " + flashflood);
+    }
 }
 
 [System.Serializable]
