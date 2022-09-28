@@ -962,16 +962,20 @@ public class UIManager : MonoBehaviour
 
     public IEnumerator FillSlidersAnimation(float totalSliderValue, float totalTextValue, Slider sliderToFill, TextMeshProUGUI textToFill)
     {
-        float timeToWait = sliderFillingTime / totalSliderValue;
+        float timeToWait = sliderFillingTime/totalSliderValue;
+        float biggerValToConsider = totalSliderValue;
+        float fillFraction = totalSliderValue / (sliderFillingTime * 60);
         if (totalSliderValue < totalTextValue)
         {
+            fillFraction = totalTextValue/(sliderFillingTime * 60);
             timeToWait = sliderFillingTime / totalTextValue;
+            biggerValToConsider = totalTextValue;
         }
 
-        float fillValue = timeToWait;
-        while (fillValue < totalSliderValue && fillValue < totalTextValue)
+        float fillValue = fillFraction;
+        while (fillFraction < biggerValToConsider)
         {
-            fillValue += timeToWait;
+            fillValue += fillFraction;
             if (fillValue < totalSliderValue)
             {
                 sliderToFill.value = fillValue;
@@ -979,7 +983,7 @@ public class UIManager : MonoBehaviour
 
             if (fillValue < totalTextValue)
             {
-                textToFill.text = fillValue.ToString();
+                textToFill.text = fillValue.ToString("F2");
             }
             yield return new WaitForSeconds(timeToWait);
         }
