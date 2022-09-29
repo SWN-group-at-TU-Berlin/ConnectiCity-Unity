@@ -91,6 +91,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Score references and parameters")]
     [SerializeField] Animator RainEventInfoPanelAnimator;
+    [SerializeField] float timeToWaitBeforeNextAnimation = 5f;
     [SerializeField] Slider populationDensity;
     [SerializeField] Slider unemploymentRate;
     [SerializeField] Slider flashFloodRisk;
@@ -1031,6 +1032,18 @@ public class UIManager : MonoBehaviour
         float _predictedPrecipitation = RainEventsManager.Instance.RainPerRound[RoundManager.Instance.CurrentRound];
         //recover lenght of animations
         Dictionary<string, AnimationClip> RainEventInfoPanelAnimationsLenghts = GetAnimatorClips(RainEventInfoPanelAnimator);
+        //deactivate final flash flood result panels
+        foreach (Transform child in RainEventInfoPanelAnimator.transform)
+        {
+            if (child.name.Equals("FloodResult"))
+            {
+                foreach (Transform result in child)
+                {
+                    result.gameObject.SetActive(false);
+
+                }
+            }
+        }
         if (RainEventInfoPanelAnimator.enabled)
         {
             RainEventInfoPanelAnimator.Play("Appear", 0, 0f);
@@ -1048,10 +1061,13 @@ public class UIManager : MonoBehaviour
 
         //Wait untill sliders are filled before playing next animation
         yield return new WaitUntil(() => _canPlayNextAnimation);
+        yield return new WaitForSeconds(timeToWaitBeforeNextAnimation);
 
+
+        //activate correspondent feedback if there is the flash flood or not
         foreach (Transform child in RainEventInfoPanelAnimator.transform)
         {
-            if (child.name.Equals("RainEventInfoPanel"))
+            if (child.name.Equals("FloodResult"))
             {
                 foreach (Transform result in child)
                 {
@@ -1074,8 +1090,8 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        RainEventInfoPanelAnimator.Play("FloodResults", 0, 0f);
-        yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["FloodResults"].length);
+        RainEventInfoPanelAnimator.Play("FloodResult", 0, 0f);
+        yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["FloodResult"].length + timeToWaitBeforeNextAnimation/2);
         RainEventInfoPanelAnimator.Play("Disappear", 0, 0f); //THIS IS JUST A PLACEHOLDER IT SHOULD BE FLASH FLOOD TRUE OR FALSE ANIMATION
 
     }
