@@ -90,6 +90,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] float txtFadeOutTime;
 
     [Header("Score references and parameters")]
+    [SerializeField] Animator RainEventInfoPanelAnimator;
     [SerializeField] Slider populationDensity;
     [SerializeField] Slider unemploymentRate;
     [SerializeField] Slider flashFloodRisk;
@@ -111,10 +112,8 @@ public class UIManager : MonoBehaviour
     #endregion
     bool _houseButtonPressed = false;
     bool _businessButtonPressed = false;
-    bool _GRButtonPressed = false;
-    bool _PPButtonPressed = false;
-    bool _RBButtonPressed = false;
     bool _buildMode = false;
+    bool _canPlayNextAnimation = false;
     bool _showingRainDistributionGraph = false;
     bool _showingRunoffReduction = false;
     #region getter
@@ -132,6 +131,11 @@ public class UIManager : MonoBehaviour
 
     //InputProvider reference
     InputProvider input;
+
+    //DEPREATED
+    bool _GRButtonPressed = false;
+    bool _PPButtonPressed = false;
+    bool _RBButtonPressed = false;
 
     private void Start()
     {
@@ -960,40 +964,130 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public IEnumerator FillSlidersAnimation(float totalSliderValue, float totalTextValue, Slider sliderToFill, TextMeshProUGUI textToFill)
+    public IEnumerator FillSlidersAnimation(float _actualRunoff, float _actualPrecipitation, float _predictedRunoff, float _predictedPrecipitation)
     {
-        float timeToWait = sliderFillingTime/totalSliderValue;
-        float biggerValToConsider = totalSliderValue;
-        float fillFraction = totalSliderValue / (sliderFillingTime * 60);
-        if (totalSliderValue < totalTextValue)
+        float timeToWait = sliderFillingTime / _actualRunoff;
+        float biggerValToConsider = _actualRunoff;
+        float fillFraction = _actualRunoff / (sliderFillingTime * 60);
+        if (_actualRunoff < _actualPrecipitation)
         {
-            fillFraction = totalTextValue/(sliderFillingTime * 60);
-            timeToWait = sliderFillingTime / totalTextValue;
-            biggerValToConsider = totalTextValue;
+            fillFraction = _actualPrecipitation / (sliderFillingTime * 60);
+            timeToWait = sliderFillingTime / _actualPrecipitation;
+            biggerValToConsider = _actualPrecipitation;
+        }
+
+        if (biggerValToConsider < _predictedRunoff)
+        {
+            fillFraction = _predictedRunoff / (sliderFillingTime * 60);
+            timeToWait = sliderFillingTime / _predictedRunoff;
+            biggerValToConsider = _predictedRunoff;
+        }
+        else if (biggerValToConsider < _predictedPrecipitation)
+        {
+            fillFraction = _predictedPrecipitation / (sliderFillingTime * 60);
+            timeToWait = sliderFillingTime / _predictedPrecipitation;
+            biggerValToConsider = _predictedPrecipitation;
         }
 
         float fillValue = fillFraction;
-        while (fillFraction < biggerValToConsider)
+        while (fillValue < biggerValToConsider)
         {
             fillValue += fillFraction;
-            if (fillValue < totalSliderValue)
+            if (fillValue < _actualRunoff)
             {
-                sliderToFill.value = fillValue;
+                actualRunoff.value = fillValue;
             }
 
-            if (fillValue < totalTextValue)
+            if (fillValue < _actualPrecipitation)
             {
-                textToFill.text = fillValue.ToString("F2");
+                actualPrecipitation.text = fillValue.ToString("F2");
             }
+
+            if (fillValue < _predictedRunoff)
+            {
+                predictedRunoff.value = fillValue;
+            }
+
+            if (fillValue < _predictedPrecipitation)
+            {
+                predictedPrecipitation.text = fillValue.ToString("F2");
+            }
+
             yield return new WaitForSeconds(timeToWait);
         }
+        _canPlayNextAnimation = true;
     }
 
     public void TestFuctionForSliderFillAnimation()
     {
+        StartCoroutine(RainEventInfosVisualization());
+    }
+
+    public IEnumerator RainEventInfosVisualization()
+    {
         float _actualRunoff = RainEventsManager.Instance.CalculateTotalRunoff(true);
-        float _actualPrecipitation = RainEventsManager.Instance.RainPerRound[RoundManager.Instance.CurrentRound];
-        StartCoroutine(FillSlidersAnimation(_actualRunoff, _actualPrecipitation, actualRunoff, actualPrecipitation));
+        float _actualPrecipitation = RainEventsManager.Instance.RainPerRound[RoundManager.Instance.CurrentRound] + RainEventsManager.Instance.RainPredictionDeviationValue;
+        float _predictedRunoff = RainEventsManager.Instance.CalculateTotalRunoff(false);
+        float _predictedPrecipitation = RainEventsManager.Instance.RainPerRound[RoundManager.Instance.CurrentRound];
+        //recover lenght of animations
+        Dictionary<string, AnimationClip> RainEventInfoPanelAnimationsLenghts = GetAnimatorClips(RainEventInfoPanelAnimator);
+        if (RainEventInfoPanelAnimator.enabled)
+        {
+            RainEventInfoPanelAnimator.Play("Appear", 0, 0f);
+        }
+        else
+        {
+            RainEventInfoPanelAnimator.enabled = true;
+        }
+        yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["Appear"].length);
+
+
+        //Setup trigger to activate next animation after sliders fill
+        _canPlayNextAnimation = false;
+        StartCoroutine(FillSlidersAnimation(_actualRunoff, _actualPrecipitation, _predictedRunoff, _predictedPrecipitation));
+
+        //Wait untill sliders are filled before playing next animation
+        yield return new WaitUntil(() => _canPlayNextAnimation);
+
+        foreach (Transform child in RainEventInfoPanelAnimator.transform)
+        {
+            if (child.name.Equals("RainEventInfoPanel"))
+            {
+                foreach (Transform result in child)
+                {
+                    if (_actualRunoff > RainEventsManager.Instance.FlashFloodThreshold)
+                    {
+                        if (result.name.Equals("Flood"))
+                        {
+                            result.gameObject.SetActive(true);
+                        }
+                    }
+                    else
+                    {
+                        if (result.name.Equals("NoFlood"))
+                        {
+                            result.gameObject.SetActive(true);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        RainEventInfoPanelAnimator.Play("FloodResults", 0, 0f);
+        yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["FloodResults"].length);
+        RainEventInfoPanelAnimator.Play("Disappear", 0, 0f); //THIS IS JUST A PLACEHOLDER IT SHOULD BE FLASH FLOOD TRUE OR FALSE ANIMATION
+
+    }
+
+    public Dictionary<string, AnimationClip> GetAnimatorClips(Animator anim)
+    {
+        Dictionary<string, AnimationClip> animationsLenghts = new Dictionary<string, AnimationClip>();
+        foreach (AnimationClip animation in anim.runtimeAnimatorController.animationClips)
+        {
+            animationsLenghts.Add(animation.name, animation);
+        }
+        return animationsLenghts;
     }
 }
 

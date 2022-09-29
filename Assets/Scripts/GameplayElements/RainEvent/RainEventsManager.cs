@@ -45,6 +45,11 @@ public class RainEventsManager : MonoBehaviour
     public float TotalRunoff { get { return totalRunoff; } }
     #endregion
 
+    float rainPredictionDeviationVal = 0;
+    #region getter
+    public float RainPredictionDeviationValue { get { return rainPredictionDeviationVal; } }
+    #endregion
+
     //DEPRECATED
     [HideInInspector]
     [SerializeField] int maxRainEvent1Threshold;
@@ -107,7 +112,7 @@ public class RainEventsManager : MonoBehaviour
     {
         //initialize variable
         float totRunoff = 0;
-        
+
         //retrieve built subcatchments
         Subcatchment[] builtSubcats = MapManager.Instance.GetBuiltSubcatchments();
 
@@ -145,6 +150,7 @@ public class RainEventsManager : MonoBehaviour
 
     private float CalculatePredictionUncertantyValue(float currentRain)
     {
+        //if the prediction deviation val has never been calculated
         //random value to determine if prediction uncertanty value is positive or negative
         int signModifierValue = 1;
         if (UnityEngine.Random.Range(0f, 1f) <= 0.5f)
@@ -156,7 +162,8 @@ public class RainEventsManager : MonoBehaviour
         float predictionDeviaton = UnityEngine.Random.Range(0f, RainPredictionUncertanty);
 
         //multiply rain prediction uncertanty per current Rain to determine value to add to current rain
-        float predictionUncertantyRainValue = currentRain * predictionDeviaton;
+        float predictionUncertantyRainValue = currentRain * predictionDeviaton * signModifierValue;
+        rainPredictionDeviationVal = predictionUncertantyRainValue;
         return predictionUncertantyRainValue;
     }
 
