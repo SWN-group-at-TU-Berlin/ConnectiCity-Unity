@@ -102,6 +102,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] float sliderFillingTime = 3f;
     [SerializeField] float flashFloodRiskSliderCap = 744f;
 
+    [Header("VFXs")]
+    [SerializeField] Transform flashFloodVfx;
+
 
     UIState uiState = UIState.Social;
 
@@ -1065,13 +1068,14 @@ public class UIManager : MonoBehaviour
 
 
         //activate correspondent feedback if there is the flash flood or not
+        bool flahsFlood = _actualRunoff > RainEventsManager.Instance.FlashFloodThreshold;
         foreach (Transform child in RainEventInfoPanelAnimator.transform)
         {
             if (child.name.Equals("FloodResult"))
             {
                 foreach (Transform result in child)
                 {
-                    if (_actualRunoff > RainEventsManager.Instance.FlashFloodThreshold)
+                    if (flahsFlood)
                     {
                         if (result.name.Equals("Flood"))
                         {
@@ -1091,9 +1095,24 @@ public class UIManager : MonoBehaviour
         }
 
         RainEventInfoPanelAnimator.Play("FloodResult", 0, 0f);
-        yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["FloodResult"].length + timeToWaitBeforeNextAnimation/2);
+        yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["FloodResult"].length + timeToWaitBeforeNextAnimation / 2);
         RainEventInfoPanelAnimator.Play("Disappear", 0, 0f); //THIS IS JUST A PLACEHOLDER IT SHOULD BE FLASH FLOOD TRUE OR FALSE ANIMATION
 
+        //wait for rain event info panel to disappear and then visualize flash flood eventually
+        yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["Disappear"].length);
+        if (flahsFlood)
+        {
+            foreach (Transform particleSys in flashFloodVfx)
+            {
+                particleSys.GetComponent<ParticleSystem>().Play();
+            }
+            yield return new WaitForSeconds(timeToWaitBeforeNextAnimation/2);
+            foreach(Transform particleSys in flashFloodVfx)
+            {
+                particleSys.GetComponent<ParticleSystem>().Stop();
+            }
+
+        }
     }
 
     public Dictionary<string, AnimationClip> GetAnimatorClips(Animator anim)

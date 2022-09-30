@@ -335,7 +335,6 @@ public class RainEventsManager : MonoBehaviour
         return mod;
     }
 
-
     public void ConfrontFlashFloodRisks()
     {
         float runoffBasedOnPrediction = CalculateTotalRunoff();
@@ -344,6 +343,11 @@ public class RainEventsManager : MonoBehaviour
         bool flashflood = actualrunoff > flashFloodThreshold;
 
         Debug.Log("Predicted runoff: " + runoffBasedOnPrediction + " | actrual runoff: " + actualrunoff + " | flash flood: " + flashflood);
+    }
+
+    public bool FlashFloodCheck()
+    {
+        return CalculateTotalRunoff(true) > flashFloodThreshold;
     }
 }
 
