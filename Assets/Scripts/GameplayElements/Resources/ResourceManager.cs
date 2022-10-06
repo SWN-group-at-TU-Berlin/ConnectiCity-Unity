@@ -129,31 +129,33 @@ public class ResourceManager : MonoBehaviour
     public void UpdateCitizenNumber(int valToAdd)
     {
         _citizenNumber += valToAdd * 1000;
-        UIManager.Instance.UpdateCitizenNumberTxt(CitizenNumber);
+        //UIManager.Instance.UpdateCitizenNumberTxt(CitizenNumber);
     }
+    
+    //DEPRECATED
     public void UpdateCitizenSatisfaction(int valToAdd)
     {
         if (_citizenSatisfaction < _maxCitizenSatisfaction || _citizenSatisfaction >= 0)
         {
             _citizenSatisfaction += valToAdd;
             _citizenSatisfaction = (int)Mathf.Clamp(_citizenSatisfaction, 0f, _maxCitizenSatisfaction);
-            UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
+           // UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
         }
     }
     public void UpdateIncome()
     {
-        /*if (_income >= 0)
-        {
-            _income += valToAdd;
-            UIManager.Instance.UpdateIncomeTxt(Income);
-        }*/
         _income = (int)((int)((GetWorkingPopulation() * AvarageIncomePerPerson)*TaxationRate) * TotalBudgetRate);
-        UIManager.Instance.UpdateIncomeTxt(Income);
+        int bgiIncome = (int)(_income * BGIbudgetPercentage);
+        int generalIncome = (Income - (int)(_income * BGIbudgetPercentage));
+        UIManager.Instance.UpdateGeneralIncreaseTxt(generalIncome.ToString());
+        UIManager.Instance.UpdateBGIsIncreaseTxt(bgiIncome.ToString());
     }
     public void UpdateBudgetsAtEndRound()
     {
         _BGIbudget += (int)(_income * BGIbudgetPercentage);
         _budget += (Income - (int)(_income * BGIbudgetPercentage));
+        UIManager.Instance.UpdateBGIsBudgetTxt(_BGIbudget.ToString());
+        UIManager.Instance.UpdateGeneralBudgetTxt(_budget.ToString());
     }
     public void UpdateBudgetAtRoundStart()
     {
@@ -162,7 +164,7 @@ public class ResourceManager : MonoBehaviour
     public void UpdateBudget(int valToAdd)
     {
         _budget -= valToAdd;
-        UIManager.Instance.UpdateBudgetTxt(Budget);
+        //UIManager.Instance.UpdateBudgetTxt(Budget);
     }
 
     public void UpdateJobs(int valToAdd)
@@ -170,6 +172,7 @@ public class ResourceManager : MonoBehaviour
         _jobs += valToAdd;
         //update jobs UI
         ScoreManager.Instance.UpdateUnemploymentPercentage();
+        UIManager.Instance.UpdateJobsAvailableTxt(_jobs.ToString());
     }
 
     public void UpdateHostablePeople(int valToAdd)
@@ -178,18 +181,19 @@ public class ResourceManager : MonoBehaviour
         //update hostable ppl UI
         ScoreManager.Instance.UpdatePopulationDensity();
         ScoreManager.Instance.UpdateUnemploymentPercentage();
+        UIManager.Instance.UpdateHostablePeopleTxt(_hostablePeople.ToString());
     }
 
     public void UpdateActionPoints(int valToAdd)
     {
         _actionPoints += valToAdd;
-        UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
+        //UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
     }
 
     public void ResetActionPoints()
     {
         _actionPoints = defaultAP;
-        UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
+       // UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
 
     }
 
@@ -206,9 +210,18 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    public int GetWorkingPopulationIncrease()
+    {
+        int workingPopIncrease = (int)(populationIncreasePerRound[RoundManager.Instance.CurrentRound] * WorkingPopulationRate);
+        return workingPopIncrease;
+    }
+
     public void IncreaseCitizens()
     {
         _citizenNumber += populationIncreasePerRound[RoundManager.Instance.CurrentRound];
+        int workers = (int)(_citizenNumber * WorkingPopulationRate);
+        UIManager.Instance.UpdateCitizensTxt(_citizenNumber.ToString());
+        UIManager.Instance.UpdateWorkersTxt(workers.ToString());
     }
 
     public int GetWorkingPopulation()

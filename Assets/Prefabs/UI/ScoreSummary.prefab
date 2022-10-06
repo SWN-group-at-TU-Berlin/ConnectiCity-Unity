@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2486677915920133622}
   - component: {fileID: 2486677915920133617}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: EnvTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 2486677915956136377}
   - component: {fileID: 2486677915956136376}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: EconTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -508,6 +508,7 @@ GameObject:
   - component: {fileID: 2486677916523174241}
   - component: {fileID: 2486677916523174240}
   - component: {fileID: 2486677916523174243}
+  - component: {fileID: 133136037}
   m_Layer: 5
   m_Name: ScoreSummary
   m_TagString: Untagged
@@ -619,6 +620,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &133136037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2486677916523174253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b80a6b95814292648b52aebf53610e14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  social: {fileID: 2486677916707670141}
+  env: {fileID: 2486677915920133617}
+  eco: {fileID: 2486677915956136376}
 --- !u!1 &2486677916707670143
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +647,7 @@ GameObject:
   - component: {fileID: 2486677916707670130}
   - component: {fileID: 2486677916707670141}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: SocialTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

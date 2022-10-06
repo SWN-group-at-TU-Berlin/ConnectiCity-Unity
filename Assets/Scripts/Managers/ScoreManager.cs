@@ -27,6 +27,12 @@ public class ScoreManager : MonoBehaviour
     #endregion
 
     [Header("UI scoring system references")]
+    [SerializeField] float maxTotalPoints = 30;
+    #region getter
+    public float MaxTotalPoints { get { return maxTotalPoints; } }
+    #endregion
+
+    [Header("UI scoring system references")]
     [SerializeField] float maxPopDensity = 3f;
     [SerializeField] float minPopDensity = -3f;
     [SerializeField] float minUnemploymentRate = -100f;
@@ -90,48 +96,41 @@ public class ScoreManager : MonoBehaviour
     public void UpdateScore()
     {
         RoundSnapshot roundSnap = new RoundSnapshot();
+        roundSnap.Stats = new List<GameStat>();
 
         //Pop density update
-        roundSnap = UpdatePopulatioDensityScore(roundSnap);
+        roundSnap.Stats.Add(UpdatePopulatioDensityScore());
 
         //Unemployment percentage update
-        roundSnap = UpdateUnemploymentRateScore(roundSnap);
+        roundSnap.Stats.Add(UpdateUnemploymentRateScore());
 
         //Emissios update
 
         //Flash flood update
-        roundSnap = UpdateFlashFloodScore(roundSnap);
+        roundSnap.Stats.Add(UpdateFlashFloodScore());
 
         //Traffic congestion update
+        float socialScore = 0;
+        float economicScore = 0;
+        float environmentlaScore = 0;
 
-        float socialScore = roundSnap.socialFlashFlood + roundSnap.socialPopulationDensity + roundSnap.socialUnemploymentRate;
-        float economicScore = roundSnap.economicFlashFlood + roundSnap.economicPopulationDensity + roundSnap.economicUnemploymentRate;
-        float environmentlaScore = roundSnap.environmentalFlashFlood + roundSnap.environmentalPopulationDensity + roundSnap.environmentalUnemploymentRate;
+        foreach(GameStat stat in roundSnap.Stats)
+        {
+            socialScore += stat.socialScore;
+            economicScore += stat.economicScore;
+            environmentlaScore += stat.environmentalScore;
+        }
+
+
+        roundSnap.total = socialScore + economicScore + environmentlaScore;
 
         RoundsSnapshots.Add(RoundManager.Instance.CurrentRound, roundSnap);
-
-        Debug.Log("Social: " +
-            "\nPop density: " + roundSnap.socialPopulationDensity + 
-            "\nUnemployment: " + roundSnap.socialUnemploymentRate + 
-            "\nFlahFlood: " + roundSnap.socialFlashFlood);
-
-        Debug.Log("Environmental: " +
-            "\nPop density: " + roundSnap.environmentalPopulationDensity +
-            "\nUnemployment: " + roundSnap.environmentalUnemploymentRate +
-            "\nFlahFlood: " + roundSnap.environmentalFlashFlood);
-
-        Debug.Log("Economic: " +
-            "\nPop density: " + roundSnap.economicPopulationDensity +
-            "\nUnemployment: " + roundSnap.economicUnemploymentRate +
-            "\nFlahFlood: " + roundSnap.economicFlashFlood);
-
-        Debug.Log("Social: " + socialScore +
-            "\nEnvironmental: " + environmentlaScore +
-            "\nEconomic: " + economicScore);
     }
 
-    public RoundSnapshot UpdatePopulatioDensityScore(RoundSnapshot snap)
+    public GameStat UpdatePopulatioDensityScore()
     {
+        GameStat popDensity = new GameStat();
+
         float socialPopDensityScore = 0;
         float economicPopDensityScore = 0;
         float environmentPopDensityScore = 0;
@@ -149,15 +148,19 @@ public class ScoreManager : MonoBehaviour
             socialPopDensityScore = -1;
         }
 
-        snap.socialPopulationDensity = socialPopDensityScore;
-        snap.economicPopulationDensity = economicPopDensityScore;
-        snap.environmentalPopulationDensity = environmentPopDensityScore;
 
-        return snap;
+        popDensity.name = "Population Density";
+        popDensity.value = populationDensity.ToString();
+        popDensity.socialScore = socialPopDensityScore;
+        popDensity.economicScore = economicPopDensityScore;
+        popDensity.environmentalScore = environmentPopDensityScore;
+
+        return popDensity;
     }
 
-    public RoundSnapshot UpdateUnemploymentRateScore(RoundSnapshot snap)
+    public GameStat UpdateUnemploymentRateScore()
     {
+        GameStat UnemploymentRate = new GameStat();
         float socialUnemploymentRate = 0;
         float economicUnemploymentRate = 0;
         float environmentUnemploymentRate = 0;
@@ -176,15 +179,19 @@ public class ScoreManager : MonoBehaviour
             economicUnemploymentRate = -1;
         }
 
-        snap.socialUnemploymentRate = socialUnemploymentRate;
-        snap.economicUnemploymentRate = economicUnemploymentRate;
-        snap.environmentalUnemploymentRate = environmentUnemploymentRate;
+        UnemploymentRate.name = "Unemployment rate";
+        UnemploymentRate.value = unempolymentPercentage.ToString() + "%";
+        UnemploymentRate.socialScore = socialUnemploymentRate;
+        UnemploymentRate.economicScore = economicUnemploymentRate;
+        UnemploymentRate.environmentalScore = environmentUnemploymentRate;
 
-        return snap;
+        return UnemploymentRate;
     }
 
-    public RoundSnapshot UpdateFlashFloodScore(RoundSnapshot snap)
+    public GameStat UpdateFlashFloodScore()
     {
+        GameStat FlashFlood = new GameStat();
+        string val = "No Flood";
         float socialFlashFlood = 0;
         float economicFlashFlood = 0;
         float environmentFlashFlood = 0;
@@ -193,13 +200,16 @@ public class ScoreManager : MonoBehaviour
         {
             socialFlashFlood = -1;
             environmentFlashFlood = -1;
+            val = "Flood";
         }
 
-        snap.socialUnemploymentRate = socialFlashFlood;
-        snap.economicUnemploymentRate = economicFlashFlood;
-        snap.environmentalUnemploymentRate = environmentFlashFlood;
+        FlashFlood.name = "FlashFlood";
+        FlashFlood.value = val;
+        FlashFlood.socialScore = socialFlashFlood;
+        FlashFlood.economicScore = economicFlashFlood;
+        FlashFlood.environmentalScore = environmentFlashFlood;
 
-        return snap;
+        return FlashFlood;
     }
 
     public void UpdatePopulationDensity()
@@ -259,23 +269,39 @@ public class ScoreManager : MonoBehaviour
         }
         return (((float)workingPop / (float)jobs) - 1f) * 100f;
     }
+
+    public Dictionary<int, float> TotalScores()
+    {
+        Dictionary<int, float> totScores = new Dictionary<int, float>();
+        for(int i = 1; i <= 10; i++)
+        {
+            if (RoundsSnapshots.ContainsKey(i))
+            {
+                totScores.Add(i, RoundsSnapshots[i].total);
+            }
+        }
+        return totScores;
+    }
+
+    public RoundSnapshot GetRoundSnapshot(int round)
+    {
+        return RoundsSnapshots[round];
+    }
 }
 
 
 public struct RoundSnapshot
 {
-    //population density
-    public float socialPopulationDensity;
-    public float environmentalPopulationDensity;
-    public float economicPopulationDensity;
+    public List<GameStat> Stats;
 
-    //unempoloyment rate
-    public float socialUnemploymentRate;
-    public float environmentalUnemploymentRate;
-    public float economicUnemploymentRate;
+    public float total;
+}
 
-    //flash flood
-    public float socialFlashFlood;
-    public float environmentalFlashFlood;
-    public float economicFlashFlood;
+public struct GameStat
+{
+    public string name;
+    public string value;
+    public float socialScore;
+    public float environmentalScore;
+    public float economicScore;
 }

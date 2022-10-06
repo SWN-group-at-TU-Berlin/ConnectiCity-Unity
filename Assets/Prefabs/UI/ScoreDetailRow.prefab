@@ -486,6 +486,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8784007894714200337}
+  - component: {fileID: 1444033529}
   m_Layer: 5
   m_Name: ScoreDetailRow
   m_TagString: Untagged
@@ -518,6 +519,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1300, y: 100}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &1444033529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439007176818343941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d856ceaf4bf8704a96ebc7cae4dcac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Background: {fileID: 7056620292176776466}
+  palette1: {r: 0.9960785, g: 0.7686275, b: 0.47450984, a: 1}
+  palette2: {r: 1, g: 0.9033196, b: 0.7783019, a: 1}
+  palette1On: 0
+  gameStats: {fileID: 6403223442169395284}
+  value: {fileID: 6412445312576621521}
+  socialScore: {fileID: 2640571116116355372}
+  environmentalScore: {fileID: 7416746720140887800}
+  economicScore: {fileID: 3571790194676114501}
 --- !u!1 &6671481186893416316
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,7 +552,7 @@ GameObject:
   - component: {fileID: 1038814613315713781}
   - component: {fileID: 6403223442169395284}
   m_Layer: 5
-  m_Name: Name
+  m_Name: GameStats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

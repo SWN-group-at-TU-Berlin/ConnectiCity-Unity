@@ -41,12 +41,16 @@ public class UIManager : MonoBehaviour
     #endregion
 
     [Header("Resources References")]
-    [SerializeField] TextMeshProUGUI budget;
-    [SerializeField] TextMeshProUGUI income;
-    [SerializeField] TextMeshProUGUI citizenNumber;
-    [SerializeField] TextMeshProUGUI citizenSatisfaction;
-    [SerializeField] TextMeshProUGUI ActionPoints;
-    [SerializeField] TextMeshProUGUI CurrentRound;
+    [SerializeField] TextMeshProUGUI GeneralBudget;
+    [SerializeField] TextMeshProUGUI BGIsBudget;
+    [SerializeField] TextMeshProUGUI GeneralIncrease;
+    [SerializeField] TextMeshProUGUI BGIsIncrease;
+    [SerializeField] TextMeshProUGUI Citizens;
+    [SerializeField] TextMeshProUGUI Workers;
+    [SerializeField] TextMeshProUGUI CitizensGrowth;
+    [SerializeField] TextMeshProUGUI WorkersGrowth;
+    [SerializeField] TextMeshProUGUI HostableCitizens;
+    [SerializeField] TextMeshProUGUI JobsAvailable;
 
     [Header("Buttons References")]
     [SerializeField] GameObject houseButtonDefault;
@@ -90,6 +94,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] float txtFadeOutTime;
 
     [Header("Score references and parameters")]
+    [SerializeField] GameObject scoreGraph;
+    [SerializeField] GameObject scoreBoard;
+    [SerializeField] ScoreSummary scoreSummary;
     [SerializeField] Animator RainEventInfoPanelAnimator;
     [SerializeField] float timeToWaitBeforeNextAnimation = 5f;
     [SerializeField] Slider populationDensity;
@@ -118,6 +125,7 @@ public class UIManager : MonoBehaviour
     bool _businessButtonPressed = false;
     bool _buildMode = false;
     bool _canPlayNextAnimation = false;
+    bool _showingRainEventInfos = false;
     bool _showingRainDistributionGraph = false;
     bool _showingRunoffReduction = false;
     #region getter
@@ -479,12 +487,16 @@ public class UIManager : MonoBehaviour
         MessageBoard.transform.position = input.MousePosition() + offset;
     }
 
-    public void UpdateBudgetTxt(int newBudget) { budget.text = newBudget.ToString(); }
-    public void UpdateIncomeTxt(int newIncome) { income.text = newIncome.ToString(); }
-    public void UpdateCitizenNumberTxt(int newCN) { citizenNumber.text = newCN.ToString(); }
-    public void UpdateCitizenSatisfactionTxt(int newCS) { citizenSatisfaction.text = newCS.ToString(); }
-    public void UpdateActionPointsTxt(int newAP) { ActionPoints.text = newAP.ToString(); }
-    public void UpdateRoundTxt(int currentRound) { CurrentRound.text = "Round" + currentRound.ToString(); }
+    public void UpdateGeneralBudgetTxt(string val) { GeneralBudget.text = val; }
+    public void UpdateBGIsBudgetTxt(string val) { BGIsBudget.text = val; }
+    public void UpdateGeneralIncreaseTxt(string val) { GeneralIncrease.text = val; }
+    public void UpdateBGIsIncreaseTxt(string val) { BGIsIncrease.text = val; }
+    public void UpdateCitizensTxt(string val) { Citizens.text = val; }
+    public void UpdateWorkersTxt(string val) { Workers.text = val; }
+    public void UpdateCitizensGrowthTxt(string val) { CitizensGrowth.text = val; }
+    public void UpdateWorkersGrowthTxt(string val) { WorkersGrowth.text = val; }
+    public void UpdateHostablePeopleTxt(string val) { HostableCitizens.text = val; }
+    public void UpdateJobsAvailableTxt(string val) { JobsAvailable.text = val; }
 
     public void ShowSocialInfoPanel(AreaUsage subcatType, InfrastructureType infrastructureType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
     {
@@ -1022,9 +1034,11 @@ public class UIManager : MonoBehaviour
         _canPlayNextAnimation = true;
     }
 
-    public void TestFuctionForSliderFillAnimation()
+    public void ShowEndRoundInfos()
     {
+        _showingRainEventInfos = true;
         StartCoroutine(RainEventInfosVisualization());
+        StartCoroutine(ShowScoreGraph());
     }
 
     public IEnumerator RainEventInfosVisualization()
@@ -1113,6 +1127,7 @@ public class UIManager : MonoBehaviour
             }
 
         }
+        _showingRainEventInfos = false;
     }
 
     public Dictionary<string, AnimationClip> GetAnimatorClips(Animator anim)
@@ -1123,6 +1138,46 @@ public class UIManager : MonoBehaviour
             animationsLenghts.Add(animation.name, animation);
         }
         return animationsLenghts;
+    }
+
+    public IEnumerator ShowScoreGraph()
+    {
+        //Update score
+        ScoreManager.Instance.UpdateScore();
+        Dictionary<int, float> graphData = ScoreManager.Instance.TotalScores();
+
+        //setup the graph
+        scoreGraph.GetComponentInChildren<ScoreGraph>().UpdateGraph(graphData, ScoreManager.Instance.MaxTotalPoints);
+        yield return new WaitUntil(() => !_showingRainEventInfos);
+
+        //show score graph
+        scoreGraph.GetComponent<Animator>().enabled = true;
+        scoreGraph.GetComponent<Animator>().Play("Appear", 0, 0f);
+        //control goes to score graph button
+    }
+
+    public void HideScoreGraph()
+    {
+        scoreGraph.GetComponent<Animator>().Play("Disappear", 0, 0f);
+    }
+
+    public void ShowScoreBoard()
+    {
+        //SCORE SUMMARY UPDATE IS HERE ONLY FOR TIMING PURPOSES, SHOULD BE CODED BETTER :/
+        RoundSnapshot snap = ScoreManager.Instance.GetRoundSnapshot(RoundManager.Instance.CurrentRound);
+        float totSocial = 0f;
+        float totEnv = 0f;
+        float totEco = 0f;
+        foreach(GameStat stat in snap.Stats)
+        {
+            totSocial += stat.socialScore;
+            totEnv += stat.environmentalScore;
+            totEco += stat.economicScore;
+        }
+        scoreSummary.UpdateSummaryScore(totSocial.ToString(), totEnv.ToString(), totEco.ToString());
+
+        scoreBoard.GetComponent<DetaildScoreBoard>().SetBoardData(ScoreManager.Instance.GetRoundSnapshot(RoundManager.Instance.CurrentRound));
+        scoreBoard.GetComponent<DetaildScoreBoard>().Appear();
     }
 }
 
