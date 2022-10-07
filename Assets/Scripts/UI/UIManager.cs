@@ -54,6 +54,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI PopulationDensityText;
     [SerializeField] TextMeshProUGUI UnemploymentPercentageText;
     [SerializeField] TextMeshProUGUI FlashFloodRiskText;
+    [SerializeField] TextMeshProUGUI RoundText;
 
     [Header("Buttons References")]
     [SerializeField] GameObject houseButtonDefault;
@@ -505,6 +506,7 @@ public class UIManager : MonoBehaviour
     public void UpdatePopulationDensityTxt(string val) { PopulationDensityText.text = val; }
     public void UpdateUnemploymentPercentageTxt(string val) { UnemploymentPercentageText.text = val + "%"; }
     public void UpdateFlashFloodRiskTxt(string val) { FlashFloodRiskText.text = val + "%"; }
+    public void UpdateRoundTxt(string val) { RoundText.text = "Round " + val; }
     #endregion
 
     public void ShowSocialInfoPanel(AreaUsage subcatType, InfrastructureType infrastructureType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
@@ -1177,16 +1179,7 @@ public class UIManager : MonoBehaviour
     {
         //SCORE SUMMARY UPDATE IS HERE ONLY FOR TIMING PURPOSES, SHOULD BE CODED BETTER :/
         RoundSnapshot snap = ScoreManager.Instance.GetRoundSnapshot(RoundManager.Instance.CurrentRound);
-        float totSocial = 0f;
-        float totEnv = 0f;
-        float totEco = 0f;
-        foreach(GameStat stat in snap.Stats)
-        {
-            totSocial += stat.socialScore;
-            totEnv += stat.environmentalScore;
-            totEco += stat.economicScore;
-        }
-        scoreSummary.UpdateSummaryScore(totSocial.ToString(), totEnv.ToString(), totEco.ToString());
+        scoreSummary.UpdateSummaryScore(ScoreManager.Instance.SocialScore.ToString(), ScoreManager.Instance.EnvironmentalScore.ToString(), ScoreManager.Instance.EconomicScore.ToString());
 
         scoreBoard.GetComponent<DetaildScoreBoard>().SetBoardData(ScoreManager.Instance.GetRoundSnapshot(RoundManager.Instance.CurrentRound));
         scoreBoard.GetComponent<DetaildScoreBoard>().Appear();

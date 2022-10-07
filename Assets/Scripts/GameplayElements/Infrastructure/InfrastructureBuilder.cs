@@ -63,11 +63,8 @@ public class InfrastructureBuilder : MonoBehaviour
                 //get build costs for current subcatchment
                 float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
 
-                //get ap costs for current subcatchment
-                float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
-
                 //if: ap costs < ap AND build costs < budget
-                if (apCost <= currentAp && buildCost <= currentBudget)
+                if (buildCost <= currentBudget)
                 {
                     //add subcatchment to buildable subcatchments
                     buildableSubcatchments.Add(subcatchment);
@@ -92,7 +89,7 @@ public class InfrastructureBuilder : MonoBehaviour
         foreach (Subcatchment subcatchment in MapManager.Instance.GetSubcatchments())
         {
             //if subcat not built
-            if (!subcatchment.SubcatchmentHostsBGI(BGIToBuild))
+            if (!subcatchment.SubcatchmentHostsBGI(BGIToBuild) && subcatchment.BGIHosted.Count < 2)
             {
 
                 //show info panels
@@ -143,11 +140,11 @@ public class InfrastructureBuilder : MonoBehaviour
         //recover costs
         float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(SelectedSubcatchment.SubcatchmentNumber, infrastructureToBuild);
 
-        //update budget
-        ResourceManager.Instance.UpdateBudget((int)buildCost);
 
         if (SelectedInfrastructure.Equals(InfrastructureType.Building))
         {
+            //update budget
+            ResourceManager.Instance.UpdateBudget((int)buildCost);
             //recover benefit
             float benefit = SelectedSubcatchment.SubcatchmentBenefit;
             //if business
@@ -161,6 +158,10 @@ public class InfrastructureBuilder : MonoBehaviour
                 //update hostable spots
                 ResourceManager.Instance.UpdateHostablePeople((int)benefit);
             }
+        } else
+        {
+            //update budget
+            ResourceManager.Instance.UpdateBGIBudget((int)buildCost);
         }
 
         //update build status of subcatchment

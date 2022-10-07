@@ -25,7 +25,7 @@ public class RoundManager : MonoBehaviour
 
     private void Start()
     {
-        //UIManager.Instance.UpdateRoundTxt(CurrentRound);
+        UIManager.Instance.UpdateRoundTxt(CurrentRound.ToString());
     }
 
     [SerializeField] EndGamePanel endGamePanel;
@@ -48,8 +48,11 @@ public class RoundManager : MonoBehaviour
     public void NextRound()
     {
         _currentRound++;
+        UIManager.Instance.UpdateRoundTxt(CurrentRound.ToString());
         ResourceManager.Instance.UpdateBudgetsAtEndRound();
         ResourceManager.Instance.IncreaseCitizens();
+        ScoreManager.Instance.UpdatePopulationDensity();
+        ScoreManager.Instance.UpdateUnemploymentPercentage();
     }
     public void StartRound()
     {

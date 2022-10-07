@@ -58,19 +58,19 @@ public class ScoreManager : MonoBehaviour
     //int = round; 
     Dictionary<int, RoundSnapshot> RoundsSnapshots;
 
-    float socialScore;
+    float _socialScore;
     #region getter
-    public float SocialScore { get { return socialScore; } }
+    public float SocialScore { get { return _socialScore; } }
     #endregion
 
-    float environmentalScore;
+    float _environmentalScore;
     #region getter
-    public float EnvironmentalScore { get { return environmentalScore; } }
+    public float EnvironmentalScore { get { return _environmentalScore; } }
     #endregion
 
-    float economicScore;
+    float _economicScore;
     #region getter
-    public float EconomicScore { get { return economicScore; } }
+    public float EconomicScore { get { return _economicScore; } }
     #endregion
 
     float populationDensity;
@@ -82,12 +82,6 @@ public class ScoreManager : MonoBehaviour
     #region getter
     public float UnempolymentPercentage { get { return unempolymentPercentage; } }
     #endregion
-
-    private void Start()
-    {
-        UIManager.Instance.SetMaxMinPopulationDensity(maxPopDensity, minPopDensity);
-        UIManager.Instance.SetMaxMinUnemployment(maxUnemploymentRate, minUnemploymentRate);
-    }
 
     public void UpdateScore()
     {
@@ -116,6 +110,10 @@ public class ScoreManager : MonoBehaviour
             economicScore += stat.economicScore;
             environmentlaScore += stat.environmentalScore;
         }
+
+        _socialScore += socialScore;
+        _environmentalScore += environmentlaScore;
+        _economicScore += economicScore;
 
 
         roundSnap.total = socialScore + economicScore + environmentlaScore;
@@ -169,7 +167,7 @@ public class ScoreManager : MonoBehaviour
         {
             economicUnemploymentRate = 1;
         }
-        else if (populationDensity > maxThresholdUR)
+        else if (unempolymentPercentage > maxThresholdUR)
         {
             socialUnemploymentRate = -1;
             economicUnemploymentRate = -1;
@@ -221,12 +219,11 @@ public class ScoreManager : MonoBehaviour
 
     public float CalculatePopulationDensity(int citizenNumber, int spots)
     {
-        return (float)citizenNumber / (float)spots;
+        return Mathf.Clamp((float)citizenNumber / (float)spots, minPopDensity, maxPopDensity);
     }
 
     public void UpdateUnemploymentPercentage()
     {
-        int pop = ResourceManager.Instance.CitizenNumber;
         int jobs = ResourceManager.Instance.Jobs;
         unempolymentPercentage = CalculateUnemploymentPercentage(ResourceManager.Instance.Workers, jobs);
         //update UI
@@ -238,12 +235,12 @@ public class ScoreManager : MonoBehaviour
         float unemploymentPercentage = 0;
         if (jobs == 0)
         {
-            unemploymentPercentage = (unemploymentPercentage - 1f) * 100f;
+            unemploymentPercentage = (unemploymentPercentage + 1f) * 100f;
         } else
         {
             unemploymentPercentage = (((float)workingPop / (float)jobs) - 1f) * 100f;
         }
-        return unemploymentPercentage;
+        return Mathf.Clamp( unemploymentPercentage, minUnemploymentRate, maxUnemploymentRate);
     }
 
     public Dictionary<int, float> TotalScores()

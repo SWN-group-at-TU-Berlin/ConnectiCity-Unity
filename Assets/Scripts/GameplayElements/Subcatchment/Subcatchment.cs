@@ -402,7 +402,7 @@ public class Subcatchment : MonoBehaviour
         //get income benefit
         float benefit = SubcatchmentBenefit;
 
-        //if trying to build BGI
+        //if not trying to build BGI
         if (!buildStatus.Equals(BuildStatus.Built))
         {
             //benefit is the difference between the current runoff reduction of the subcat vs the new one after building the bgi

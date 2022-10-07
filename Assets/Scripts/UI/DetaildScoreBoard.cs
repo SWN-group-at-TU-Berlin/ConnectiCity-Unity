@@ -28,6 +28,7 @@ public class DetaildScoreBoard : MonoBehaviour
         UpdateRoundText(RoundManager.Instance.CurrentRound.ToString());
         UpdateTotalText(snap.total.ToString());
 
+        CearRowsContainer();
         foreach (GameStat stat in snap.Stats)
         {
             SpawnNewRow(stat.name, stat.value, stat.socialScore.ToString(), stat.environmentalScore.ToString(), stat.economicScore.ToString());
@@ -52,6 +53,19 @@ public class DetaildScoreBoard : MonoBehaviour
             newRow.GetComponent<ScoreRow>().UpdateRowText(gStat, val, sScore, envScore, ecoScore, !lastRow.GetComponent<ScoreRow>().Palette1On);
             lastRow = newRow;
         }
+    }
+
+    void CearRowsContainer()
+    {
+        foreach(Transform row in rowsContainer)
+        {
+            if (!row.gameObject.Equals(firstRow))
+            {
+                Destroy(row.gameObject);
+            }
+        }
+        lastRow = null;
+        rowsContainer.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, firstRow.GetComponent<RectTransform>().rect.height);
     }
 
     public void Appear()

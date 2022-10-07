@@ -172,7 +172,13 @@ public class ResourceManager : MonoBehaviour
     public void UpdateBudget(int valToAdd)
     {
         _budget -= valToAdd;
-        //UIManager.Instance.UpdateBudgetTxt(Budget);
+        UIManager.Instance.UpdateGeneralBudgetTxt(_budget.ToString("F2"));
+    }
+
+    public void UpdateBGIBudget(int valToAdd)
+    {
+        _BGIbudget -= valToAdd;
+        UIManager.Instance.UpdateBGIsBudgetTxt(_BGIbudget.ToString("F2"));
     }
 
     public void UpdateJobs(int valToAdd)
@@ -232,9 +238,9 @@ public class ResourceManager : MonoBehaviour
     public void IncreaseCitizens()
     {
         _citizenNumber += populationIncreasePerRound[RoundManager.Instance.CurrentRound];
-        int workers = (int)(_citizenNumber * WorkingPopulationRate);
+        _workers = (int)(_citizenNumber * WorkingPopulationRate);
         UIManager.Instance.UpdateCitizensTxt(_citizenNumber.ToString());
-        UIManager.Instance.UpdateWorkersTxt(workers.ToString());
+        UIManager.Instance.UpdateWorkersTxt(_workers.ToString());
         UIManager.Instance.UpdateCitizensGrowthTxt(populationIncreasePerRound[RoundManager.Instance.CurrentRound].ToString());
         UIManager.Instance.UpdateWorkersGrowthTxt(GetWorkingPopulationIncrease().ToString());
     }
