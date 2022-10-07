@@ -89,7 +89,12 @@ public class ResourceManager : MonoBehaviour
     public float TotalBudgetRate { get { return _totalBudgetRate; } }
     #endregion
 
-    [SerializeField] int _income;
+    [SerializeField] int _baseIncome;//basic income to add to the one produced by workers
+    #region getter
+    public int BasicIncome { get { return _baseIncome; } }
+    #endregion
+
+    int _income;
     #region getter
     public int Income { get { return _income; } }
     #endregion
@@ -154,14 +159,14 @@ public class ResourceManager : MonoBehaviour
     {
         _income = (int)((int)((GetWorkingPopulation() * AvarageIncomePerPerson) * TaxationRate) * TotalBudgetRate);
         int bgiIncome = (int)(_income * BGIbudgetPercentage);
-        int generalIncome = (Income - (int)(_income * BGIbudgetPercentage));
+        int generalIncome = (_income - (int)(_income * BGIbudgetPercentage));
         UIManager.Instance.UpdateGeneralIncreaseTxt(generalIncome.ToString());
         UIManager.Instance.UpdateBGIsIncreaseTxt(bgiIncome.ToString());
     }
     public void UpdateBudgetsAtEndRound()
     {
-        _BGIbudget += (int)(_income * BGIbudgetPercentage);
-        _budget += (Income - (int)(_income * BGIbudgetPercentage));
+        _BGIbudget += (int)((_income + _baseIncome) * BGIbudgetPercentage);
+        _budget += (_income - (int)((_income + _baseIncome) * BGIbudgetPercentage));
         UIManager.Instance.UpdateBGIsBudgetTxt(_BGIbudget.ToString());
         UIManager.Instance.UpdateGeneralBudgetTxt(_budget.ToString());
     }

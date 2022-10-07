@@ -47,12 +47,25 @@ public class RoundManager : MonoBehaviour
 
     public void NextRound()
     {
+
         _currentRound++;
-        UIManager.Instance.UpdateRoundTxt(CurrentRound.ToString());
-        ResourceManager.Instance.UpdateBudgetsAtEndRound();
-        ResourceManager.Instance.IncreaseCitizens();
-        ScoreManager.Instance.UpdatePopulationDensity();
-        ScoreManager.Instance.UpdateUnemploymentPercentage();
+        if (_currentRound <= 10)
+        {
+            UIManager.Instance.UpdateRoundTxt(CurrentRound.ToString());
+            ResourceManager.Instance.UpdateBudgetsAtEndRound();
+            ResourceManager.Instance.IncreaseCitizens();
+            ScoreManager.Instance.UpdatePopulationDensity();
+            ScoreManager.Instance.UpdateUnemploymentPercentage();
+        }
+        else
+        {
+            float sscore = ScoreManager.Instance.SocialScore;
+            float envScore = ScoreManager.Instance.EnvironmentalScore;
+            float ecoScore = ScoreManager.Instance.EconomicScore;
+            float totalScore = sscore + envScore + ecoScore;
+            endGamePanel.gameObject.SetActive(true);
+            endGamePanel.SetUpEndPanelStats(sscore, envScore, ecoScore, totalScore);
+        }
     }
     public void StartRound()
     {
@@ -63,7 +76,7 @@ public class RoundManager : MonoBehaviour
             ResourceManager.Instance.UpdateBudgetAtRoundStart();
             if (_currentRound < 10)
             {
-               // UIManager.Instance.UpdateRoundTxt(_currentRound);
+                // UIManager.Instance.UpdateRoundTxt(_currentRound);
             }
         }
     }
