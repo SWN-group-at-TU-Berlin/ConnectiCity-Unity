@@ -20,11 +20,6 @@ public class ResourceManager : MonoBehaviour
         }
 
         defaultAP = _actionPoints;
-        InitializeBudgets();
-    }
-    private void Start()
-    {
-        PopulationIncreaseInitialization();
     }
 
     #endregion
@@ -35,6 +30,11 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] int _citizenNumber;
     #region getter
     public int CitizenNumber { get { return _citizenNumber; } }
+    #endregion
+
+    [SerializeField] int _workers;
+    #region getter
+    public int Workers { get { return _workers; } }
     #endregion
 
     [SerializeField] int _finalRoundCitizenIncrease = 370;
@@ -119,19 +119,26 @@ public class ResourceManager : MonoBehaviour
     int defaultAP;
 
     Dictionary<int, int> populationIncreasePerRound;
+    private void Start()
+    {
+        PopulationIncreaseInitialization();
+        InitializeBudgets();
+        UIManager.Instance.UpdateJobsAvailableTxt(_jobs.ToString());
+    }
 
     private void InitializeBudgets()
     {
         _BGIbudget = (int)((int)Budget * BGIbudgetPercentage);
         _budget -= _BGIbudget;
+        UIManager.Instance.UpdateBGIsBudgetTxt(_BGIbudget.ToString());
+        UIManager.Instance.UpdateGeneralBudgetTxt(_budget.ToString());
     }
 
     public void UpdateCitizenNumber(int valToAdd)
     {
-        _citizenNumber += valToAdd * 1000;
-        //UIManager.Instance.UpdateCitizenNumberTxt(CitizenNumber);
+        _citizenNumber += valToAdd;
     }
-    
+
     //DEPRECATED
     public void UpdateCitizenSatisfaction(int valToAdd)
     {
@@ -139,12 +146,13 @@ public class ResourceManager : MonoBehaviour
         {
             _citizenSatisfaction += valToAdd;
             _citizenSatisfaction = (int)Mathf.Clamp(_citizenSatisfaction, 0f, _maxCitizenSatisfaction);
-           // UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
+            // UIManager.Instance.UpdateCitizenSatisfactionTxt(CitizenSatisfaction);
         }
     }
+
     public void UpdateIncome()
     {
-        _income = (int)((int)((GetWorkingPopulation() * AvarageIncomePerPerson)*TaxationRate) * TotalBudgetRate);
+        _income = (int)((int)((GetWorkingPopulation() * AvarageIncomePerPerson) * TaxationRate) * TotalBudgetRate);
         int bgiIncome = (int)(_income * BGIbudgetPercentage);
         int generalIncome = (Income - (int)(_income * BGIbudgetPercentage));
         UIManager.Instance.UpdateGeneralIncreaseTxt(generalIncome.ToString());
@@ -193,7 +201,7 @@ public class ResourceManager : MonoBehaviour
     public void ResetActionPoints()
     {
         _actionPoints = defaultAP;
-       // UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
+        // UIManager.Instance.UpdateActionPointsTxt(ActionPoints);
 
     }
 
@@ -208,6 +216,11 @@ public class ResourceManager : MonoBehaviour
             int popIncrease = Mathf.CeilToInt(FinalRoundCitizenIncrease / denominator);
             populationIncreasePerRound.Add(round, popIncrease);
         }
+        _workers = (int)(_citizenNumber * WorkingPopulationRate);
+        UIManager.Instance.UpdateCitizensTxt(_citizenNumber.ToString());
+        UIManager.Instance.UpdateWorkersTxt(_workers.ToString());
+        UIManager.Instance.UpdateCitizensGrowthTxt(populationIncreasePerRound[RoundManager.Instance.CurrentRound].ToString());
+        UIManager.Instance.UpdateWorkersGrowthTxt(GetWorkingPopulationIncrease().ToString());
     }
 
     public int GetWorkingPopulationIncrease()
@@ -222,10 +235,21 @@ public class ResourceManager : MonoBehaviour
         int workers = (int)(_citizenNumber * WorkingPopulationRate);
         UIManager.Instance.UpdateCitizensTxt(_citizenNumber.ToString());
         UIManager.Instance.UpdateWorkersTxt(workers.ToString());
+        UIManager.Instance.UpdateCitizensGrowthTxt(populationIncreasePerRound[RoundManager.Instance.CurrentRound].ToString());
+        UIManager.Instance.UpdateWorkersGrowthTxt(GetWorkingPopulationIncrease().ToString());
     }
 
     public int GetWorkingPopulation()
     {
-        return Mathf.CeilToInt(_citizenNumber * WorkingPopulationRate);
+        int peopleThatHaveAJob = 0;
+        if (_jobs - _workers < 0)
+        {
+            peopleThatHaveAJob = _jobs;
+        }
+        else
+        {
+            peopleThatHaveAJob = _workers;
+        }
+        return peopleThatHaveAJob;
     }
 }

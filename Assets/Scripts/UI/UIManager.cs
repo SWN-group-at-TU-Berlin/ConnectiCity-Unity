@@ -51,6 +51,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI WorkersGrowth;
     [SerializeField] TextMeshProUGUI HostableCitizens;
     [SerializeField] TextMeshProUGUI JobsAvailable;
+    [SerializeField] TextMeshProUGUI PopulationDensityText;
+    [SerializeField] TextMeshProUGUI UnemploymentPercentageText;
+    [SerializeField] TextMeshProUGUI FlashFloodRiskText;
 
     [Header("Buttons References")]
     [SerializeField] GameObject houseButtonDefault;
@@ -156,6 +159,7 @@ public class UIManager : MonoBehaviour
         flashFloodRisk.minValue = 0;
         flashFloodRisk.maxValue = RainEventsManager.Instance.FlashFloodThreshold;
         flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateFlashFloorRisk(), 0f, flashFloodRiskSliderCap);
+        UpdateFlashFloodRiskTxt(flashFloodRisk.value.ToString("F2"));
     }
 
     private void Update()
@@ -487,6 +491,7 @@ public class UIManager : MonoBehaviour
         MessageBoard.transform.position = input.MousePosition() + offset;
     }
 
+    #region Text update functions
     public void UpdateGeneralBudgetTxt(string val) { GeneralBudget.text = val; }
     public void UpdateBGIsBudgetTxt(string val) { BGIsBudget.text = val; }
     public void UpdateGeneralIncreaseTxt(string val) { GeneralIncrease.text = val; }
@@ -497,6 +502,10 @@ public class UIManager : MonoBehaviour
     public void UpdateWorkersGrowthTxt(string val) { WorkersGrowth.text = val; }
     public void UpdateHostablePeopleTxt(string val) { HostableCitizens.text = val; }
     public void UpdateJobsAvailableTxt(string val) { JobsAvailable.text = val; }
+    public void UpdatePopulationDensityTxt(string val) { PopulationDensityText.text = val; }
+    public void UpdateUnemploymentPercentageTxt(string val) { UnemploymentPercentageText.text = val + "%"; }
+    public void UpdateFlashFloodRiskTxt(string val) { FlashFloodRiskText.text = val + "%"; }
+    #endregion
 
     public void ShowSocialInfoPanel(AreaUsage subcatType, InfrastructureType infrastructureType, Vector3 position, int actionPoints, int budget, int income, int citizenSatisfaction, int citizenNumber)
     {
@@ -873,11 +882,13 @@ public class UIManager : MonoBehaviour
     public void UpdatePopulationDesitySlider(float popDensity)
     {
         populationDensity.value = popDensity;
+        UpdatePopulationDensityTxt(popDensity.ToString("F2"));
     }
 
     public void UpdateUnemploymentSlider(float unmlpRate)
     {
         unemploymentRate.value = unmlpRate;
+        UpdateUnemploymentPercentageTxt(unmlpRate.ToString("F2"));
     }
 
     public void ChangeButtonColorToPressed(Button btn)
@@ -919,7 +930,8 @@ public class UIManager : MonoBehaviour
             unemploymentRate.gameObject.SetActive(false);
             populationDensity.gameObject.SetActive(false);
             flashFloodRisk.gameObject.SetActive(true);
-            flashFloodRisk.value = RainEventsManager.Instance.CalculateFlashFloorRisk();
+            flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateFlashFloorRisk(), 0f, flashFloodRiskSliderCap);
+            UpdateFlashFloodRiskTxt(flashFloodRisk.value.ToString("F2"));
         }
     }
 

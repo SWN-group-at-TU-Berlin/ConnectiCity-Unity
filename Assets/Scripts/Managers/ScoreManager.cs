@@ -55,10 +55,6 @@ public class ScoreManager : MonoBehaviour
     [Header("Unemployment rate")]
     bool flashFlood;
 
-
-    [Header("Debug references")]
-    [SerializeField] TextMeshProUGUI debugRates;
-
     //int = round; 
     Dictionary<int, RoundSnapshot> RoundsSnapshots;
 
@@ -150,7 +146,7 @@ public class ScoreManager : MonoBehaviour
 
 
         popDensity.name = "Population Density";
-        popDensity.value = populationDensity.ToString();
+        popDensity.value = populationDensity.ToString("F2");
         popDensity.socialScore = socialPopDensityScore;
         popDensity.economicScore = economicPopDensityScore;
         popDensity.environmentalScore = environmentPopDensityScore;
@@ -220,16 +216,6 @@ public class ScoreManager : MonoBehaviour
 
         //update UI
         UIManager.Instance.UpdatePopulationDesitySlider(populationDensity);
-        debugRates.text = "Citizens: " + pop + " | Spots: " +
-            spots +
-            " | pop density: " +
-            populationDensity.ToString("F2") +
-            "\nWorking pop: " +
-            ResourceManager.Instance.GetWorkingPopulation() +
-            "Jobs: " +
-            ResourceManager.Instance.Jobs +
-            " | employment percentage: " +
-            unempolymentPercentage + "%";
     }
 
 
@@ -242,32 +228,22 @@ public class ScoreManager : MonoBehaviour
     {
         int pop = ResourceManager.Instance.CitizenNumber;
         int jobs = ResourceManager.Instance.Jobs;
-        unempolymentPercentage = CalculateUnemploymentPercentage(ResourceManager.Instance.GetWorkingPopulation(), jobs);
+        unempolymentPercentage = CalculateUnemploymentPercentage(ResourceManager.Instance.Workers, jobs);
         //update UI
         UIManager.Instance.UpdateUnemploymentSlider(unempolymentPercentage);
-
-        debugRates.text = "Citizens: " +
-            pop +
-            " | Spots: " +
-            ResourceManager.Instance.HostablePeople +
-            " | pop density: " +
-            populationDensity.ToString("F2") +
-            "\nWorking pop: " +
-            ResourceManager.Instance.GetWorkingPopulation() +
-            " | Jobs: " +
-            jobs +
-            " | employment percentage: " +
-            unempolymentPercentage.ToString("F2") +
-            "%";
     }
 
     public float CalculateUnemploymentPercentage(int workingPop, int jobs)
     {
+        float unemploymentPercentage = 0;
         if (jobs == 0)
         {
-            jobs = 1;
+            unemploymentPercentage = (unemploymentPercentage - 1f) * 100f;
+        } else
+        {
+            unemploymentPercentage = (((float)workingPop / (float)jobs) - 1f) * 100f;
         }
-        return (((float)workingPop / (float)jobs) - 1f) * 100f;
+        return unemploymentPercentage;
     }
 
     public Dictionary<int, float> TotalScores()
