@@ -1,50 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TutorialManager : MonoBehaviour
 {
-    [SerializeField] List<TutorialPanel> Transforms;
-    [SerializeField] RectTransform TutorialPanel;
-    [SerializeField] RectTransform TutorialPanelMask;
-    TutorialPanel panelShown;
+    [SerializeField] List<TutorialOjectsSetup> tutroialObjectsSetups;
+    [SerializeField] RectTransform tutorialOpaquePanel;
+    [SerializeField] RectTransform tutorialOpaquePanelCutout;
+    [SerializeField] RectTransform dialogueBoxRect;
+    [SerializeField] TextMeshProUGUI dialogueBoxText;
+    [SerializeField] RectTransform arrow;
 
-    private void Awake()
+    int i = 0;
+
+    private void Start()
     {
-        panelShown = Transforms[0];
+        SwithcTutorialPanels();
     }
 
     public void SwithcTutorialPanels()
     {
-        if (Transforms[0].Equals(panelShown))
+        TutorialOjectsSetup panelSetup = tutroialObjectsSetups[i];
+        CopyRectTransform(tutorialOpaquePanel, panelSetup.tutorialOpaquePanel);
+        CopyRectTransform(tutorialOpaquePanelCutout, panelSetup.tutorialOpaquePanelCutout);
+        CopyRectTransform(dialogueBoxRect, panelSetup.dialogueBox);
+        dialogueBoxText.text = panelSetup.text;
+        CopyRectTransform(arrow, panelSetup.arrow);
+
+        if(i == tutroialObjectsSetups.Count - 1)
         {
-            TutorialPanel.anchoredPosition = new Vector2(Transforms[1].parent.posX, Transforms[1].parent.posY);
-            TutorialPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Transforms[1].parent.height);
-            TutorialPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Transforms[1].parent.width);
-            panelShown = Transforms[1];
-        }
-        else
+            i = 0;
+        } else
         {
-            TutorialPanel.anchoredPosition = new Vector2(Transforms[0].parent.posX, Transforms[0].parent.posY);
-            TutorialPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, Transforms[0].parent.height);
-            TutorialPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Transforms[0].parent.width);
-            panelShown = Transforms[0];
+            i++;
         }
+    }
+
+    void CopyRectTransform(RectTransform destination, RectTransform toCopy)
+    {
+        destination.anchorMax = toCopy.anchorMax;
+        destination.anchorMin = toCopy.anchorMin;
+        destination.pivot = toCopy.pivot;
+        destination.anchoredPosition = toCopy.anchoredPosition;
+        destination.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, toCopy.rect.height);
+        destination.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, toCopy.rect.width);
+        destination.localScale = toCopy.localScale;
+        destination.rotation = toCopy.rotation;
     }
 }
 
 [System.Serializable]
-public class TutorialPanel
+public class TutorialOjectsSetup
 {
-    public RectTransformData parent;
-    public RectTransformData child;
+    public int tutorialPanelNumber;
+    public string text;
+    public RectTransform tutorialOpaquePanel;
+    public RectTransform tutorialOpaquePanelCutout;
+    public RectTransform dialogueBox;
+    public RectTransform arrow;
 }
 
-[System.Serializable]
-public class RectTransformData
-{
-    public float posX;
-    public float posY;
-    public float width;
-    public float height;
-}
