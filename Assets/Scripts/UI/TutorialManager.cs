@@ -5,36 +5,94 @@ using TMPro;
 
 public class TutorialManager : MonoBehaviour
 {
+    #region signleton
+    private static TutorialManager instance;
+    #region getter
+    public static TutorialManager Instance { get { return instance; } }
+    #endregion
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
     [SerializeField] List<TutorialOjectsSetup> tutroialObjectsSetups;
     [SerializeField] RectTransform tutorialOpaquePanel;
     [SerializeField] RectTransform tutorialOpaquePanelCutout;
     [SerializeField] RectTransform dialogueBoxRect;
     [SerializeField] TextMeshProUGUI dialogueBoxText;
     [SerializeField] RectTransform arrow;
+    [SerializeField] GameObject animatedArrow;
+
 
     int i = 0;
 
     private void Start()
     {
+        UIManager.Instance.DeactivateButtons();
         SwithcTutorialPanels();
     }
 
     public void SwithcTutorialPanels()
     {
+
+        animatedArrow.SetActive(false);
+        tutorialOpaquePanel.gameObject.SetActive(true);
+        arrow.gameObject.SetActive(true);
+        dialogueBoxRect.gameObject.SetActive(true);
+
         TutorialOjectsSetup panelSetup = tutroialObjectsSetups[i];
         CopyRectTransform(tutorialOpaquePanel, panelSetup.tutorialOpaquePanel);
-        CopyRectTransform(tutorialOpaquePanelCutout, panelSetup.tutorialOpaquePanelCutout);
+        CopyRectTransform(tutorialOpaquePanelCutout, panelSetup.tutorialOpaquePanelCutoff);
         CopyRectTransform(dialogueBoxRect, panelSetup.dialogueBox);
         dialogueBoxText.text = panelSetup.text;
         CopyRectTransform(arrow, panelSetup.arrow);
 
-        if(i == tutroialObjectsSetups.Count - 1)
+        if (tutroialObjectsSetups[i].tutorialPanelNumber == 1)
         {
-            i = 0;
-        } else
+            UIManager.Instance.ActivateTutorialInfrastructureButton();
+            animatedArrow.SetActive(true);
+            animatedArrow.GetComponent<Animator>().Play("PointInfrastructureButton", 0, 0f);
+            tutorialOpaquePanel.gameObject.SetActive(false);
+            arrow.gameObject.SetActive(false);
+            dialogueBoxRect.gameObject.SetActive(false);
+            i++;
+        }
+        else if (tutroialObjectsSetups[i].tutorialPanelNumber == 2)
+        {
+            UIManager.Instance.ActivateButtons();
+            UIManager.Instance.DeactivateTutorialMode();
+            tutorialOpaquePanel.gameObject.SetActive(false);
+            arrow.gameObject.SetActive(false);
+            dialogueBoxRect.gameObject.SetActive(false);
+        }
+        else if (i < tutroialObjectsSetups.Count - 1)
         {
             i++;
         }
+    }
+
+    public void ArrowPointInfrastructureButton()
+    {
+        animatedArrow.GetComponent<Animator>().Play("PointInfrastructureButton", 0, 0f);
+    }
+
+    public void ArrowPointSubcat7()
+    {
+        animatedArrow.GetComponent<Animator>().Play("Subcat7", 0, 0f);
+    }
+
+    public void DeactivateArrow()
+    {
+        animatedArrow.SetActive(false);
     }
 
     void CopyRectTransform(RectTransform destination, RectTransform toCopy)
@@ -47,6 +105,7 @@ public class TutorialManager : MonoBehaviour
         destination.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, toCopy.rect.width);
         destination.localScale = toCopy.localScale;
         destination.rotation = toCopy.rotation;
+        ;
     }
 }
 
@@ -56,7 +115,7 @@ public class TutorialOjectsSetup
     public int tutorialPanelNumber;
     public string text;
     public RectTransform tutorialOpaquePanel;
-    public RectTransform tutorialOpaquePanelCutout;
+    public RectTransform tutorialOpaquePanelCutoff;
     public RectTransform dialogueBox;
     public RectTransform arrow;
 }

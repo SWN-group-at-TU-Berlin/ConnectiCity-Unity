@@ -77,6 +77,25 @@ public class InfrastructureBuilder : MonoBehaviour
         MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
     }
 
+    public void EnterTutorialBuildStatus()
+    {
+        //change selected infrastructure to building
+        SelectedInfrastructure = InfrastructureType.Building;
+
+        //instantiate a list of buildable subcatchments
+        List<Subcatchment> buildableSubcatchments = new List<Subcatchment>();
+
+        //get subcat n7
+        buildableSubcatchments.Add(MapManager.Instance.GetSubcatchment(7));
+
+        //activate subcatchment arrow in tutorial manager
+        TutorialManager.Instance.ArrowPointSubcat7();
+        
+        //highlight those for which you have enough resources to build
+        MapManager.Instance.DehighlightBuildableSubcatchments();
+        MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
+    }
+
     public void EnterBGIBuildStatus(InfrastructureType BGIToBuild)
     {
         //update selected infrastructure
@@ -143,6 +162,13 @@ public class InfrastructureBuilder : MonoBehaviour
 
         if (SelectedInfrastructure.Equals(InfrastructureType.Building))
         {
+            if (SelectedSubcatchment.SubcatchmentNumber.Equals(7))
+            {
+                TutorialManager.Instance.DeactivateArrow();
+                TutorialManager.Instance.SwithcTutorialPanels();
+                UIManager.Instance.DeactivateButtons();
+            }
+
             //update budget
             ResourceManager.Instance.UpdateBudget((int)buildCost);
             //recover benefit

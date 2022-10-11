@@ -92,13 +92,13 @@ public class Subcatchment : MonoBehaviour
     private void Start()
     {
         _subcatchmentBenefit = (int)DataReader.Instance.SubcatchmentsBenefits[_subcatchmentNumber];
-        if (SubcatchmentNumber == 7)
+        /*if (SubcatchmentNumber == 7)
         {
             InfrastructureBuilder.Instance.SelectedInfrastructure = InfrastructureType.Building;
             InfrastructureBuilder.Instance.SelectedSubcatchment = this;
             InfrastructureBuilder.Instance.BuildInfrastructure();
             _buildStatus = BuildStatus.Built;
-        }
+        }*/
     }
 
     private void OnEnable()

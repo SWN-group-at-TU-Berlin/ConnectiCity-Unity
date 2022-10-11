@@ -57,18 +57,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI RoundText;
 
     [Header("Buttons References")]
-    [SerializeField] GameObject houseButtonDefault;
+    [SerializeField] GameObject InfrasructureButton;
+    [SerializeField] GameObject RoundButton;
+    [SerializeField] GameObject SocialButton;
+    [SerializeField] GameObject GRButtonDefault;
+    [SerializeField] GameObject RBButtonDefault;
+    [SerializeField] GameObject PPButtonDefault;
+    [SerializeField] GameObject RainButton;
+
+    //DEPRECATED
     [SerializeField] GameObject houseButtonDown;
     [SerializeField] GameObject businessButtonDefault;
     [SerializeField] GameObject businessButtonDown;
-    [SerializeField] GameObject GRButtonDefault;
     [SerializeField] GameObject GRButtonDown;
-    [SerializeField] GameObject RBButtonDefault;
     [SerializeField] GameObject RBButtonDown;
-    [SerializeField] GameObject PPButtonDefault;
-    [SerializeField] GameObject PPButtonDown;
-    [SerializeField] GameObject SocialButton;
-    [SerializeField] GameObject RainButton;
 
     [Header("Info boards references and properties")]
     [SerializeField] GameObject MessageBoard;
@@ -135,6 +137,11 @@ public class UIManager : MonoBehaviour
     #region getter
     public bool ShowingRunoffReduction { get { return _showingRunoffReduction; } }
     #endregion
+    bool _tutorialOn = false;
+    #region getter
+    public bool TutorialOn { get { return _tutorialOn; } }
+    #endregion
+
 
     //Info boards variables
     Color fullAlphaBackground;
@@ -253,7 +260,7 @@ public class UIManager : MonoBehaviour
     private void InitializeButtonList()
     {
         DefaultButtons = new List<GameObject>();
-        DefaultButtons.Add(houseButtonDefault);
+        DefaultButtons.Add(InfrasructureButton);
         DefaultButtons.Add(businessButtonDefault);
         DefaultButtons.Add(GRButtonDefault);
         DefaultButtons.Add(PPButtonDefault);
@@ -303,7 +310,11 @@ public class UIManager : MonoBehaviour
                 infoPanelsNotInUse.Enqueue(infoPanel);
             }
             infrastructureTypeButtonPressed = infrastructureTypeToHandle;
-            if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Building))
+            if (_tutorialOn)
+            {
+                InfrastructureBuilder.Instance.EnterTutorialBuildStatus();
+            }
+            else if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Building))
             {
                 InfrastructureBuilder.Instance.EnterInfrastructureBuildStatus();
             }
@@ -338,6 +349,10 @@ public class UIManager : MonoBehaviour
 
     public void ExitBuildMode()
     {
+        if (_tutorialOn)
+        {
+            TutorialManager.Instance.ArrowPointInfrastructureButton();
+        }
         _buildMode = false;
         MapManager.Instance.DehighlightBuildableSubcatchments();
         HideInfoPanels();
@@ -367,15 +382,15 @@ public class UIManager : MonoBehaviour
     {
         _houseButtonPressed = !_houseButtonPressed;
         houseButtonDown.SetActive(_houseButtonPressed);
-        houseButtonDefault.SetActive(!_houseButtonPressed);
-        if (houseButtonDefault.activeInHierarchy)
+        InfrasructureButton.SetActive(!_houseButtonPressed);
+        if (InfrasructureButton.activeInHierarchy)
         {
-            ActivateDefaultButtons(houseButtonDefault);
+            ActivateDefaultButtons(InfrasructureButton);
             HideInfoPanels();
         }
         else
         {
-            DeactivateDefaultButtons(houseButtonDefault);
+            DeactivateDefaultButtons(InfrasructureButton);
         }
     }
 
@@ -1134,8 +1149,8 @@ public class UIManager : MonoBehaviour
             {
                 particleSys.GetComponent<ParticleSystem>().Play();
             }
-            yield return new WaitForSeconds(timeToWaitBeforeNextAnimation/2);
-            foreach(Transform particleSys in flashFloodVfx)
+            yield return new WaitForSeconds(timeToWaitBeforeNextAnimation / 2);
+            foreach (Transform particleSys in flashFloodVfx)
             {
                 particleSys.GetComponent<ParticleSystem>().Stop();
             }
@@ -1183,6 +1198,39 @@ public class UIManager : MonoBehaviour
 
         scoreBoard.GetComponent<DetaildScoreBoard>().SetBoardData(ScoreManager.Instance.GetRoundSnapshot(RoundManager.Instance.CurrentRound));
         scoreBoard.GetComponent<DetaildScoreBoard>().Appear();
+    }
+
+    public void DeactivateButtons()
+    {
+        InfrasructureButton.GetComponent<Button>().enabled = false;
+        RoundButton.GetComponent<Button>().enabled = false;
+        SocialButton.GetComponent<Button>().enabled = false;
+        RainButton.GetComponent<Button>().enabled = false;
+        GRButtonDefault.GetComponent<Button>().enabled = false;
+        RBButtonDefault.GetComponent<Button>().enabled = false;
+        PPButtonDefault.GetComponent<Button>().enabled = false;
+    }
+
+    public void ActivateButtons()
+    {
+        InfrasructureButton.GetComponent<Button>().enabled = true;
+        RoundButton.GetComponent<Button>().enabled = true;
+        SocialButton.GetComponent<Button>().enabled = true;
+        RainButton.GetComponent<Button>().enabled = true;
+        GRButtonDefault.GetComponent<Button>().enabled = true;
+        RBButtonDefault.GetComponent<Button>().enabled = true;
+        PPButtonDefault.GetComponent<Button>().enabled = true;
+    }
+
+    public void ActivateTutorialInfrastructureButton()
+    {
+        _tutorialOn = true;
+        InfrasructureButton.GetComponent<Button>().enabled = true;
+    }
+
+    public void DeactivateTutorialMode()
+    {
+        _tutorialOn = false;
     }
 }
 
