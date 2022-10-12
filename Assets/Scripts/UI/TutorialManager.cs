@@ -84,7 +84,7 @@ public class TutorialManager : MonoBehaviour
 
             //animated arrow play point rain button
             animatedArrow.GetComponent<Animator>().Play("PointRainButton", 0, 0f);
-            
+
             i++;
 
             //In UIManager clicking rain button with tutorialOn should reactivate tutorial panels
@@ -105,7 +105,10 @@ public class TutorialManager : MonoBehaviour
 
     public void ArrowPointInfrastructureButton()
     {
-        animatedArrow.GetComponent<Animator>().Play("PointInfrastructureButton", 0, 0f);
+        if (i < 18)
+        {
+            animatedArrow.GetComponent<Animator>().Play("PointInfrastructureButton", 0, 0f);
+        }
     }
 
     public void ArrowPointSubcat7()

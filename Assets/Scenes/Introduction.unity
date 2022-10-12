@@ -232,8 +232,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 69.52166}
-  m_SizeDelta: {x: -168.2433, y: -233.7421}
+  m_AnchoredPosition: {x: -2.6950073, y: 75.59106}
+  m_SizeDelta: {x: -162.8534, y: -273.1954}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &479591150
 MonoBehaviour:
@@ -266,8 +266,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4285088302
+  m_fontColor: {r: 0.18039216, g: 0.25882354, b: 0.4117647, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -401,7 +401,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -527,15 +527,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Next
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -660,9 +660,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ce9de85b79032c34380fe0dc15285bdb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b19b8880152cca04482ca5aaaf5bacbd, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -802,7 +802,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.18039216, g: 0.25882354, b: 0.4117647, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -844,7 +844,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000061035156, y: 50}
+  m_AnchoredPosition: {x: 0, y: 115}
   m_SizeDelta: {x: -1100, y: 75}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &1220475085
@@ -995,7 +995,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1231845981}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1060,12 +1060,23 @@ MonoBehaviour:
   endButton: {fileID: 1206204046}
   transitionPanel: {fileID: 2021730333}
   introductionTexts:
-  - this
-  - is
-  - a
-  - test
-  - 'for '
-  - ah you got it, just play!
+  - ConnectiCity is a simulation-informed serious game developed by ide3a, aiming
+    to showcase some of the challenges our critical urban infrastructures face these
+    days, as well as how we can attempt to overcome these issues. In this prototype,
+    you have the chance to get familiar with the concept, intended learning outcomes
+    and mechanics of the game and provide us with feedback for its further development.
+  - The game sets in the municipality of ConnectiCity. Over the past years, an increasing
+    number of storms and heavy rain events have hit the city and caused damage across
+    multiple neighborhoods. While struggling with the effects of a changing climate,
+    the city also faces the challenge of a growing population.
+  - "To accommodate the newcomers and create businesses, ConnectiCity\u2019s mayor
+    decides to develop a new neighborhood by transforming a former industrial area.
+    However, this area should be a neighborhood which is ready to face the diverse
+    challenges of climate change and population growth."
+  - Mayor Connie decides to invite an expert consultant - you - to simulate different
+    scenarios and develop a plan for the new neighborhood.
+  - Are you ready for the challenge?
+  - "Then let\u2019s get started!"
 --- !u!4 &1257493225
 Transform:
   m_ObjectHideFlags: 0
@@ -1116,7 +1127,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000061035156, y: 50}
+  m_AnchoredPosition: {x: 0, y: 115}
   m_SizeDelta: {x: -1100, y: 75}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1823001052
@@ -1188,7 +1199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.18039216, g: 0.25882354, b: 0.4117647, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
