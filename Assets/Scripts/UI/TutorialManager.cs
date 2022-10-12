@@ -68,6 +68,29 @@ public class TutorialManager : MonoBehaviour
         }
         else if (tutroialObjectsSetups[i].tutorialPanelNumber == 2)
         {
+            //deactivate buttons
+            UIManager.Instance.DeactivateButtons();
+
+            //activate rain button
+            UIManager.Instance.ActivateRainButton();
+
+            //deactivate tutorials panel
+            tutorialOpaquePanel.gameObject.SetActive(false);
+            arrow.gameObject.SetActive(false);
+            dialogueBoxRect.gameObject.SetActive(false);
+
+            //activate animated arro
+            animatedArrow.SetActive(true);
+
+            //animated arrow play point rain button
+            animatedArrow.GetComponent<Animator>().Play("PointRainButton", 0, 0f);
+            
+            i++;
+
+            //In UIManager clicking rain button with tutorialOn should reactivate tutorial panels
+        }
+        else if (tutroialObjectsSetups[i].tutorialPanelNumber == 3)
+        {
             UIManager.Instance.ActivateButtons();
             UIManager.Instance.DeactivateTutorialMode();
             tutorialOpaquePanel.gameObject.SetActive(false);
@@ -88,6 +111,11 @@ public class TutorialManager : MonoBehaviour
     public void ArrowPointSubcat7()
     {
         animatedArrow.GetComponent<Animator>().Play("Subcat7", 0, 0f);
+    }
+
+    public void ArrowPointBuildButton()
+    {
+        animatedArrow.GetComponent<Animator>().Play("PointBuildButton", 0, 0f);
     }
 
     public void DeactivateArrow()

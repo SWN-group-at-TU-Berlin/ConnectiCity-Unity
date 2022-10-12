@@ -774,6 +774,9 @@ public class UIManager : MonoBehaviour
         {
             InfoTab.SetActive(true);
             lastSubcatchmentCallingInfoTab = (int)subcatchmentNumber;
+
+            //show animated arrow if tutorial on
+            TutorialManager.Instance.ArrowPointBuildButton();
         }
 
         /*THIS IS A QUICK N DIRTY FIX TO CONVERT THE ENUM INTO A STRING
@@ -949,6 +952,12 @@ public class UIManager : MonoBehaviour
             flashFloodRisk.gameObject.SetActive(true);
             flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateFlashFloorRisk(), 0f, flashFloodRiskSliderCap);
             UpdateFlashFloodRiskTxt(flashFloodRisk.value.ToString("F2"));
+
+            //call next tutorial panel
+            if (_tutorialOn)
+            {
+                TutorialManager.Instance.SwithcTutorialPanels();
+            }
         }
     }
 
@@ -1226,6 +1235,12 @@ public class UIManager : MonoBehaviour
     {
         _tutorialOn = true;
         InfrasructureButton.GetComponent<Button>().enabled = true;
+    }
+
+    public void ActivateRainButton()
+    {
+        _tutorialOn = true;
+        RainButton.GetComponent<Button>().enabled = true;
     }
 
     public void DeactivateTutorialMode()
