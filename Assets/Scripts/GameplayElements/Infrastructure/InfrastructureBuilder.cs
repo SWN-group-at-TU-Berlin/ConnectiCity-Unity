@@ -64,11 +64,12 @@ public class InfrastructureBuilder : MonoBehaviour
                 float buildCost = CostsManager.Instance.GetSubcatchmentBuildCosts(subcatchment.SubcatchmentNumber, BuildStatus.Built);
 
                 //if: ap costs < ap AND build costs < budget
-                if (buildCost <= currentBudget)
+                /*if (buildCost <= currentBudget)
                 {
                     //add subcatchment to buildable subcatchments
                     buildableSubcatchments.Add(subcatchment);
-                }
+                }*/
+                buildableSubcatchments.Add(subcatchment); //Testing budget going negative
             }
 
         }
@@ -90,7 +91,7 @@ public class InfrastructureBuilder : MonoBehaviour
 
         //activate subcatchment arrow in tutorial manager
         TutorialManager.Instance.ArrowPointSubcat7();
-        
+
         //highlight those for which you have enough resources to build
         MapManager.Instance.DehighlightBuildableSubcatchments();
         MapManager.Instance.HighlightBuildableSubcatchments(buildableSubcatchments.ToArray());
@@ -128,8 +129,7 @@ public class InfrastructureBuilder : MonoBehaviour
                 //get ap costs for current subcatchment
                 float apCost = CostsManager.Instance.GetActionPointCosts(subcatchment.SubcatchmentNumber, specificSubcatBGI);
 
-                //if: ap costs < ap AND build costs < budget
-                if (buildCost <= currentBudget && subcatchment.IsBuilt)
+                if (/*buildCost <= currentBudget &&*/ subcatchment.IsBuilt)
                 {
                     //add subcatchment to buildable subcatchments
                     buildableSubcatchments.Add(subcatchment);
@@ -184,7 +184,8 @@ public class InfrastructureBuilder : MonoBehaviour
                 //update hostable spots
                 ResourceManager.Instance.UpdateHostablePeople((int)benefit);
             }
-        } else
+        }
+        else
         {
             //update budget
             ResourceManager.Instance.UpdateBGIBudget((int)buildCost);

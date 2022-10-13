@@ -158,8 +158,8 @@ public class ResourceManager : MonoBehaviour
     public void UpdateIncome()
     {
         _income = (int)((int)((GetWorkingPopulation() * AvarageIncomePerPerson) * TaxationRate) * TotalBudgetRate);
-        int bgiIncome = (int)(_income * BGIbudgetPercentage);
-        int generalIncome = (_income - (int)(_income * BGIbudgetPercentage));
+        int bgiIncome = (int)((_income + _baseIncome) * BGIbudgetPercentage);
+        int generalIncome = (_income - (int)((_income + _baseIncome) * BGIbudgetPercentage));
         UIManager.Instance.UpdateGeneralIncreaseTxt(generalIncome.ToString());
         UIManager.Instance.UpdateBGIsIncreaseTxt(bgiIncome.ToString());
     }

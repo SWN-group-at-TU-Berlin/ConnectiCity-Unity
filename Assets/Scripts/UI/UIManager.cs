@@ -815,8 +815,9 @@ public class UIManager : MonoBehaviour
         if (!InfoTab.activeInHierarchy)
         {
             InfoTab.SetActive(true);
-            lastSubcatchmentCallingInfoTab = (int)subcatchmentNumber;
         }
+
+        lastSubcatchmentCallingInfoTab = (int)subcatchmentNumber;
 
         /*THIS IS A QUICK N DIRTY FIX TO CONVERT THE ENUM INTO A STRING
          IT SHOULD BE ADDRESSED IN A MORE GENERAL WAY PLZ*/
@@ -953,8 +954,8 @@ public class UIManager : MonoBehaviour
             unemploymentRate.gameObject.SetActive(false);
             populationDensity.gameObject.SetActive(false);
             flashFloodRisk.gameObject.SetActive(true);
-            flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateFlashFloorRisk(), 0f, flashFloodRiskSliderCap);
-            UpdateFlashFloodRiskTxt(flashFloodRisk.value.ToString("F2"));
+            flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateTotalRunoff(), 0f, flashFloodRiskSliderCap);
+            UpdateFlashFloodRiskTxt(RainEventsManager.Instance.CalculateFlashFloorRisk().ToString("F2"));
 
             //call next tutorial panel
             if (_tutorialOn)
@@ -1080,6 +1081,7 @@ public class UIManager : MonoBehaviour
     public void ShowEndRoundInfos()
     {
         _showingRainEventInfos = true;
+        DeactivateButtons();
         StartCoroutine(RainEventInfosVisualization());
         StartCoroutine(ShowScoreGraph());
     }
@@ -1163,7 +1165,7 @@ public class UIManager : MonoBehaviour
             {
                 particleSys.GetComponent<ParticleSystem>().Play();
             }
-            yield return new WaitForSeconds(timeToWaitBeforeNextAnimation / 2);
+            yield return new WaitForSeconds(4/*timeToWaitBeforeNextAnimation / 2*/);
             foreach (Transform particleSys in flashFloodVfx)
             {
                 particleSys.GetComponent<ParticleSystem>().Stop();
@@ -1186,6 +1188,10 @@ public class UIManager : MonoBehaviour
     public IEnumerator ShowScoreGraph()
     {
         //Update score
+        if (RoundManager.Instance.CurrentRound == 11)
+        {
+            ResourceManager.Instance.UpdateBudgetsAtEndRound();
+        }
         ScoreManager.Instance.UpdateScore();
         Dictionary<int, float> graphData = ScoreManager.Instance.TotalScores();
 

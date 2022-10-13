@@ -49,6 +49,7 @@ public class RoundManager : MonoBehaviour
     {
 
         _currentRound++;
+        UIManager.Instance.ActivateButtons();
         if (_currentRound <= 10)
         {
             UIManager.Instance.UpdateRoundTxt(CurrentRound.ToString());

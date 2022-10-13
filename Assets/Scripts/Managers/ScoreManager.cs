@@ -99,6 +99,12 @@ public class ScoreManager : MonoBehaviour
         //Flash flood update
         roundSnap.Stats.Add(UpdateFlashFloodScore());
 
+        //if final round, calculate final budget score
+        if(RoundManager.Instance.CurrentRound == 11)
+        {
+            roundSnap.Stats.Add(UpdateFinalBudgetScore());
+        }
+
         //Traffic congestion update
         float socialScore = 0;
         float economicScore = 0;
@@ -174,7 +180,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         UnemploymentRate.name = "Unemployment rate";
-        UnemploymentRate.value = unempolymentPercentage.ToString() + "%";
+        UnemploymentRate.value = unempolymentPercentage.ToString("F2") + "%";
         UnemploymentRate.socialScore = socialUnemploymentRate;
         UnemploymentRate.economicScore = economicUnemploymentRate;
         UnemploymentRate.environmentalScore = environmentUnemploymentRate;
@@ -193,8 +199,13 @@ public class ScoreManager : MonoBehaviour
         if (RainEventsManager.Instance.FlashFloodCheck())
         {
             socialFlashFlood = -1;
-            environmentFlashFlood = -1;
+            environmentFlashFlood = -2;
+            economicFlashFlood = -1;
             val = "Flood";
+        } else
+        {
+            environmentFlashFlood = 0.5f;
+            val = "No Flood";
         }
 
         FlashFlood.name = "FlashFlood";
@@ -204,6 +215,32 @@ public class ScoreManager : MonoBehaviour
         FlashFlood.environmentalScore = environmentFlashFlood;
 
         return FlashFlood;
+    }
+
+    public GameStat UpdateFinalBudgetScore()
+    {
+        GameStat FinalBudget = new GameStat();
+        float socialFinalBudget = 0;
+        float economicFinalBudget = 0;
+        float environmentFinalBudget = 0;
+        float val = ResourceManager.Instance.Budget;
+
+        if (ResourceManager.Instance.Budget < -ResourceManager.Instance.Income)
+        {
+            economicFinalBudget = -1;
+        }
+        else
+        {
+            economicFinalBudget = 1f;
+        }
+
+        FinalBudget.name = "Final Budget";
+        FinalBudget.value = val.ToString("F2");
+        FinalBudget.socialScore = socialFinalBudget;
+        FinalBudget.economicScore = economicFinalBudget;
+        FinalBudget.environmentalScore = environmentFinalBudget;
+
+        return FinalBudget;
     }
 
     public void UpdatePopulationDensity()
