@@ -196,7 +196,10 @@ public class UIManager : MonoBehaviour
                 else //if you are in runoff reduction mode
                 {
                     //hide the info tab
-                    RainInfoTab.SetActive(false);
+                    if (!_tutorialOn)
+                    {
+                        RainInfoTab.SetActive(false);
+                    }
 
                     // if you are showing the graph
                     if (_showingRainDistributionGraph)
@@ -957,6 +960,8 @@ public class UIManager : MonoBehaviour
             if (_tutorialOn)
             {
                 TutorialManager.Instance.SwithcTutorialPanels();
+                Subcatchment subcat = MapManager.Instance.GetSubcatchment(7);
+                ShowRainInfoTab(subcat.SubcatchmentNumber, subcat.BuildStatus, subcat.GetBGIsBuiltOnSubcatchment());
             }
         }
     }
