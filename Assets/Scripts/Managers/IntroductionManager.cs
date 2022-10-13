@@ -47,4 +47,9 @@ public class IntroductionManager : MonoBehaviour
         yield return new WaitForSeconds(waitingTime);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

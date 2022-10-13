@@ -19,6 +19,6 @@ public class ToolTipUser : MonoBehaviour
 
     public void ShowTooltip()
     {
-        StartCoroutine(Tooltip.Instance.Activate(title, message, input.MousePosition()));
+        //StartCoroutine(Tooltip.Instance.Activate(title, message, input.MousePosition()));
     }
 }

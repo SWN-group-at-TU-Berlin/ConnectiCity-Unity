@@ -31,6 +31,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI dialogueBoxText;
     [SerializeField] RectTransform arrow;
     [SerializeField] GameObject animatedArrow;
+    [SerializeField] GameObject skipTutorialButton;
 
 
     int i = 0;
@@ -38,6 +39,7 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         UIManager.Instance.DeactivateButtons();
+        UIManager.Instance.ActivateTutorialMode();
         SwithcTutorialPanels();
     }
 
@@ -91,11 +93,13 @@ public class TutorialManager : MonoBehaviour
         }
         else if (tutroialObjectsSetups[i].tutorialPanelNumber == 3)
         {
+            //Swap all of this with SkipTutorial()
             UIManager.Instance.ActivateButtons();
             UIManager.Instance.DeactivateTutorialMode();
             tutorialOpaquePanel.gameObject.SetActive(false);
             arrow.gameObject.SetActive(false);
             dialogueBoxRect.gameObject.SetActive(false);
+            skipTutorialButton.SetActive(false);
         }
         else if (i < tutroialObjectsSetups.Count - 1)
         {
@@ -137,6 +141,17 @@ public class TutorialManager : MonoBehaviour
         destination.localScale = toCopy.localScale;
         destination.rotation = toCopy.rotation;
         ;
+    }
+
+    public void SkipTutorial()
+    {
+        UIManager.Instance.ActivateButtons();
+        UIManager.Instance.DeactivateTutorialMode();
+        tutorialOpaquePanel.gameObject.SetActive(false);
+        arrow.gameObject.SetActive(false);
+        animatedArrow.gameObject.SetActive(false);
+        dialogueBoxRect.gameObject.SetActive(false);
+        skipTutorialButton.SetActive(false);
     }
 }
 

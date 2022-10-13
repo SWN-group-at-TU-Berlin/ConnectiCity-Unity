@@ -64,7 +64,7 @@ public class Tooltip : MonoBehaviour
     {
         if (!activated)
         {
-            animator.Play("TooltipDisappear");
+            //animator.Play("TooltipDisappear");
         }
     }
 }

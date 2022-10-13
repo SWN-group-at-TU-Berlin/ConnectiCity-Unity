@@ -1252,6 +1252,11 @@ public class UIManager : MonoBehaviour
     {
         _tutorialOn = false;
     }
+
+    public void ActivateTutorialMode()
+    {
+        _tutorialOn = true;
+    }
 }
 
 public enum UIState

@@ -162,7 +162,7 @@ public class InfrastructureBuilder : MonoBehaviour
 
         if (SelectedInfrastructure.Equals(InfrastructureType.Building))
         {
-            if (SelectedSubcatchment.SubcatchmentNumber.Equals(7))
+            if (SelectedSubcatchment.SubcatchmentNumber.Equals(7) && UIManager.Instance.TutorialOn)
             {
                 TutorialManager.Instance.DeactivateArrow();
                 TutorialManager.Instance.SwithcTutorialPanels();
