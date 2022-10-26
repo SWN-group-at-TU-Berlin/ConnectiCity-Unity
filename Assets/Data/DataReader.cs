@@ -17,6 +17,8 @@ public class DataReader : MonoBehaviour
     [SerializeField] TextAsset buildingCostsTable;
     [SerializeField] TextAsset subcatchmentBenefitsTable;
     [SerializeField] TextAsset subcatchmentRainDistributionTable;
+    [SerializeField] TextAsset streetsFullCapacityTable;
+    [SerializeField] TextAsset streetsLengthTable;
     [SerializeField] TextAsset actionPointsTable;//CHECK IF DEPRECATED
     [SerializeField] TextAsset incomeBenefitTable;//CHECK IF DEPRECATED
     [SerializeField] TextAsset citizenSatisfactionBenefitTable;//CHECK IF DEPRECATED
@@ -77,6 +79,16 @@ public class DataReader : MonoBehaviour
     public Dictionary<int, float> RainPerRoundDictionary { get { return rainPerRoundDictionary; } }
     #endregion
 
+    Dictionary<int, float> streetsFullCapacity;
+    #region getter
+    public Dictionary<int, float> StreetsFullCapacity { get { return streetsFullCapacity; } }
+    #endregion
+
+    Dictionary<int, float> streetsLength;
+    #region getter
+    public Dictionary<int, float> StreetsLength { get { return streetsLength; } }
+    #endregion
+
     private void Awake()
     {
         //SINGLETON
@@ -95,6 +107,8 @@ public class DataReader : MonoBehaviour
         runoffsDictionaries = new Dictionary<int, Dictionary<SubcatchmentKey, float>>();
         buildingCosts = new Dictionary<SubcatchmentKey, float>();
         subcatchmentsAreas = new Dictionary<int, float>();
+        streetsFullCapacity = new Dictionary<int, float>();
+        streetsLength = new Dictionary<int, float>();
         subcatchmentsBenefits = new Dictionary<int, float>();
         subcatchmentsRainDistributionDictionary = new Dictionary<int, float>();
         rainPerRoundDictionary = new Dictionary<int, float>();
@@ -104,6 +118,8 @@ public class DataReader : MonoBehaviour
         subcatchmentsBenefits = PopulateOneValuePerSubcatchmentDictionary(subcatchmentBenefitsTable);
         subcatchmentsRainDistributionDictionary = PopulateOneValuePerSubcatchmentDictionary(subcatchmentRainDistributionTable);
         rainPerRoundDictionary = PopulateOneValuePerSubcatchmentDictionary(rainPerRoundTable);
+        streetsFullCapacity = PopulateOneValuePerSubcatchmentDictionary(streetsFullCapacityTable);
+        streetsLength = PopulateOneValuePerSubcatchmentDictionary(streetsLengthTable);
         PopulateDictionaryFromRainLevelTables(rainCostsDictionaries, rainCostsTables);
         PopulateDictionaryFromRainLevelTables(runoffReductionPercentagesDictionaries, runoffReductionTables);
         PopulateDictionaryFromRainLevelTables(runoffsDictionaries, runoffsTables);

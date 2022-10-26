@@ -53,6 +53,10 @@ public class Subcatchment : MonoBehaviour
     #region getter
     public bool IsBuilt { get { return _isBuilt; } }
     #endregion
+    bool _publicTransport;
+    #region getter
+    public bool PublicTransport { get { return _publicTransport; } }
+    #endregion
     bool _isHostingBGI;
     #region getter
     public bool IsHostingBGI { get { return _isHostingBGI; } }
