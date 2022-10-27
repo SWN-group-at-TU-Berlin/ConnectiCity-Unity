@@ -52,6 +52,8 @@ public class TrafficManager : MonoBehaviour
 
         streetsFullCapacity = DataReader.Instance.StreetsFullCapacity;
         streetsLengths = DataReader.Instance.StreetsLength;
+
+        InitializeStreetsColor();
     }
 
     public void UpdateTrafficData()
@@ -109,6 +111,7 @@ public class TrafficManager : MonoBehaviour
         trafficModel.CalculateTrafficData(areasInput, floodInput);
         yield return new WaitUntil(() => trafficModel.ResultsReady);
         trafficData = trafficModel.TrafficData;
+        UpdateStreetsColor();
     }
 
     public int GetCarNumberOnStreet(int streetNum)
@@ -142,5 +145,25 @@ public class TrafficManager : MonoBehaviour
             streetCongested = true;
         }
         return streetCongested;
+    }
+
+    void UpdateStreetsColor()
+    {
+        foreach(Street street in MapManager.Instance.GetStreets())
+        {
+            float streetTraffic = trafficData[street.StreetNumber];
+            float streetTrafficRatio = Mathf.Clamp(streetTraffic / (maxTrafficIntensity + 50), 0f, 1f);
+            Color streetColor = gradientExample.Evaluate(streetTrafficRatio);
+            street.SetStreetColor(streetColor);
+        }
+    }
+
+    void InitializeStreetsColor()
+    {
+        foreach (Street street in MapManager.Instance.GetStreets())
+        {
+            Color streetColor = gradientExample.Evaluate(0);
+            street.SetStreetColor(streetColor);
+        }
     }
 }

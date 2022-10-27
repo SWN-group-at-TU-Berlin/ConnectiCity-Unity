@@ -28,6 +28,7 @@ public class MapManager : MonoBehaviour
     #endregion
 
     [SerializeField] List<Subcatchment> _subcatchments;
+    [SerializeField] Transform _streetsParent;
     [SerializeField] int GR100 = 2;
     [SerializeField] int GR75 = 4;
     [SerializeField] int GR50 = 4;
@@ -39,17 +40,17 @@ public class MapManager : MonoBehaviour
     [SerializeField] float lightFatctor;
 
     float lightIntensity;
+    List<Street> _streets;
 
     private void Start()
     {
-        //setup benefits in each subcatchement
-
-        /*//foreach subcatchment
-        foreach (Subcatchment subcat in _subcatchments)
+        //Initialize streets
+        _streets = new List<Street>();
+        foreach(Transform street in _streetsParent)
         {
-            //set subcatchment benefit from dictionary
-            subcat.SubcatchmentBenefit = (int)DataReader.Instance.SubcatchmentsBenefits[subcat.SubcatchmentNumber];
-        }*/
+            _streets.Add(street.gameObject.GetComponent<Street>());
+        }
+
         RandomBGIInitialization();
     }
 
@@ -183,6 +184,11 @@ public class MapManager : MonoBehaviour
         }
 
         return bgisNum;
+    }
+
+    public List<Street> GetStreets()
+    {
+        return _streets;
     }
 
     /*Gives each subcatchment a random gr coverage and rb type*/

@@ -160,7 +160,6 @@ public class TrafficModelController : MonoBehaviour
         Dictionary<int, float> tmpResults = new Dictionary<int, float>();
         foreach (string result in splittedResults)
         {
-            UnityEngine.Debug.Log("single result: " + result);
             string _result = result.Trim(']');
             float numResult = float.Parse(_result);
             tmpResults.Add(i, numResult);
