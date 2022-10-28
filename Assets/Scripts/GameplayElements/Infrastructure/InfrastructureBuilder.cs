@@ -184,6 +184,7 @@ public class InfrastructureBuilder : MonoBehaviour
                 //update hostable spots
                 ResourceManager.Instance.UpdateHostablePeople((int)benefit);
             }
+
         }
         else
         {
@@ -196,6 +197,7 @@ public class InfrastructureBuilder : MonoBehaviour
 
         //update subcat visual
         SelectedSubcatchment.BuildInfrastructureOnSubcatchment(SelectedInfrastructure);
+        TrafficManager.Instance.UpdateTrafficData();
 
         //update income
         ResourceManager.Instance.UpdateIncome();

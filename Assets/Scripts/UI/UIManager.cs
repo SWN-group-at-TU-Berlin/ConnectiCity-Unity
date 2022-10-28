@@ -54,6 +54,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI PopulationDensityText;
     [SerializeField] TextMeshProUGUI UnemploymentPercentageText;
     [SerializeField] TextMeshProUGUI FlashFloodRiskText;
+    [SerializeField] TextMeshProUGUI EmissionsText;
+    [SerializeField] TextMeshProUGUI TrafficText;
     [SerializeField] TextMeshProUGUI RoundText;
 
     [Header("Buttons References")]
@@ -64,6 +66,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject RBButtonDefault;
     [SerializeField] GameObject PPButtonDefault;
     [SerializeField] GameObject RainButton;
+    [SerializeField] GameObject TrafficButton;
 
     //DEPRECATED
     [SerializeField] GameObject houseButtonDown;
@@ -76,6 +79,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject MessageBoard;
     [SerializeField] GameObject InfoTab;
     [SerializeField] GameObject RainInfoTab;
+    [SerializeField] GameObject TrafficInfoTab;
     [SerializeField] GameObject RainDistributionPanel;
     [SerializeField] GameObject RainDistributionGraph;
     [SerializeField] LayerMask UILayer;
@@ -110,6 +114,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider flashFloodRisk;
     [SerializeField] Slider predictedRunoff;
     [SerializeField] Slider actualRunoff;
+    [SerializeField] Slider trafficIntensity;
+    [SerializeField] Slider emissions;
     [SerializeField] TextMeshProUGUI actualPrecipitation;
     [SerializeField] TextMeshProUGUI predictedPrecipitation;
     [SerializeField] float sliderFillingTime = 3f;
@@ -120,6 +126,9 @@ public class UIManager : MonoBehaviour
 
 
     UIState uiState = UIState.Social;
+    #region getter
+     public UIState UIState { get { return uiState; } }
+    #endregion
 
     //Button variables
     List<GameObject> DefaultButtons;
@@ -188,7 +197,7 @@ public class UIManager : MonoBehaviour
             if (input.MouseLeftButton())
             {
                 //if you are not in runoff reduction showing mode
-                if (!_showingRunoffReduction)
+                if (uiState.Equals(UIState.Social))
                 {
                     //then exit the build mode
                     ExitBuildMode();
@@ -200,6 +209,8 @@ public class UIManager : MonoBehaviour
                     {
                         RainInfoTab.SetActive(false);
                     }
+
+                    TrafficInfoTab.SetActive(false);
 
                     // if you are showing the graph
                     if (_showingRainDistributionGraph)
@@ -294,6 +305,26 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ShowTrafficInfoTab(int subcatNum)
+    {
+        //recover current budget
+        float currentBgt = ResourceManager.Instance.BGIbudget;
+
+        //recover pt cost
+        float costExample = 100000;
+
+        //calculate new budget
+        float newBudget = currentBgt - costExample;
+
+        //call traffic info tab update text
+        TrafficInfoTab.SetActive(true);
+        TrafficInfoTab.GetComponent<TrafficInfoTab>().UpdateTexts(
+            MapManager.Instance.GetSubcatchment(subcatNum).CanHostPublicTransport(),
+            subcatNum.ToString(), 
+            currentBgt.ToString("F0"), 
+            costExample.ToString("F0"), 
+            newBudget.ToString("F0"));
+    }
 
     private void EnteringBuildMode(InfrastructureType infrastructureTypeToHandle)
     {
@@ -524,6 +555,8 @@ public class UIManager : MonoBehaviour
     public void UpdatePopulationDensityTxt(string val) { PopulationDensityText.text = val; }
     public void UpdateUnemploymentPercentageTxt(string val) { UnemploymentPercentageText.text = val + "%"; }
     public void UpdateFlashFloodRiskTxt(string val) { FlashFloodRiskText.text = val + "%"; }
+    public void UpdateEmissionsTxt(string val) { EmissionsText.text = val + "kg"; }
+    public void UpdateTrafficTxt(string val) { TrafficText.text = val + "%"; }
     public void UpdateRoundTxt(string val) { RoundText.text = "Round " + val; }
     #endregion
 
@@ -915,6 +948,12 @@ public class UIManager : MonoBehaviour
         UpdateUnemploymentPercentageTxt(unmlpRate.ToString("F2"));
     }
 
+    public void UpdateTrafficSlider(float unmlpRate)
+    {
+        trafficIntensity.value = unmlpRate;
+        UpdateUnemploymentPercentageTxt(unmlpRate.ToString("F2"));
+    }
+
     public void ChangeButtonColorToPressed(Button btn)
     {
         Sprite currentSprite = btn.image.sprite;
@@ -928,15 +967,24 @@ public class UIManager : MonoBehaviour
     {
         if (!uiState.Equals(UIState.Social))
         {
+            if (uiState.Equals(UIState.Rain))
+            {
+                ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
+            }
+            else
+            {
+                ChangeButtonColorToPressed(TrafficButton.GetComponent<Button>());
+            }
             HideRunoffReductions();
             ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
-            ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
             uiState = UIState.Social;
             unemploymentRate.gameObject.SetActive(true);
             populationDensity.gameObject.SetActive(true);
             flashFloodRisk.gameObject.SetActive(false);
             RainDistributionPanel.SetActive(false);
             RainDistributionGraph.SetActive(false);
+            trafficIntensity.gameObject.SetActive(false);
+            emissions.gameObject.SetActive(false);
             _showingRainDistributionGraph = false;
         }
     }
@@ -945,11 +993,20 @@ public class UIManager : MonoBehaviour
     {
         if (!uiState.Equals(UIState.Rain))
         {
+            if (uiState.Equals(UIState.Social))
+            {
+                ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
+            }
+            else
+            {
+                ChangeButtonColorToPressed(TrafficButton.GetComponent<Button>());
+            }
             ExitBuildMode();
             ShowRunoffReductions();
             uiState = UIState.Rain;
-            ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
             ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
+            trafficIntensity.gameObject.SetActive(false);
+            emissions.gameObject.SetActive(false);
             RainDistributionPanel.SetActive(true);
             unemploymentRate.gameObject.SetActive(false);
             populationDensity.gameObject.SetActive(false);
@@ -964,6 +1021,40 @@ public class UIManager : MonoBehaviour
                 Subcatchment subcat = MapManager.Instance.GetSubcatchment(7);
                 ShowRainInfoTab(subcat.SubcatchmentNumber, subcat.BuildStatus, subcat.GetBGIsBuiltOnSubcatchment());
             }
+        }
+    }
+
+    public void TrafficButtonPressed()
+    {
+        if (!uiState.Equals(UIState.Traffic))
+        {
+            if (uiState.Equals(UIState.Social))
+            {
+                ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
+            }
+            else
+            {
+                ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
+            }
+            uiState = UIState.Traffic;
+            ExitBuildMode();
+            HideRunoffReductions();
+            ChangeButtonColorToPressed(TrafficButton.GetComponent<Button>());
+            RainDistributionPanel.SetActive(false);
+            unemploymentRate.gameObject.SetActive(false);
+            populationDensity.gameObject.SetActive(false);
+            flashFloodRisk.gameObject.SetActive(false);
+            trafficIntensity.gameObject.SetActive(true);
+            emissions.gameObject.SetActive(true);
+
+            trafficIntensity.value = TrafficManager.Instance.GetTrafficIntensity();
+            UpdateTrafficTxt(TrafficManager.Instance.GetTrafficIntensityPercentage().ToString("F2"));
+
+            float emissionsVal = TrafficManager.Instance.GetTrafficEmissions();
+            UpdateEmissionsTxt(emissionsVal.ToString("F2"));
+            emissions.value = emissionsVal;
+
+
         }
     }
 

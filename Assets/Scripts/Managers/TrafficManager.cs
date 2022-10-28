@@ -30,7 +30,8 @@ public class TrafficManager : MonoBehaviour
     //source: gooogle sheet "residents+jobs+traffic" -> tab "Traffic"
     [SerializeField] float avgVehicleSize = 4.5f;
     [SerializeField] float maxCarsVelocity = 50f; //in km/h
-    [SerializeField] float maxTrafficIntensity = 300f; //value refers to the values of the py traffic model
+    [SerializeField] float trafficIntensityThreshold = 300f; //value refers to the values of the py traffic model
+    [SerializeField] float maxTrafficIntensity = 502f; //max avarage reachable
     [SerializeField] Gradient gradientExample; //value refers to the values of the py traffic model
     [SerializeField] AnimationCurve avgVehicleEmission;
 
@@ -127,7 +128,7 @@ public class TrafficManager : MonoBehaviour
 
     public float GetCarsVelocityOnStreet(int streetNum)
     {
-        float velocity = maxCarsVelocity / Mathf.Abs(trafficData[streetNum] / streetsFullCapacity[streetNum] - 1);
+        float velocity = maxCarsVelocity * Mathf.Abs(trafficData[streetNum] / streetsFullCapacity[streetNum] - 1);
         return velocity;
     }
 
@@ -140,7 +141,7 @@ public class TrafficManager : MonoBehaviour
     public bool StreetCongested(int streetNum)
     {
         bool streetCongested = false;
-        if(trafficData[streetNum] > maxTrafficIntensity)
+        if(trafficData[streetNum] > trafficIntensityThreshold)
         {
             streetCongested = true;
         }
@@ -152,7 +153,7 @@ public class TrafficManager : MonoBehaviour
         foreach(Street street in MapManager.Instance.GetStreets())
         {
             float streetTraffic = trafficData[street.StreetNumber];
-            float streetTrafficRatio = Mathf.Clamp(streetTraffic / (maxTrafficIntensity + 50), 0f, 1f);
+            float streetTrafficRatio = Mathf.Clamp(streetTraffic / (trafficIntensityThreshold + 50), 0f, 1f);
             Color streetColor = gradientExample.Evaluate(streetTrafficRatio);
             street.SetStreetColor(streetColor);
         }
@@ -165,5 +166,39 @@ public class TrafficManager : MonoBehaviour
             Color streetColor = gradientExample.Evaluate(0);
             street.SetStreetColor(streetColor);
         }
+    }
+
+    public float GetTrafficIntensity()
+    {
+        float trafficIntenstiyRaw = 0;
+        for(int i = 1; i <= trafficData.Count; i++)
+        {
+            trafficIntenstiyRaw += trafficData[i];
+        }
+        return trafficIntenstiyRaw / trafficData.Count;
+    }
+
+    public float GetTrafficIntensityPercentage()
+    {
+        float trafficIntenstiyRaw = 0;
+        for (int i = 1; i <= trafficData.Count; i++)
+        {
+            trafficIntenstiyRaw += trafficData[i];
+        }
+        float trafficPercentage = ((trafficIntenstiyRaw / trafficData.Count) / maxTrafficIntensity)*100;
+        return trafficPercentage;
+    }
+
+    public float GetTrafficEmissions()
+    {
+        float trafficEmissions = 0;
+        for (int i = 1; i <= trafficData.Count; i++)
+        {
+            float numberOfCars = GetCarNumberOnStreet(i);
+            trafficEmissions += GetEmissionOnStreet(i)*numberOfCars*streetsLengths[i];
+        }
+
+        //convert from g to kg
+        return trafficEmissions/1000;
     }
 }

@@ -65,6 +65,10 @@ public class Subcatchment : MonoBehaviour
     #region getter
     public bool IsHighlighted { get { return _isHighlighted; } }
     #endregion
+    bool _isHostingPt = false;
+    #region getter
+    public bool IsHostingPublicTransport { get { return _isHostingPt; } }
+    #endregion
 
     Outline outline;
 
@@ -96,13 +100,6 @@ public class Subcatchment : MonoBehaviour
     private void Start()
     {
         _subcatchmentBenefit = (int)DataReader.Instance.SubcatchmentsBenefits[_subcatchmentNumber];
-        /*if (SubcatchmentNumber == 7)
-        {
-            InfrastructureBuilder.Instance.SelectedInfrastructure = InfrastructureType.Building;
-            InfrastructureBuilder.Instance.SelectedSubcatchment = this;
-            InfrastructureBuilder.Instance.BuildInfrastructure();
-            _buildStatus = BuildStatus.Built;
-        }*/
     }
 
     private void OnEnable()
@@ -123,7 +120,7 @@ public class Subcatchment : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(input.MousePosition());
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.transform.gameObject.tag.Equals("Subcatchment") && hit.transform.gameObject.name.Equals("SC" + SubcatchmentNumber) && (IsHighlighted || UIManager.Instance.ShowingRunoffReduction))
+            if (hit.transform.gameObject.tag.Equals("Subcatchment") && hit.transform.gameObject.name.Equals("SC" + SubcatchmentNumber) && (IsHighlighted || !UIManager.Instance.UIState.Equals(UIState.Social)))
             {
                 if (!IsHovered)
                 {
@@ -138,7 +135,15 @@ public class Subcatchment : MonoBehaviour
                     }
                     else
                     {
-                        UIManager.Instance.ShowRainInfoTab(_subcatchmentNumber, _buildStatus, GetBGIsBuiltOnSubcatchment());
+                        if (UIManager.Instance.UIState.Equals(UIState.Rain))
+                        {
+                            UIManager.Instance.ShowRainInfoTab(_subcatchmentNumber, _buildStatus, GetBGIsBuiltOnSubcatchment());
+                        }
+                        else
+                        {
+                            //show TrafficInfoTab
+                            UIManager.Instance.ShowTrafficInfoTab(_subcatchmentNumber);
+                        }
                     }
                 }
             }
@@ -417,7 +422,7 @@ public class Subcatchment : MonoBehaviour
             if (!newBuildStatus.Equals(_buildStatus))
             {
                 newBGIReduction = RainEventsManager.Instance.GetRunoffReductionPercentage(RainEventsManager.Instance.CurrentRainIntensity, _subcatchmentNumber, NewBuildStatus(buildStatus));
-                newBGIReduction = newBGIReduction -currentBGIReduction;
+                newBGIReduction = newBGIReduction - currentBGIReduction;
             }
             benefit = newBGIReduction;
         }
@@ -640,5 +645,10 @@ public class Subcatchment : MonoBehaviour
             }
         }
         return hostedBGIs;
+    }
+
+    public bool CanHostPublicTransport()
+    {
+        return IsBuilt && !_isHostingPt;
     }
 }
