@@ -113,6 +113,8 @@ public class TrafficManager : MonoBehaviour
         yield return new WaitUntil(() => trafficModel.ResultsReady);
         trafficData = trafficModel.TrafficData;
         UpdateStreetsColor();
+        UIManager.Instance.UpdateTrafficSlider();
+        UIManager.Instance.UpdateEmissionSlider();
     }
 
     public int GetCarNumberOnStreet(int streetNum)

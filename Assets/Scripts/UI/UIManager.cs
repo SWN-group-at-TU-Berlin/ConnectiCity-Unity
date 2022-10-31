@@ -311,7 +311,7 @@ public class UIManager : MonoBehaviour
         float currentBgt = ResourceManager.Instance.BGIbudget;
 
         //recover pt cost
-        float costExample = 100000;
+        float costExample = CostsManager.Instance.TransportCosts[subcatNum];
 
         //calculate new budget
         float newBudget = currentBgt - costExample;
@@ -324,6 +324,11 @@ public class UIManager : MonoBehaviour
             currentBgt.ToString("F0"), 
             costExample.ToString("F0"), 
             newBudget.ToString("F0"));
+    }
+
+    public void HideTrafficInfoTab()
+    {
+        TrafficInfoTab.SetActive(false);
     }
 
     private void EnteringBuildMode(InfrastructureType infrastructureTypeToHandle)
@@ -948,10 +953,10 @@ public class UIManager : MonoBehaviour
         UpdateUnemploymentPercentageTxt(unmlpRate.ToString("F2"));
     }
 
-    public void UpdateTrafficSlider(float unmlpRate)
+    public void UpdateTrafficSlider()
     {
-        trafficIntensity.value = unmlpRate;
-        UpdateUnemploymentPercentageTxt(unmlpRate.ToString("F2"));
+        trafficIntensity.value = TrafficManager.Instance.GetTrafficIntensity();
+        UpdateTrafficTxt(TrafficManager.Instance.GetTrafficIntensityPercentage().ToString("F2"));
     }
 
     public void ChangeButtonColorToPressed(Button btn)
@@ -985,6 +990,7 @@ public class UIManager : MonoBehaviour
             RainDistributionGraph.SetActive(false);
             trafficIntensity.gameObject.SetActive(false);
             emissions.gameObject.SetActive(false);
+            TrafficInfoTab.SetActive(false);
             _showingRainDistributionGraph = false;
         }
     }
@@ -1011,6 +1017,7 @@ public class UIManager : MonoBehaviour
             unemploymentRate.gameObject.SetActive(false);
             populationDensity.gameObject.SetActive(false);
             flashFloodRisk.gameObject.SetActive(true);
+            TrafficInfoTab.SetActive(false);
             flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateTotalRunoff(), 0f, flashFloodRiskSliderCap);
             UpdateFlashFloodRiskTxt(RainEventsManager.Instance.CalculateFlashFloorRisk().ToString("F2"));
 
@@ -1047,15 +1054,18 @@ public class UIManager : MonoBehaviour
             trafficIntensity.gameObject.SetActive(true);
             emissions.gameObject.SetActive(true);
 
-            trafficIntensity.value = TrafficManager.Instance.GetTrafficIntensity();
-            UpdateTrafficTxt(TrafficManager.Instance.GetTrafficIntensityPercentage().ToString("F2"));
+            UpdateTrafficSlider();
 
-            float emissionsVal = TrafficManager.Instance.GetTrafficEmissions();
-            UpdateEmissionsTxt(emissionsVal.ToString("F2"));
-            emissions.value = emissionsVal;
-
+            UpdateEmissionSlider();
 
         }
+    }
+
+    public void UpdateEmissionSlider()
+    {
+        float emissionsVal = TrafficManager.Instance.GetTrafficEmissions();
+        UpdateEmissionsTxt(emissionsVal.ToString("F2"));
+        emissions.value = emissionsVal;
     }
 
     public void ShowRainInfoTab(int subcatNumber, BuildStatus subcatBuildStatus, Dictionary<InfrastructureType, BuildStatus> bgisBuilt)

@@ -56,6 +56,11 @@ public class CostsManager : MonoBehaviour
     public Dictionary<SubcatchmentKey, float> ActionPointsCosts { get { return actionPoints; } }
     #endregion
 
+    Dictionary<int, float> transportCosts;
+    #region getter
+    public Dictionary<int, float> TransportCosts { get { return transportCosts; } }
+    #endregion
+
     /*Dictionaries of data
      * citizen satisfaction loss
      */
@@ -75,6 +80,7 @@ public class CostsManager : MonoBehaviour
         buildingCosts = DataReader.Instance.BuildingCosts;
         benefits = DataReader.Instance.Benefits;
         actionPoints = DataReader.Instance.ActionPointsCosts;
+        transportCosts = DataReader.Instance.TransportationCosts;
     }
 
     public float GetSubcatchmentRainCost(int rainLv, int subcatchmentNumber, BuildStatus subcatchmentBuildStatus)

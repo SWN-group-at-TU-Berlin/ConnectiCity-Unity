@@ -148,6 +148,15 @@ public class InfrastructureBuilder : MonoBehaviour
         isBuilding = false;
     }
 
+    public void BuildPublicTransportOnSubcatchment()
+    {
+        float subcatPtCost = CostsManager.Instance.TransportCosts[SelectedSubcatchment.SubcatchmentNumber];
+        SelectedSubcatchment.PublicTransport = true;
+        ResourceManager.Instance.UpdateBGIBudget((int)subcatPtCost);
+        TrafficManager.Instance.UpdateTrafficData();
+        UIManager.Instance.HideTrafficInfoTab();
+    }
+
     public void BuildInfrastructure()
     {
         //recover infrastructure to build

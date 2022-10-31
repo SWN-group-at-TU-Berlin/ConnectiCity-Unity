@@ -55,7 +55,11 @@ public class Subcatchment : MonoBehaviour
     #endregion
     bool _publicTransport;
     #region getter
-    public bool PublicTransport { get { return _publicTransport; } }
+    public bool PublicTransport
+    {
+        get { return _publicTransport; }
+        set { _publicTransport = value; }
+    }
     #endregion
     bool _isHostingBGI;
     #region getter
@@ -64,10 +68,6 @@ public class Subcatchment : MonoBehaviour
     bool _isHighlighted;
     #region getter
     public bool IsHighlighted { get { return _isHighlighted; } }
-    #endregion
-    bool _isHostingPt = false;
-    #region getter
-    public bool IsHostingPublicTransport { get { return _isHostingPt; } }
     #endregion
 
     Outline outline;
@@ -143,6 +143,7 @@ public class Subcatchment : MonoBehaviour
                         {
                             //show TrafficInfoTab
                             UIManager.Instance.ShowTrafficInfoTab(_subcatchmentNumber);
+                            InfrastructureBuilder.Instance.SelectedSubcatchment = this;
                         }
                     }
                 }
@@ -649,6 +650,6 @@ public class Subcatchment : MonoBehaviour
 
     public bool CanHostPublicTransport()
     {
-        return IsBuilt && !_isHostingPt;
+        return IsBuilt && !_publicTransport;
     }
 }

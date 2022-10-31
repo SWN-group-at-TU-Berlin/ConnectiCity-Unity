@@ -97,10 +97,10 @@ public class TrafficModelController : MonoBehaviour
         var errors = "";
         _results = "";
 
-        using (var process = Process.Start(psi))
+        using(var process = Process.Start(psi))
         {
-            errors = process.StandardError.ReadToEnd();
-            _results = process.StandardOutput.ReadToEnd();
+            errors =  process.StandardError.ReadToEnd();
+            _results =  process.StandardOutput.ReadToEnd();
         }
 
         UnityEngine.Debug.Log("ERRORS:");

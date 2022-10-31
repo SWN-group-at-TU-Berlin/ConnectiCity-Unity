@@ -19,6 +19,7 @@ public class DataReader : MonoBehaviour
     [SerializeField] TextAsset subcatchmentRainDistributionTable;
     [SerializeField] TextAsset streetsFullCapacityTable;
     [SerializeField] TextAsset streetsLengthTable;
+    [SerializeField] TextAsset transportationCosts;
     [SerializeField] TextAsset actionPointsTable;//CHECK IF DEPRECATED
     [SerializeField] TextAsset incomeBenefitTable;//CHECK IF DEPRECATED
     [SerializeField] TextAsset citizenSatisfactionBenefitTable;//CHECK IF DEPRECATED
@@ -89,6 +90,12 @@ public class DataReader : MonoBehaviour
     public Dictionary<int, float> StreetsLength { get { return streetsLength; } }
     #endregion
 
+    Dictionary<int, float> _transportationCosts;
+    #region getter
+    public Dictionary<int, float> TransportationCosts { get { return _transportationCosts; } }
+    #endregion
+
+
     private void Awake()
     {
         //SINGLETON
@@ -112,10 +119,12 @@ public class DataReader : MonoBehaviour
         subcatchmentsBenefits = new Dictionary<int, float>();
         subcatchmentsRainDistributionDictionary = new Dictionary<int, float>();
         rainPerRoundDictionary = new Dictionary<int, float>();
+        _transportationCosts = new Dictionary<int, float>();
         benefits = new Dictionary<Benefit, Dictionary<SubcatchmentKey, float>>();
 
         //Dictionaries population
         subcatchmentsBenefits = PopulateOneValuePerSubcatchmentDictionary(subcatchmentBenefitsTable);
+        _transportationCosts = PopulateOneValuePerSubcatchmentDictionary(transportationCosts);
         subcatchmentsRainDistributionDictionary = PopulateOneValuePerSubcatchmentDictionary(subcatchmentRainDistributionTable);
         rainPerRoundDictionary = PopulateOneValuePerSubcatchmentDictionary(rainPerRoundTable);
         streetsFullCapacity = PopulateOneValuePerSubcatchmentDictionary(streetsFullCapacityTable);
