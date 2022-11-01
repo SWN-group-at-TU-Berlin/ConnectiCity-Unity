@@ -152,6 +152,7 @@ public class InfrastructureBuilder : MonoBehaviour
     {
         float subcatPtCost = CostsManager.Instance.TransportCosts[SelectedSubcatchment.SubcatchmentNumber];
         SelectedSubcatchment.PublicTransport = true;
+        SelectedSubcatchment.ShowPublicTransport();
         ResourceManager.Instance.UpdateBGIBudget((int)subcatPtCost);
         TrafficManager.Instance.UpdateTrafficData();
         UIManager.Instance.HideTrafficInfoTab();

@@ -347,6 +347,12 @@ public class Subcatchment : MonoBehaviour
         ShowInfrastructure(infrastructureStr);
     }
 
+
+    public void ShowPublicTransport()
+    {
+        ShowInfrastructure("PT");
+    }
+
     public bool CanHostBGI(InfrastructureType BGI)
     {
         bool canHostBGI = false;
