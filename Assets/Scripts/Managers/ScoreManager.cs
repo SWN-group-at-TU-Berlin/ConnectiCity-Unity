@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -52,8 +50,13 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] float midThresholdUR2;
     [SerializeField] float maxThresholdUR;
 
-    [Header("Unemployment rate")]
-    bool flashFlood;
+    [Header("Emissions threshold")]
+    [SerializeField] float maxEmissions = 1;
+
+    [Header("Traffic threshold")]
+    [SerializeField] float maxTrafficIntensityPercentage = 40;
+
+
 
     //int = round; 
     Dictionary<int, RoundSnapshot> RoundsSnapshots;
@@ -98,6 +101,12 @@ public class ScoreManager : MonoBehaviour
 
         //Flash flood update
         roundSnap.Stats.Add(UpdateFlashFloodScore());
+
+        //Emissions
+        roundSnap.Stats.Add(UpdateEmissionScore());
+
+        //Traffic
+        roundSnap.Stats.Add(UpdateTrafficScore());
 
         //if final round, calculate final budget score
         if(RoundManager.Instance.CurrentRound == 11)
@@ -241,6 +250,59 @@ public class ScoreManager : MonoBehaviour
         FinalBudget.environmentalScore = environmentFinalBudget;
 
         return FinalBudget;
+    }
+
+    public GameStat UpdateEmissionScore()
+    {
+        GameStat Emissions = new GameStat();
+        float socialEmission = 0;
+        float economicEmission = 0;
+        float environmentEmission = 0;
+        float val = TrafficManager.Instance.GetTrafficEmissions();
+
+        if (val < maxEmissions)
+        {
+            environmentEmission = 1;
+        }
+        else
+        {
+            environmentEmission = -1;
+            socialEmission = -1f;
+        }
+
+        Emissions.name = "Emissions";
+        Emissions.value = val.ToString("F2") + "kg";
+        Emissions.socialScore = socialEmission;
+        Emissions.economicScore = economicEmission;
+        Emissions.environmentalScore = environmentEmission;
+
+        return Emissions;
+    }
+
+    public GameStat UpdateTrafficScore()
+    {
+        GameStat Traffic = new GameStat();
+        float socialTraffic = 0;
+        float economicTraffic = 0;
+        float environmentTraffic = 0;
+        float val = TrafficManager.Instance.GetTrafficIntensityPercentage();
+
+        if (val < maxTrafficIntensityPercentage)
+        {
+            socialTraffic = 1;
+        }
+        else
+        {
+            socialTraffic = -1;
+        }
+
+        Traffic.name = "Traffic Intensity";
+        Traffic.value = val.ToString("F2") + "%";
+        Traffic.socialScore = socialTraffic;
+        Traffic.economicScore = economicTraffic;
+        Traffic.environmentalScore = environmentTraffic;
+
+        return Traffic;
     }
 
     public void UpdatePopulationDensity()
