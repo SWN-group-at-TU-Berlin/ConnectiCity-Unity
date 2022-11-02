@@ -170,7 +170,6 @@ public class RainEventsManager : MonoBehaviour
     public void UpdateTotalRunoff()
     {
         totalRunoff = CalculateTotalRunoff();
-        Debug.Log("Total runoff: " + TotalRunoff);
     }
 
     public float CalculateFlashFloorRisk()

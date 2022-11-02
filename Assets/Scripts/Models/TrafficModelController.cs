@@ -63,7 +63,15 @@ public class TrafficModelController : MonoBehaviour
         else if (osSystemVariable == 2)
         {
             m_path = System.IO.Directory.GetParent(Application.dataPath).FullName;
-            string[] FileNamePath = { m_path, "ConnectiCity-TrafficModel/venv/bin/python3.8" };
+
+            //path manupulation to delete the .app folder from m_path
+            string[] pathToClean = m_path.Split('/');
+            List<string> arrayPathToClean = new List<string>(pathToClean);
+            arrayPathToClean.RemoveAt(arrayPathToClean.Count - 1);
+            string[] cleanArrayPath = arrayPathToClean.ToArray();
+            m_path = string.Join("/", cleanArrayPath);
+
+            string[] FileNamePath = { m_path, "ConnectiCity-TrafficModel/venv/bin/python3" };
             psi.FileName = string.Join("/", FileNamePath);
         }
         else if (osSystemVariable == 3)
@@ -83,6 +91,7 @@ public class TrafficModelController : MonoBehaviour
             string[] tmp = { m_path, "ConnectiCity-TrafficModel/main.py" };
             ScriptPath = tmp;
             script = string.Join("/", ScriptPath);
+        
         }
 
         psi.Arguments = $"{script} --areas {areas} --flooding {flooding}";
@@ -191,10 +200,6 @@ public class TrafficModelController : MonoBehaviour
         int zeros = areas.Count(x => x.Equals('0'));
         int ones = areas.Count(x => x.Equals('1'));
         int twos = areas.Count(x => x.Equals('2'));
-        UnityEngine.Debug.Log("Commas:" + commas);
-        UnityEngine.Debug.Log("Zeros:" + zeros);
-        UnityEngine.Debug.Log("Ones:" + ones);
-        UnityEngine.Debug.Log("Twos:" + twos);
         bool areasChecks = false;
         if (commas == 11 && (zeros + ones + twos) == 12)
         {
