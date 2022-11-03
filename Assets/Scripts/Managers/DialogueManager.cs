@@ -30,6 +30,10 @@ public class DialogueManager : MonoBehaviour
     public bool dialogueIsPlaying { get; private set; }
 
     private bool canContinueToNextLine = false;
+    private bool introPlaying = false;
+    #region getter
+    public bool IntroPlaying { get { return introPlaying; } }
+    #endregion
 
     private static DialogueManager instance;
 
@@ -38,6 +42,7 @@ public class DialogueManager : MonoBehaviour
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
     private const string LAYOUT_TAG = "layout";
+    private const string INTRO_TAG = "intro";
 
     private void Awake()
     {
@@ -222,6 +227,9 @@ public class DialogueManager : MonoBehaviour
                     break;
                 case LAYOUT_TAG:
                     layoutAnimator.Play(tagValue);
+                    break;
+                case INTRO_TAG:
+                    introPlaying = tagValue.Equals("true");
                     break;
                 default:
                     Debug.LogWarning("Tag came in but is not currently being handled: " + tag);
