@@ -1348,7 +1348,6 @@ public class UIManager : MonoBehaviour
         _tutorialOn = true;
         InfrasructureButton.GetComponent<Button>().enabled = true;
     }
-
     public void ActivateRainButton()
     {
         _tutorialOn = true;

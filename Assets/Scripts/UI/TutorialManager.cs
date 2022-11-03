@@ -32,7 +32,11 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] RectTransform arrow;
     [SerializeField] GameObject animatedArrow;
     [SerializeField] GameObject skipTutorialButton;
+    [SerializeField] Animator tutorialAnimator;
 
+    [SerializeField] TextAsset tutorialPart1;
+    [SerializeField] TextAsset tutorialPart2;
+    [SerializeField] TextAsset tutorialPart3;
 
     int i = 0;
 
@@ -40,7 +44,8 @@ public class TutorialManager : MonoBehaviour
     {
         UIManager.Instance.DeactivateButtons();
         UIManager.Instance.ActivateTutorialMode();
-        SwithcTutorialPanels();
+        //SwithcTutorialPanels();
+        DialogueManager.GetInstance().EnterDialogueMode(tutorialPart1);
     }
 
     public void SwithcTutorialPanels()
@@ -60,12 +65,9 @@ public class TutorialManager : MonoBehaviour
 
         if (tutroialObjectsSetups[i].tutorialPanelNumber == 1)
         {
-            UIManager.Instance.ActivateTutorialInfrastructureButton();
-            animatedArrow.SetActive(true);
-            animatedArrow.GetComponent<Animator>().Play("PointInfrastructureButton", 0, 0f);
+            BuildCommercialSubcatchmentTutorial();
             tutorialOpaquePanel.gameObject.SetActive(false);
             arrow.gameObject.SetActive(false);
-            dialogueBoxRect.gameObject.SetActive(false);
             i++;
         }
         else if (tutroialObjectsSetups[i].tutorialPanelNumber == 2)
@@ -105,6 +107,13 @@ public class TutorialManager : MonoBehaviour
         {
             i++;
         }
+    }
+
+    public void BuildCommercialSubcatchmentTutorial()
+    {
+        UIManager.Instance.ActivateTutorialInfrastructureButton();
+        animatedArrow.SetActive(true);
+        animatedArrow.GetComponent<Animator>().Play("PointInfrastructureButton", 0, 0f);
     }
 
     public void ArrowPointInfrastructureButton()
@@ -152,6 +161,18 @@ public class TutorialManager : MonoBehaviour
         animatedArrow.gameObject.SetActive(false);
         dialogueBoxRect.gameObject.SetActive(false);
         skipTutorialButton.SetActive(false);
+    }
+
+
+    public void TutorialCutoutSetActive(bool status)
+    {
+        tutorialOpaquePanel.gameObject.SetActive(status);
+    }
+
+
+    public void PlayAnimation(string anim)
+    {
+        tutorialAnimator.Play(anim, 0, 0f);
     }
 }
 

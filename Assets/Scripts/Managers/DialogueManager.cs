@@ -43,6 +43,9 @@ public class DialogueManager : MonoBehaviour
     private const string PORTRAIT_TAG = "portrait";
     private const string LAYOUT_TAG = "layout";
     private const string INTRO_TAG = "intro";
+    private const string TUTORIAL_ANIMATOR_TAG = "animation";
+    private const string TUTORIAL_SUBCATCHMENT_TAG = "subcatchment";
+    private const string TUTORIAL_CUTOUT_TAG = "cutout";
 
     private void Awake()
     {
@@ -230,6 +233,18 @@ public class DialogueManager : MonoBehaviour
                     break;
                 case INTRO_TAG:
                     introPlaying = tagValue.Equals("true");
+                    break;
+                case TUTORIAL_ANIMATOR_TAG:
+                    TutorialManager.Instance.PlayAnimation(tagValue);
+                    break;
+                case TUTORIAL_SUBCATCHMENT_TAG:
+                    if (tagValue.Equals("build"))
+                    {
+                        TutorialManager.Instance.BuildCommercialSubcatchmentTutorial();
+                    }
+                    break;
+                case TUTORIAL_CUTOUT_TAG:
+                    TutorialManager.Instance.TutorialCutoutSetActive(tagValue.Equals("active"));
                     break;
                 default:
                     Debug.LogWarning("Tag came in but is not currently being handled: " + tag);
