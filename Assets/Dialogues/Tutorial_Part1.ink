@@ -31,4 +31,4 @@ Here we can also see the impact of the different metrics on the overall score.
 Alright, I am curious to see what kind of plan you can come up with! Let’s get to work!#layout:Right #portrait:Mayor #speaker:Mayor Connie #animation:pt1_start
 
 I think I will start from the housing for the citizens#layout:Left #portrait:Consultant #speaker:Consultant 
-Let me show you how to construct buildings in this software...#subcatchment:build #cutout:notActive
+Let me show you how to construct buildings on <color=\#63C3FF>commercial subcatchments</color> in this software...#subcatchment:build #cutout:notActive

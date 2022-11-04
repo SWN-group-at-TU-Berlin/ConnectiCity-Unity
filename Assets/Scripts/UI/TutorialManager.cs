@@ -21,6 +21,12 @@ public class TutorialManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        tutorialDialoguesQ = new Queue<TextAsset>();
+        foreach (TextAsset dialogue in tutorialDialoguesL)
+        {
+            tutorialDialoguesQ.Enqueue(dialogue);
+        }
     }
     #endregion
 
@@ -34,18 +40,24 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject skipTutorialButton;
     [SerializeField] Animator tutorialAnimator;
 
-    [SerializeField] TextAsset tutorialPart1;
-    [SerializeField] TextAsset tutorialPart2;
-    [SerializeField] TextAsset tutorialPart3;
+    [SerializeField] List<TextAsset> tutorialDialoguesL;
+
+    Queue<TextAsset> tutorialDialoguesQ;
 
     int i = 0;
+
 
     private void Start()
     {
         UIManager.Instance.DeactivateButtons();
         UIManager.Instance.ActivateTutorialMode();
         //SwithcTutorialPanels();
-        DialogueManager.GetInstance().EnterDialogueMode(tutorialPart1);
+        NextTutorialDialogue();
+    }
+
+    public void NextTutorialDialogue()
+    {
+        DialogueManager.GetInstance().EnterDialogueMode(tutorialDialoguesQ.Dequeue());
     }
 
     public void SwithcTutorialPanels()

@@ -46,6 +46,8 @@ public class DialogueManager : MonoBehaviour
     private const string TUTORIAL_ANIMATOR_TAG = "animation";
     private const string TUTORIAL_SUBCATCHMENT_TAG = "subcatchment";
     private const string TUTORIAL_CUTOUT_TAG = "cutout";
+    private const string UI_TUTORIAL_FLAG_TAG = "tutorial";
+    private const string UI_BUTTON_TAG = "buttons";
 
     private void Awake()
     {
@@ -245,6 +247,27 @@ public class DialogueManager : MonoBehaviour
                     break;
                 case TUTORIAL_CUTOUT_TAG:
                     TutorialManager.Instance.TutorialCutoutSetActive(tagValue.Equals("active"));
+                    break;
+                case UI_BUTTON_TAG:
+                    if (tagValue.Equals("enable"))
+                    {
+                        UIManager.Instance.ActivateButtons();
+                    }
+                    else
+                    {
+                        UIManager.Instance.DeactivateButtons();
+                    }
+                    break;
+                case UI_TUTORIAL_FLAG_TAG:
+                    if (tagValue.Equals("on"))
+                    {
+                        UIManager.Instance.ActivateTutorialMode();
+                    }
+                    else
+                    {
+
+                        UIManager.Instance.DeactivateTutorialMode();
+                    }
                     break;
                 default:
                     Debug.LogWarning("Tag came in but is not currently being handled: " + tag);

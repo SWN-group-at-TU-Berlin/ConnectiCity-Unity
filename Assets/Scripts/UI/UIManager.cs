@@ -1024,7 +1024,6 @@ public class UIManager : MonoBehaviour
             //call next tutorial panel
             if (_tutorialOn)
             {
-                TutorialManager.Instance.SwithcTutorialPanels();
                 Subcatchment subcat = MapManager.Instance.GetSubcatchment(7);
                 ShowRainInfoTab(subcat.SubcatchmentNumber, subcat.BuildStatus, subcat.GetBGIsBuiltOnSubcatchment());
             }
