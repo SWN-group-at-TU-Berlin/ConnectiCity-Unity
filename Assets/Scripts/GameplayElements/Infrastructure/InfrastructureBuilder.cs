@@ -215,15 +215,17 @@ public class InfrastructureBuilder : MonoBehaviour
         //Dehighlight subcat
         MapManager.Instance.DehighlightBuildableSubcatchments();
 
-
-        //reset selected infra
-        ResetSelectedInfrastructure();
-
         //exit build mode
         UIManager.Instance.ExitBuildMode();
         //Dehighlight subcat
         MapManager.Instance.DehighlightBuildableSubcatchments();
         //reset selected infra
         ResetSelectedInfrastructure();
+        ResetSelectedSubcatchment();
+    }
+
+    public void ResetSelectedSubcatchment()
+    {
+        SelectedSubcatchment = null;
     }
 }

@@ -50,6 +50,10 @@ public class RoundManager : MonoBehaviour
 
         _currentRound++;
         UIManager.Instance.ActivateButtons();
+        if(TutorialManager.Instance.TutorialDialogue == 3)
+        {
+            TutorialManager.Instance.NextTutorialDialogue();
+        }
         if (_currentRound <= 10)
         {
             UIManager.Instance.UpdateRoundTxt(CurrentRound.ToString());

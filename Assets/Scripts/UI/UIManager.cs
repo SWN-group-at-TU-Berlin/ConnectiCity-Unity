@@ -333,6 +333,12 @@ public class UIManager : MonoBehaviour
 
     private void EnteringBuildMode(InfrastructureType infrastructureTypeToHandle)
     {
+        if((TutorialManager.Instance.TutorialDialogue <= 2 && !infrastructureTypeToHandle.Equals(InfrastructureType.Building))
+            || TutorialManager.Instance.TutorialDialogue == 3)
+        {
+            TutorialManager.Instance.HanldePlayer();
+            return;
+        }
         //infrastructure type button pressed is null if you exited build mode without switching between infrastructure an bgis
         if (infrastructureTypeButtonPressed.Equals(InfrastructureType.Null) || infrastructureTypeButtonPressed.Equals(infrastructureTypeToHandle))
         {
@@ -397,6 +403,7 @@ public class UIManager : MonoBehaviour
         HideInfoPanels();
         HideInfoTab();
         infrastructureTypeButtonPressed = InfrastructureType.Null;
+        InfrastructureBuilder.Instance.ResetSelectedSubcatchment();
     }
 
     //DRPRECATED
@@ -997,6 +1004,11 @@ public class UIManager : MonoBehaviour
 
     public void RainButtonPressed()
     {
+        if(TutorialManager.Instance.TutorialDialogue <= 3)
+        {
+            TutorialManager.Instance.HanldePlayer();
+            return;
+        }
         if (!uiState.Equals(UIState.Rain))
         {
             if (uiState.Equals(UIState.Social))
@@ -1032,6 +1044,12 @@ public class UIManager : MonoBehaviour
 
     public void TrafficButtonPressed()
     {
+        if (TutorialManager.Instance.TutorialDialogue <= 3)
+        {
+            TutorialManager.Instance.HanldePlayer();
+            return;
+        }
+
         if (!uiState.Equals(UIState.Traffic))
         {
             if (uiState.Equals(UIState.Social))
@@ -1180,6 +1198,11 @@ public class UIManager : MonoBehaviour
 
     public void ShowEndRoundInfos()
     {
+        if (TutorialManager.Instance.TutorialDialogue <= 2 && MapManager.Instance.GetNumberOfBusinessSubcatchmentsBuilt()==0)
+        {
+            TutorialManager.Instance.HanldePlayer();
+            return;
+        }
         _showingRainEventInfos = true;
         DeactivateButtons();
         StartCoroutine(RainEventInfosVisualization());

@@ -41,10 +41,17 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] Animator tutorialAnimator;
 
     [SerializeField] List<TextAsset> tutorialDialoguesL;
+    [SerializeField] TextAsset TPt1HPNBC;
+    [SerializeField] TextAsset TPt1HPBR;
+    [SerializeField] TextAsset TPt1HPED;
 
     Queue<TextAsset> tutorialDialoguesQ;
 
     int i = 0;
+    int tutorialDialogue = 0;
+    #region getter
+    public int TutorialDialogue { get { return tutorialDialogue; } }
+    #endregion
 
 
     private void Start()
@@ -58,6 +65,29 @@ public class TutorialManager : MonoBehaviour
     public void NextTutorialDialogue()
     {
         DialogueManager.GetInstance().EnterDialogueMode(tutorialDialoguesQ.Dequeue());
+        tutorialDialogue++;
+    }
+
+    public void HanldePlayer()
+    {
+        if (tutorialDialogue <= 2)
+        {
+            if (InfrastructureBuilder.Instance.SelectedSubcatchment != null)
+            {
+                if (InfrastructureBuilder.Instance.SelectedSubcatchment.Usage.Equals(AreaUsage.Residential))
+                {
+                    DialogueManager.GetInstance().EnterDialogueMode(TPt1HPBR);
+                }
+            }
+            else
+            {
+                DialogueManager.GetInstance().EnterDialogueMode(TPt1HPNBC);
+            }
+        }
+        else if (tutorialDialogue <= 3)
+        {
+            DialogueManager.GetInstance().EnterDialogueMode(TPt1HPED);
+        }
     }
 
     public void SwithcTutorialPanels()

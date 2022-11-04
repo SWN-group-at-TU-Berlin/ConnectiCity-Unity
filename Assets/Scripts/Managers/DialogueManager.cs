@@ -265,7 +265,6 @@ public class DialogueManager : MonoBehaviour
                     }
                     else
                     {
-
                         UIManager.Instance.DeactivateTutorialMode();
                     }
                     break;

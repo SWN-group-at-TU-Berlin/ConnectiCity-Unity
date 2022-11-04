@@ -131,7 +131,17 @@ public class Subcatchment : MonoBehaviour
                 {
                     if (IsHighlighted)
                     {
-                        CallUIInfoTab();
+                        InfrastructureBuilder.Instance.SelectedSubcatchment = this;
+                        if (TutorialManager.Instance.TutorialDialogue <= 3
+                            && _usage.Equals(AreaUsage.Residential)
+                            && MapManager.Instance.GetNumberOfHousesSubcatchmentsBuilt() > 0)
+                        {
+                            TutorialManager.Instance.HanldePlayer();
+                        }
+                        else
+                        {
+                            CallUIInfoTab();
+                        }
                     }
                     else
                     {
@@ -230,7 +240,6 @@ public class Subcatchment : MonoBehaviour
             currentRunoffReductions.Add(3, BGIRuonffReductionLv3_c);
             UIManager.Instance.ShowInfoTabBGI(_subcatchmentNumber, infrastructureTypeToBuild, infrastructureToBuild, buildingCost, newRunoffReductions, currentRunoffReductions);
         }
-        InfrastructureBuilder.Instance.SelectedSubcatchment = this;
     }
 
     public BuildStatus ConvertInfrastructureTypeToBuildStatus(InfrastructureType toConvert)
@@ -345,6 +354,11 @@ public class Subcatchment : MonoBehaviour
             _isHostingBGI = true;
         }
         ShowInfrastructure(infrastructureStr);
+
+        if(RoundManager.Instance.CurrentRound == 1 && _usage.Equals(AreaUsage.Commercial))
+        {
+            TutorialManager.Instance.NextTutorialDialogue();
+        }
     }
 
 
