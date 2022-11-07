@@ -46,8 +46,11 @@ public class DialogueManager : MonoBehaviour
     private const string TUTORIAL_ANIMATOR_TAG = "animation";
     private const string TUTORIAL_SUBCATCHMENT_TAG = "subcatchment";
     private const string TUTORIAL_CUTOUT_TAG = "cutout";
+    private const string TUTORIAL_ARROW_TAG = "arrow";
     private const string UI_TUTORIAL_FLAG_TAG = "tutorial";
     private const string UI_BUTTON_TAG = "buttons";
+    private const string UI_TRAFFIC_BUTTON_TAG = "trafficbtn";
+    private const string UI_RAIN_BUTTON_TAG = "rainbtn";
 
     private void Awake()
     {
@@ -258,10 +261,36 @@ public class DialogueManager : MonoBehaviour
                         UIManager.Instance.DeactivateButtons();
                     }
                     break;
+                case UI_TRAFFIC_BUTTON_TAG:
+                    if (tagValue.Equals("enable"))
+                    {
+                        UIManager.Instance.ActivateTrafficButton();
+                    }
+                    break;
+                case UI_RAIN_BUTTON_TAG:
+                    if (tagValue.Equals("enable"))
+                    {
+                        UIManager.Instance.ActivateRainButton();
+                    }
+                    break;
+                case TUTORIAL_ARROW_TAG:
+                    if (tagValue.Contains("Point"))
+                    {
+                        TutorialManager.Instance.AnimatedArrowPlay(tagValue);
+                    }
+                    else
+                    {
+                        TutorialManager.Instance.DeactivateArrow();
+                    }
+                    break;
                 case UI_TUTORIAL_FLAG_TAG:
                     if (tagValue.Equals("on"))
                     {
                         UIManager.Instance.ActivateTutorialMode();
+                    }
+                    else if( tagValue.Equals("end"))
+                    {
+                        TutorialManager.Instance.EndTutorial();
                     }
                     else
                     {
@@ -321,6 +350,12 @@ public class DialogueManager : MonoBehaviour
         // NOTE: The below two lines were added to fix a bug after the Youtube video was made
         //InputManager.GetInstance().RegisterSubmitPressed(); // this is specific to my InputManager script
         ContinueStory();
+    }
+
+    public void EndTutorial()
+    {
+        StartCoroutine( ExitDialogueMode());
+        TutorialManager.Instance.EndTutorial();
     }
 
 }

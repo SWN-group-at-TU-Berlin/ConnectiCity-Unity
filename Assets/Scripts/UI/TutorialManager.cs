@@ -45,6 +45,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] TextAsset TPt1HPBR;
     [SerializeField] TextAsset TPt1HPED;
 
+    [SerializeField] TextAsset TPt2HPRBP;
+
     Queue<TextAsset> tutorialDialoguesQ;
 
     int i = 0;
@@ -87,6 +89,10 @@ public class TutorialManager : MonoBehaviour
         else if (tutorialDialogue <= 3)
         {
             DialogueManager.GetInstance().EnterDialogueMode(TPt1HPED);
+        }
+        else if(TutorialDialogue == 5)
+        {
+            DialogueManager.GetInstance().EnterDialogueMode(TPt2HPRBP);
         }
     }
 
@@ -158,6 +164,19 @@ public class TutorialManager : MonoBehaviour
         animatedArrow.GetComponent<Animator>().Play("PointInfrastructureButton", 0, 0f);
     }
 
+    /*This function should substitute all functions that control the animated arrow animator*/
+    public void AnimatedArrowPlay(string anim)
+    {
+        if (!animatedArrow.activeInHierarchy)
+        {
+            animatedArrow.SetActive(true);
+            animatedArrow.GetComponent<Animator>().enabled = true;
+        }
+        animatedArrow.GetComponent<Animator>().Play(anim, 0, 0f);
+    }
+
+
+    //DEPRECATED
     public void ArrowPointInfrastructureButton()
     {
         if (i < 18)
@@ -166,11 +185,13 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    //DEPRECATED
     public void ArrowPointSubcat7()
     {
-        animatedArrow.GetComponent<Animator>().Play("Subcat7", 0, 0f);
+        animatedArrow.GetComponent<Animator>().Play("PointSubcat7", 0, 0f);
     }
 
+    //DEPRECATED
     public void ArrowPointBuildButton()
     {
         animatedArrow.GetComponent<Animator>().Play("PointBuildButton", 0, 0f);
@@ -215,6 +236,12 @@ public class TutorialManager : MonoBehaviour
     public void PlayAnimation(string anim)
     {
         tutorialAnimator.Play(anim, 0, 0f);
+    }
+
+    public void EndTutorial()
+    {
+        SkipTutorial();
+        tutorialDialogue = 10;
     }
 }
 

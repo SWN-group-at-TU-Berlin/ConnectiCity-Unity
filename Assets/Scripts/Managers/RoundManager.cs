@@ -50,7 +50,7 @@ public class RoundManager : MonoBehaviour
 
         _currentRound++;
         UIManager.Instance.ActivateButtons();
-        if(TutorialManager.Instance.TutorialDialogue == 3)
+        if(TutorialManager.Instance.TutorialDialogue == 3 || TutorialManager.Instance.TutorialDialogue == 5)
         {
             TutorialManager.Instance.NextTutorialDialogue();
         }

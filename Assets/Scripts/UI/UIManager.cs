@@ -127,7 +127,7 @@ public class UIManager : MonoBehaviour
 
     UIState uiState = UIState.Social;
     #region getter
-     public UIState UIState { get { return uiState; } }
+    public UIState UIState { get { return uiState; } }
     #endregion
 
     //Button variables
@@ -320,9 +320,9 @@ public class UIManager : MonoBehaviour
         TrafficInfoTab.SetActive(true);
         TrafficInfoTab.GetComponent<TrafficInfoTab>().UpdateTexts(
             MapManager.Instance.GetSubcatchment(subcatNum).CanHostPublicTransport(),
-            subcatNum.ToString(), 
-            currentBgt.ToString("F0"), 
-            costExample.ToString("F0"), 
+            subcatNum.ToString(),
+            currentBgt.ToString("F0"),
+            costExample.ToString("F0"),
             newBudget.ToString("F0"));
     }
 
@@ -333,7 +333,7 @@ public class UIManager : MonoBehaviour
 
     private void EnteringBuildMode(InfrastructureType infrastructureTypeToHandle)
     {
-        if((TutorialManager.Instance.TutorialDialogue <= 2 && !infrastructureTypeToHandle.Equals(InfrastructureType.Building))
+        if ((TutorialManager.Instance.TutorialDialogue <= 2 && !infrastructureTypeToHandle.Equals(InfrastructureType.Building))
             || TutorialManager.Instance.TutorialDialogue == 3)
         {
             TutorialManager.Instance.HanldePlayer();
@@ -1004,11 +1004,21 @@ public class UIManager : MonoBehaviour
 
     public void RainButtonPressed()
     {
-        if(TutorialManager.Instance.TutorialDialogue <= 3)
+        if (TutorialManager.Instance.TutorialDialogue <= 3)
         {
             TutorialManager.Instance.HanldePlayer();
             return;
         }
+        else if (TutorialManager.Instance.TutorialDialogue == 6)
+        {
+            TutorialManager.Instance.DeactivateArrow();
+            TutorialManager.Instance.NextTutorialDialogue();
+        }
+        else if (TutorialManager.Instance.TutorialDialogue == 5)
+        {
+            TutorialManager.Instance.HanldePlayer();
+        }
+
         if (!uiState.Equals(UIState.Rain))
         {
             if (uiState.Equals(UIState.Social))
@@ -1048,6 +1058,11 @@ public class UIManager : MonoBehaviour
         {
             TutorialManager.Instance.HanldePlayer();
             return;
+        }
+        else if (TutorialManager.Instance.TutorialDialogue == 4)
+        {
+            TutorialManager.Instance.NextTutorialDialogue();
+            TutorialManager.Instance.DeactivateArrow();
         }
 
         if (!uiState.Equals(UIState.Traffic))
@@ -1198,7 +1213,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowEndRoundInfos()
     {
-        if (TutorialManager.Instance.TutorialDialogue <= 2 && MapManager.Instance.GetNumberOfBusinessSubcatchmentsBuilt()==0)
+        if (TutorialManager.Instance.TutorialDialogue <= 2 && MapManager.Instance.GetNumberOfBusinessSubcatchmentsBuilt() == 0)
         {
             TutorialManager.Instance.HanldePlayer();
             return;
@@ -1372,8 +1387,13 @@ public class UIManager : MonoBehaviour
     }
     public void ActivateRainButton()
     {
-        _tutorialOn = true;
+        //_tutorialOn = true;
         RainButton.GetComponent<Button>().enabled = true;
+    }
+
+    public void ActivateTrafficButton()
+    {
+        TrafficButton.GetComponent<Button>().enabled = true;
     }
 
     public void DeactivateTutorialMode()
