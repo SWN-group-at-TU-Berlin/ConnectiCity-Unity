@@ -16,16 +16,16 @@ The ratio between hostable people and citizen is shown in the population density
 
 The ratio between jobs available and actual workers is shown in the unemployment tracker#animation:pt1_unemployment
 
-To track the metrics during the game, check whether the black indicator is in the optimal zone (between the danger signs)#animation:pt1_trackers
+To track the metrics during the game, check whether the black indicator is in the optimal zone (the <color=\#1DC37C>green</color> one)#animation:pt1_trackers
 
 If it moves outside of that zone, the score will be affected negatively.
 
 Indeed, these are important details, because they are showing us the impact of our decisions and how sustainably the area is being developed.#layout:Right #portrait:Mayor #speaker:Mayor Connie
 
 Exactly! Moreover, the sustainable development scores will show us how well we are performing in terms of#layout:Left #portrait:Consultant #speaker:Consultant #animation:pt1_scores
-...social sustainability #animation:pt1_social_score
-... environmental sustainability #animation:pt1_environmental_score
-... and economic sustainability. #animation:pt1_economic_score
+...<color=\#809ee9>social</color> sustainability #animation:pt1_social_score
+...<color=\#83f5b9>environmental</color> sustainability #animation:pt1_environmental_score
+... and <color=\#ee9595>economic</color> sustainability. #animation:pt1_economic_score
 Here we can also see the impact of the different metrics on the overall score.
 
 Alright, I am curious to see what kind of plan you can come up with! Let’s get to work!#layout:Right #portrait:Mayor #speaker:Mayor Connie #animation:pt1_start

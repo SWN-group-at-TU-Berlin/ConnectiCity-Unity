@@ -51,7 +51,8 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] float maxThresholdUR;
 
     [Header("Emissions threshold")]
-    [SerializeField] float maxEmissions = 1;
+    [SerializeField] float minThresholdEmissions = 1;
+    [SerializeField] float maxThresholdEmissions = 8;
 
     [Header("Traffic threshold")]
     [SerializeField] float maxTrafficIntensityPercentage = 40;
@@ -260,11 +261,11 @@ public class ScoreManager : MonoBehaviour
         float environmentEmission = 0;
         float val = TrafficManager.Instance.GetTrafficEmissions();
 
-        if (val < maxEmissions)
+        if (val < minThresholdEmissions)
         {
             environmentEmission = 1;
         }
-        else
+        else if( val > maxThresholdEmissions)
         {
             environmentEmission = -1;
             socialEmission = -1f;
