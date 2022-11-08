@@ -61,7 +61,7 @@ public class TutorialManager : MonoBehaviour
         UIManager.Instance.DeactivateButtons();
         UIManager.Instance.ActivateTutorialMode();
         //SwithcTutorialPanels();
-        NextTutorialDialogue();
+        Invoke("NextTutorialDialogue", 1.5f);
     }
 
     public void NextTutorialDialogue()

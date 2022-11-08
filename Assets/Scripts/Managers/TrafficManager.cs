@@ -25,7 +25,7 @@ public class TrafficManager : MonoBehaviour
 
 
     [SerializeField] TrafficModelController trafficModel;
-    
+
     [Header("Traffic statistics")]
     //source: gooogle sheet "residents+jobs+traffic" -> tab "Traffic"
     [SerializeField] float avgVehicleSize = 4.5f;
@@ -37,6 +37,7 @@ public class TrafficManager : MonoBehaviour
 
     //float will be swapped with a custom class for Street like Subcatchment
     Dictionary<int, float> trafficData;
+    Dictionary<int, float> floodTrafficData;
     Dictionary<int, float> streetsFullCapacity;
     Dictionary<int, float> streetsLengths;
     private bool _v2vCommunication = false;
@@ -57,14 +58,14 @@ public class TrafficManager : MonoBehaviour
         InitializeStreetsColor();
     }
 
-    public void UpdateTrafficData()
+    public void UpdateTrafficData(bool flood = false)
     {
         //Gathering input
         string areasInput = "";
         string floodInput = "";
 
         //flood input
-        if (RainEventsManager.Instance.FlashFloodCheck())
+        if (flood)
         {
             floodInput = "1";
             if (_v2vCommunication)
@@ -109,10 +110,18 @@ public class TrafficManager : MonoBehaviour
 
     IEnumerator WaitForTrafficData(string areasInput, string floodInput)
     {
+        bool noFlood = floodInput.Equals("0");
         trafficModel.CalculateTrafficData(areasInput, floodInput);
         yield return new WaitUntil(() => trafficModel.ResultsReady);
-        trafficData = trafficModel.TrafficData;
-        UpdateStreetsColor();
+        if (noFlood)
+        {
+            trafficData = trafficModel.TrafficData;
+        }
+        else
+        {
+            floodTrafficData = trafficModel.TrafficData;
+        }
+        UpdateStreetsColor(noFlood);
         UIManager.Instance.UpdateTrafficSlider();
         UIManager.Instance.UpdateEmissionSlider();
     }
@@ -143,18 +152,28 @@ public class TrafficManager : MonoBehaviour
     public bool StreetCongested(int streetNum)
     {
         bool streetCongested = false;
-        if(trafficData[streetNum] > trafficIntensityThreshold)
+        if (trafficData[streetNum] > trafficIntensityThreshold)
         {
             streetCongested = true;
         }
         return streetCongested;
     }
 
-    void UpdateStreetsColor()
+    public void UpdateStreetsColor(bool noFlood)
     {
-        foreach(Street street in MapManager.Instance.GetStreets())
+        //copy dictionary to use for colors
+        Dictionary<int, float> traffic = new Dictionary<int, float>();
+        if (noFlood)
         {
-            float streetTraffic = trafficData[street.StreetNumber];
+            traffic = trafficData;
+        }
+        else
+        {
+            traffic = floodTrafficData;
+        }
+        foreach (Street street in MapManager.Instance.GetStreets())
+        {
+            float streetTraffic = traffic[street.StreetNumber];
             float streetTrafficRatio = Mathf.Clamp(streetTraffic / (trafficIntensityThreshold + 50), 0f, 1f);
             Color streetColor = gradientExample.Evaluate(streetTrafficRatio);
             street.SetStreetColor(streetColor);
@@ -173,7 +192,7 @@ public class TrafficManager : MonoBehaviour
     public float GetTrafficIntensity()
     {
         float trafficIntenstiyRaw = 0;
-        for(int i = 1; i <= trafficData.Count; i++)
+        for (int i = 1; i <= trafficData.Count; i++)
         {
             trafficIntenstiyRaw += trafficData[i];
         }
@@ -187,7 +206,7 @@ public class TrafficManager : MonoBehaviour
         {
             trafficIntenstiyRaw += trafficData[i];
         }
-        float trafficPercentage = ((trafficIntenstiyRaw / trafficData.Count) / maxTrafficIntensity)*100;
+        float trafficPercentage = ((trafficIntenstiyRaw / trafficData.Count) / maxTrafficIntensity) * 100;
         return trafficPercentage;
     }
 
@@ -197,10 +216,10 @@ public class TrafficManager : MonoBehaviour
         for (int i = 1; i <= trafficData.Count; i++)
         {
             float numberOfCars = GetCarNumberOnStreet(i);
-            trafficEmissions += GetEmissionOnStreet(i)*numberOfCars*streetsLengths[i];
+            trafficEmissions += GetEmissionOnStreet(i) * numberOfCars * streetsLengths[i];
         }
 
         //convert from g to kg
-        return trafficEmissions/1000;
+        return trafficEmissions / 1000;
     }
 }

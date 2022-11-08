@@ -30,6 +30,7 @@ public class DialogueManager : MonoBehaviour
     public bool dialogueIsPlaying { get; private set; }
 
     private bool canContinueToNextLine = false;
+    private bool noMoreDialogue = false;
     private bool introPlaying = false;
     #region getter
     public bool IntroPlaying { get { return introPlaying; } }
@@ -115,16 +116,19 @@ public class DialogueManager : MonoBehaviour
 
     public void EnterDialogueMode(TextAsset inkJSON)
     {
-        currentStory = new Story(inkJSON.text);
-        dialogueIsPlaying = true;
-        dialoguePanel.SetActive(true);
+        if (!noMoreDialogue)
+        {
+            currentStory = new Story(inkJSON.text);
+            dialogueIsPlaying = true;
+            dialoguePanel.SetActive(true);
 
-        // reset portrait, layout, and speaker
-        displayNameText.text = "???";
-        //portraitAnimator.Play("default");
-        //layoutAnimator.Play("right");
+            // reset portrait, layout, and speaker
+            displayNameText.text = "???";
+            //portraitAnimator.Play("default");
+            //layoutAnimator.Play("right");
 
-        ContinueStory();
+            ContinueStory();
+        }
     }
 
     private IEnumerator ExitDialogueMode()
@@ -288,7 +292,7 @@ public class DialogueManager : MonoBehaviour
                     {
                         UIManager.Instance.ActivateTutorialMode();
                     }
-                    else if( tagValue.Equals("end"))
+                    else if (tagValue.Equals("end"))
                     {
                         TutorialManager.Instance.EndTutorial();
                     }
@@ -354,8 +358,9 @@ public class DialogueManager : MonoBehaviour
 
     public void EndTutorial()
     {
-        StartCoroutine( ExitDialogueMode());
+        StartCoroutine(ExitDialogueMode());
         TutorialManager.Instance.EndTutorial();
+        noMoreDialogue = true;
     }
 
 }

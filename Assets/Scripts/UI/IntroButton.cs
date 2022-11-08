@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class IntroButton : MonoBehaviour
 {
+    private float timeFromStart;
+
+    private void Start()
+    {
+        timeFromStart = Time.time;
+    }
     void Update()
     {
-        transform.GetChild(0).gameObject.SetActive(!DialogueManager.GetInstance().IntroPlaying && !DialogueManager.GetInstance().dialogueIsPlaying);
+        if (Time.time - timeFromStart > 2)
+        {
+            transform.GetChild(0).gameObject.SetActive(!DialogueManager.GetInstance().IntroPlaying && !DialogueManager.GetInstance().dialogueIsPlaying);
+        }
     }
 }

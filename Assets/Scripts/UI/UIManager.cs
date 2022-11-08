@@ -1299,6 +1299,7 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["Disappear"].length);
         if (flahsFlood)
         {
+            TrafficManager.Instance.UpdateTrafficData(true);
             foreach (Transform particleSys in flashFloodVfx)
             {
                 particleSys.GetComponent<ParticleSystem>().Play();
@@ -1308,6 +1309,8 @@ public class UIManager : MonoBehaviour
             {
                 particleSys.GetComponent<ParticleSystem>().Stop();
             }
+
+            TrafficManager.Instance.UpdateStreetsColor(true);
 
         }
         _showingRainEventInfos = false;

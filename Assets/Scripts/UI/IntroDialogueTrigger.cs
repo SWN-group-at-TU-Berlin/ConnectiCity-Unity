@@ -9,6 +9,11 @@ public class IntroDialogueTrigger : MonoBehaviour
     private void Start()
     {
         //try invoke to delay start call
+        Invoke("StartDialogue", 1.5f);
+    }
+
+    private void StartDialogue()
+    {
         DialogueManager.GetInstance().EnterDialogueMode(inkDialogue);
     }
 }
