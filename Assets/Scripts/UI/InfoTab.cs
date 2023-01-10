@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class InfoTab : MonoBehaviour
+public class InfoTab : Tab
 {
     [Header("Text Fields")]
     [SerializeField] GameObject BGIContainer;
@@ -39,6 +39,7 @@ public class InfoTab : MonoBehaviour
 
     public void UpdateTextFieldsInfrastructure(float subcatchmentNumber, string infrastcutureType, float bc_op1, float bc_op2, float ap_op1, float ap_op2, string benefitLable)
     {
+        PlayOpenTab(true);
         BGIContainer.SetActive(false);
         SeparatorBGI.SetActive(false);
         InfrastructuresContainer.SetActive(true);
@@ -75,6 +76,8 @@ public class InfoTab : MonoBehaviour
         Dictionary<int, float> roReduction_before, 
         Dictionary<int, float> roReduction_after)
     {
+        PlayOpenTab(true);
+
         //Show BGIContainer and Hide InfrastructureContainer
         BGIContainer.SetActive(true);
         SeparatorBGI.SetActive(true);

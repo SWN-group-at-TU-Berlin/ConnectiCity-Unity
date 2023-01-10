@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TrafficInfoTab : MonoBehaviour
+public class TrafficInfoTab : Tab
 {
     [SerializeField] TextMeshProUGUI subcatNum;
     [SerializeField] TextMeshProUGUI currentBudget;
@@ -14,6 +14,7 @@ public class TrafficInfoTab : MonoBehaviour
 
     public void UpdateTexts(bool canHostPT, string _subcatNum, string _currentBudget, string _cost, string _newBudget)
     {
+        PlayOpenTab(true);
         buildButton.interactable = canHostPT;
         subcatNum.text = _subcatNum;
         currentBudget.text = _currentBudget;
