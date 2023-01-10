@@ -11,6 +11,15 @@ public class PlaySound : MonoBehaviour
     [SerializeField] string soundName;
     [SerializeField] PlaySoundAction playSoundOn;
 
+    private void Awake()
+    {
+        //In order to avoid calling AudioManager before getting initialized
+        if (playSoundOn.Equals(PlaySoundAction.onEnable))
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

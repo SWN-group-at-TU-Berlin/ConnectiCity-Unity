@@ -555,6 +555,7 @@ public class Subcatchment : MonoBehaviour
     void MouseHoveringOnSubcatchment()
     {
         IsHovered = true;
+        AudioManager.Instance.Play("SubcatchmentHovering");
         outline.enabled = IsHovered;
         outline.OutlineColor = highlightSelectionColor;
     }

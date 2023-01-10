@@ -348,7 +348,7 @@ public class UIManager : MonoBehaviour
 
         if (_buildMode)
         {
-            AudioManager.Instance.Play(InfrastructureType.Building.ToString() + "ButtonPressed");
+            AudioManager.Instance.Play(infrastructureTypeToHandle.ToString() + "ButtonPressed");
             SocialButtonPressed();
             infoPanelsNotInUse.Clear();
             foreach (Transform infoPanel in InfoPanels)

@@ -179,6 +179,9 @@ public class InfrastructureBuilder : MonoBehaviour
                 UIManager.Instance.DeactivateButtons();
             }
 
+            //Build sound
+            AudioManager.Instance.Play("BuildingInfrastructure");
+
             //update budget
             ResourceManager.Instance.UpdateBudget((int)buildCost);
             //recover benefit
