@@ -19,6 +19,10 @@ public class AudioManager : MonoBehaviour
     //collection of all the sounds to initialize
     [SerializeField] Sound[] sounds;
 
+    [Header("Random pitch limits:")]
+    [SerializeField, Range(-3, 3)] float minPitch = 0f;
+    [SerializeField, Range(-3, 3)] float maxPitch = 2f;
+
     private void Awake()
     {
         #region singleton initialization
@@ -26,7 +30,8 @@ public class AudioManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-        } else
+        }
+        else
         {
             Destroy(gameObject);
         }
@@ -47,11 +52,38 @@ public class AudioManager : MonoBehaviour
     {
         //find sound searching by name
         Sound s = Array.Find(sounds, sound => sound.name.Equals(name));
-        
+
         //check if sound with matching name exists in sounds
-        if(s != null)
+        if (s != null)
         {
             s.source.Play();
+        }
+        else
+        {
+            Debug.LogWarning("No sound with name " + name + " was found");
+            return;
+        }
+    }
+
+    /*this function plays the sound of the voice if the currentCharactersDisplayed is a multiple of the soundFrequency*/
+    public void PlayVoice(string name, int currentCharactersDisplayed, float soundFrequency, bool randomizePitch)
+    {
+        //find sound searching by name
+        Sound s = Array.Find(sounds, sound => sound.name.Equals(name));
+        if (s != null)
+        {
+            if (currentCharactersDisplayed % soundFrequency == 0)
+            {
+                s.source.Stop();
+
+                //if the pitch value to change is not zero
+                if (randomizePitch)
+                {
+                    //take the random pitch variation
+                    s.source.pitch = UnityEngine.Random.Range(minPitch, maxPitch);
+                }
+                s.source.Play();
+            }
         }
         else
         {

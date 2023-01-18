@@ -10,6 +10,9 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Params")]
     [SerializeField] private float typingSpeed = 0.04f;
+    [SerializeField] private float voiceSoundFrequency = 2f;
+    [SerializeField, Range(0,1)] private float voicepitchVariation = 0.10f;
+    [SerializeField] bool randomizeVoice = false;
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
@@ -35,6 +38,8 @@ public class DialogueManager : MonoBehaviour
     #region getter
     public bool IntroPlaying { get { return introPlaying; } }
     #endregion
+
+    private string currentSpeaker;
 
     private static DialogueManager instance;
 
@@ -133,6 +138,8 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator ExitDialogueMode()
     {
+        //conversation end sound
+        AudioManager.Instance.Play("ConversationEnd");
         yield return new WaitForSeconds(0.2f);
 
         dialogueIsPlaying = false;
@@ -149,8 +156,11 @@ public class DialogueManager : MonoBehaviour
             {
                 StopCoroutine(displayLineCoroutine);
             }
-            displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
+
             // handle tags
+            //HandleTags(currentStory.currentTags);
+
+            displayLineCoroutine = StartCoroutine(DisplayLine(currentStory.Continue()));
             HandleTags(currentStory.currentTags);
         }
         else
@@ -185,6 +195,7 @@ public class DialogueManager : MonoBehaviour
             if (letter == '<' || isAddingRichTextTag)
             {
                 isAddingRichTextTag = true;
+                AudioManager.Instance.PlayVoice(currentSpeaker, dialogueText.text.Length, voiceSoundFrequency, randomizeVoice);
                 dialogueText.text += letter;
                 if (letter == '>')
                 {
@@ -194,6 +205,7 @@ public class DialogueManager : MonoBehaviour
             // if not rich text, add the next letter and wait a small time
             else
             {
+                AudioManager.Instance.PlayVoice(currentSpeaker, dialogueText.text.Length, voiceSoundFrequency, randomizeVoice);
                 dialogueText.text += letter;
                 yield return new WaitForSeconds(typingSpeed);
             }
@@ -233,6 +245,7 @@ public class DialogueManager : MonoBehaviour
             {
                 case SPEAKER_TAG:
                     displayNameText.text = tagValue;
+                    currentSpeaker = tagValue;
                     break;
                 case PORTRAIT_TAG:
                     portraitAnimator.Play(tagValue);
