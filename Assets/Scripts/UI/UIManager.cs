@@ -988,6 +988,7 @@ public class UIManager : MonoBehaviour
             {
                 ChangeButtonColorToPressed(TrafficButton.GetComponent<Button>());
             }
+            AudioManager.Instance.Play("Switch View");
             HideRunoffReductions();
             ChangeButtonColorToPressed(SocialButton.GetComponent<Button>());
             uiState = UIState.Social;
@@ -1030,6 +1031,7 @@ public class UIManager : MonoBehaviour
             {
                 ChangeButtonColorToPressed(TrafficButton.GetComponent<Button>());
             }
+            AudioManager.Instance.Play("Switch View");
             ExitBuildMode();
             ShowRunoffReductions();
             uiState = UIState.Rain;
@@ -1076,6 +1078,7 @@ public class UIManager : MonoBehaviour
             {
                 ChangeButtonColorToPressed(RainButton.GetComponent<Button>());
             }
+            AudioManager.Instance.Play("Switch View");
             uiState = UIState.Traffic;
             ExitBuildMode();
             HideRunoffReductions();
@@ -1220,6 +1223,7 @@ public class UIManager : MonoBehaviour
             return;
         }
         _showingRainEventInfos = true;
+        AudioManager.Instance.Play("EndRound");
         DeactivateButtons();
         StartCoroutine(RainEventInfosVisualization());
         StartCoroutine(ShowScoreGraph());
