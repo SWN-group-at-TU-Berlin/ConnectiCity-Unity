@@ -30,6 +30,9 @@ public class RainEventsManager : MonoBehaviour
 
     [SerializeField] GameObject rainEventInfoPanel;
     [SerializeField] GameObject rainParticles;
+    #region getter
+    public GameObject RainParticles { get { return rainParticles; } }
+    #endregion
     [SerializeField] float flashFloodThreshold = 670;
     #region getter
     public float FlashFloodThreshold { get { return flashFloodThreshold; } }

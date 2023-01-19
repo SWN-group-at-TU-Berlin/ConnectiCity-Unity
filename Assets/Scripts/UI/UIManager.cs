@@ -1257,6 +1257,13 @@ public class UIManager : MonoBehaviour
         {
             RainEventInfoPanelAnimator.enabled = true;
         }
+
+        //turn on rain particles
+        RainEventsManager.Instance.RainParticles.GetComponent<ParticleSystem>().Play();
+
+        //play rain sound
+        AudioManager.Instance.PlayWithFadeIn("Rain");
+
         yield return new WaitForSeconds(RainEventInfoPanelAnimationsLenghts["Appear"].length);
 
 
@@ -1289,6 +1296,7 @@ public class UIManager : MonoBehaviour
                         if (result.name.Equals("NoFlood"))
                         {
                             result.gameObject.SetActive(true);
+                            AudioManager.Instance.Play("No Flashflood");
                         }
                     }
 
@@ -1318,6 +1326,10 @@ public class UIManager : MonoBehaviour
             TrafficManager.Instance.UpdateStreetsColor(true);
 
         }
+        //stop particle effect and sound
+        RainEventsManager.Instance.RainParticles.GetComponent<ParticleSystem>().Stop();
+        AudioManager.Instance.StopWithFadeIn("Rain");
+
         _showingRainEventInfos = false;
     }
 

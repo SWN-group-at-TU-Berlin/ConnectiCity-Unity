@@ -91,4 +91,63 @@ public class AudioManager : MonoBehaviour
             return;
         }
     }
+
+
+    public void PlayWithFadeIn(string name, float fadeInTime = 1)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name.Equals(name));
+
+        if (s != null)
+        {
+            s.source.volume = 0;
+            s.source.Play();
+            StartCoroutine(FadeInSound(s.source, s.volume, fadeInTime));
+        }
+        else
+        {
+            Debug.LogWarning("No sound called " + name + " can be found");
+            return;
+        }
+    }
+
+    public void StopWithFadeIn(string name, float fadeInTime = 1)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name.Equals(name));
+
+        if (s != null)
+        {
+            StartCoroutine(FadeOutSound(s.source, fadeInTime));
+        }
+        else
+        {
+            Debug.LogWarning("No sound called " + name + " can be found");
+            return;
+        }
+    }
+
+    private IEnumerator FadeInSound(AudioSource audioSource, float maxAudio, float fadeTime = 1)
+    {
+        float startTime = Time.time;
+        float endTime = startTime + fadeTime;
+        while (Time.time < endTime && audioSource.volume < maxAudio)
+        {
+            float progress = (Time.time - startTime) / fadeTime;
+            audioSource.volume = progress;
+            yield return null;
+        }
+        audioSource.volume = 1f;
+    }
+
+    private IEnumerator FadeOutSound(AudioSource audioSource, float fadeTime = 1)
+    {
+        float startTime = Time.time;
+        float endTime = startTime + fadeTime;
+        while (Time.time < endTime)
+        {
+            float progress = (Time.time - startTime) / fadeTime;
+            audioSource.volume = 1f - progress;
+            yield return null;
+        }
+        audioSource.Stop();
+    }
 }
