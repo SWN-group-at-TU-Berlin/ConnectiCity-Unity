@@ -11,19 +11,22 @@ public class PlaySound : MonoBehaviour
     [SerializeField] string soundName;
     [SerializeField] PlaySoundAction playSoundOn;
 
-    private void Awake()
+    private bool firstActivation = true;
+
+    /*private void Awake()
     {
         //In order to avoid calling AudioManager before getting initialized
-        if (playSoundOn.Equals(PlaySoundAction.onEnable))
+        if (playSoundOn.Equals(PlaySoundAction.onEnable) && firstActivation)
         {
             gameObject.SetActive(false);
+            firstActivation = false;
         }
-    }
+    }*/
 
     // Start is called before the first frame update
     void Start()
     {
-        if (playSoundOn.Equals(PlaySoundAction.onStart))
+        if (playSoundOn.Equals(PlaySoundAction.onStart) && AudioManager.Instance != null)
         {
             AudioManager.Instance.Play(soundName);
         }
@@ -31,15 +34,16 @@ public class PlaySound : MonoBehaviour
 
     private void OnEnable()
     {
-        if (playSoundOn.Equals(PlaySoundAction.onEnable))
+        if (playSoundOn.Equals(PlaySoundAction.onEnable) && AudioManager.Instance != null && !firstActivation)
         {
             AudioManager.Instance.Play(soundName);
         }
+        firstActivation = false;
     }
 
     private void OnDisable()
     {
-        if (playSoundOn.Equals(PlaySoundAction.onDisable))
+        if (playSoundOn.Equals(PlaySoundAction.onDisable) && AudioManager.Instance != null)
         {
             AudioManager.Instance.Play(soundName);
         }

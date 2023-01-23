@@ -23,7 +23,7 @@ public class MapManager : MonoBehaviour
         {
             lightIntensity = light.intensity;
         }
-        DeactivateSubcatchmentsChildren();
+        //DeactivateSubcatchmentsChildren();
     }
     #endregion
 
@@ -44,6 +44,8 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
+        DeactivateSubcatchmentsChildren();
+
         //Initialize streets
         _streets = new List<Street>();
         foreach(Transform street in _streetsParent)
