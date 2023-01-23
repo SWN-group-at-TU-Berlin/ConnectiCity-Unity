@@ -1328,7 +1328,7 @@ public class UIManager : MonoBehaviour
         }
         //stop particle effect and sound
         RainEventsManager.Instance.RainParticles.GetComponent<ParticleSystem>().Stop();
-        AudioManager.Instance.StopWithFadeIn("Rain");
+        AudioManager.Instance.StopWithFadeOut("Rain");
 
         _showingRainEventInfos = false;
     }

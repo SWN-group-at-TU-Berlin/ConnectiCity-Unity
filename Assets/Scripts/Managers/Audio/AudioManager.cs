@@ -110,13 +110,13 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void StopWithFadeIn(string name, float fadeInTime = 1)
+    public void StopWithFadeOut(string name, float fadeInTime = 1)
     {
         Sound s = Array.Find(sounds, sound => sound.name.Equals(name));
 
         if (s != null)
         {
-            StartCoroutine(FadeOutSound(s.source, fadeInTime));
+            StartCoroutine(FadeOutSound(s.source, s.volume, fadeInTime));
         }
         else
         {
@@ -131,21 +131,21 @@ public class AudioManager : MonoBehaviour
         float endTime = startTime + fadeTime;
         while (Time.time < endTime && audioSource.volume < maxAudio)
         {
-            float progress = (Time.time - startTime) / fadeTime;
+            float progress = ((Time.time - startTime) / fadeTime)*maxAudio; // maxAudio should be always between 0 and 1
             audioSource.volume = progress;
             yield return null;
         }
-        audioSource.volume = 1f;
+        audioSource.volume = maxAudio;
     }
 
-    private IEnumerator FadeOutSound(AudioSource audioSource, float fadeTime = 1)
+    private IEnumerator FadeOutSound(AudioSource audioSource, float maxAudio, float fadeTime = 1)
     {
         float startTime = Time.time;
         float endTime = startTime + fadeTime;
         while (Time.time < endTime)
         {
-            float progress = (Time.time - startTime) / fadeTime;
-            audioSource.volume = 1f - progress;
+            float progress = ((Time.time - startTime) / fadeTime)*maxAudio;
+            audioSource.volume -= progress;
             yield return null;
         }
         audioSource.Stop();
