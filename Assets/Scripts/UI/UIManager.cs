@@ -1289,6 +1289,7 @@ public class UIManager : MonoBehaviour
                         if (result.name.Equals("Flood"))
                         {
                             result.gameObject.SetActive(true);
+                            AudioManager.Instance.Play("Flood");
                         }
                     }
                     else
