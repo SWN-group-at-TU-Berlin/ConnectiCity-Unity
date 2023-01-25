@@ -70,6 +70,7 @@ public class RoundManager : MonoBehaviour
             float totalScore = sscore + envScore + ecoScore;
             endGamePanel.gameObject.SetActive(true);
             endGamePanel.SetUpEndPanelStats(sscore, envScore, ecoScore, totalScore);
+            AudioManager.Instance.Play("End Jingle");
         }
     }
     public void StartRound()
