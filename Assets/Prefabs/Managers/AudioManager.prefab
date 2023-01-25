@@ -1,0 +1,204 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1951922128390175123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1951922128390175121}
+  - component: {fileID: 1951922128390175120}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1951922128390175121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951922128390175123}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 829.5921, y: 673.1943, z: -783.77466}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1951922128390175120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951922128390175123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 772bde69f99104e4f88a8c9b108161dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: BuildingButtonPressed
+    clip: {fileID: 8300000, guid: a9efd59b6742a8a4c92d0a4c5a3c5a04, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: GRButtonPressed
+    clip: {fileID: 8300000, guid: a6fdccd5f900c6f4ca6cacefd3d1841b, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: PPButtonPressed
+    clip: {fileID: 8300000, guid: 79ffd7a03f00ca54da89db1619df061b, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: RBButtonPressed
+    clip: {fileID: 8300000, guid: 12958dec24417cc47bf0b3f4e2a44b4a, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BuildBusLine
+    clip: {fileID: 8300000, guid: d78e284c9ea845f4bbee8eb851d0bfa7, type: 3}
+    volume: 0.25
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BuildingInfrastructure
+    clip: {fileID: 8300000, guid: 3a665014c4898314488d126fad64adbc, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: SubcatchmentHovering
+    clip: {fileID: 8300000, guid: 1f0f31459a5ef8241966b9ca2ec0d0c1, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: OpenInfoTab
+    clip: {fileID: 8300000, guid: f2db49736d66e984a83c408f6df597af, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: CloseInfoTab
+    clip: {fileID: 8300000, guid: bf4a29b92f1c08540b9c4093a2b45e1c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: ConversationStart
+    clip: {fileID: 8300000, guid: da5cfb2eb48a2ad40a825f120ed197dd, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: ConversationEnd
+    clip: {fileID: 8300000, guid: 8ebd37bec6d95714ebe7d1400df7564f, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Mayor Connie
+    clip: {fileID: 8300000, guid: ec5251b1ce50a4a47bcddd20817541b1, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Consultant
+    clip: {fileID: 8300000, guid: c8de89b00ca99c14ea2ec40f573cd92c, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Mobility Planner
+    clip: {fileID: 8300000, guid: 032a7e0a5a2c587418464ebba9d2fe66, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Water Manager
+    clip: {fileID: 8300000, guid: 63f69c14a62d894428015eb93a04819b, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: EndRound
+    clip: {fileID: 8300000, guid: 8fb040f0f875ecd4b9ced12ea0b855e1, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Switch View
+    clip: {fileID: 8300000, guid: 4d6bc1758a5c6f445a6c4c092c000802, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Build GR
+    clip: {fileID: 8300000, guid: 37f22eecb0ab7f149b5d5c86d34093a5, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Build PP
+    clip: {fileID: 8300000, guid: 7ae44d98f6e574348b39d410d82b1c2b, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Build RB
+    clip: {fileID: 8300000, guid: 73e3e070d3f487147a7c024f918d1ad2, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Rain
+    clip: {fileID: 8300000, guid: 88a98336147aba0408eb71a0f240cfb8, type: 3}
+    volume: 0.14
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: No Flashflood
+    clip: {fileID: 8300000, guid: 67c75df555468fc4bbb64bedad4b2ab6, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: BTNHover
+    clip: {fileID: 8300000, guid: db81be0203efa8042ab8910ca0107cc4, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Flood
+    clip: {fileID: 8300000, guid: e365a9c7f3d56ab4c947e91c5adbbc0f, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Button Pressed
+    clip: {fileID: 8300000, guid: 3f1cff56b0bf97741ac7466bbfa769b8, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: End Jingle
+    clip: {fileID: 8300000, guid: e507f8008c947cc45a6a0fc4e935fa25, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  minPitch: 0.7
+  maxPitch: 1.3
