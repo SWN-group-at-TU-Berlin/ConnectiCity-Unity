@@ -21,7 +21,8 @@ public class GlossaryTitlesController : MonoBehaviour
         {
             foreach (GameObject title in titles)
             {
-                if (title.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.Contains(titleName))
+                string lowerCaseTitle = title.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text.ToLower();
+                if (lowerCaseTitle.Contains(titleName.ToLower()))
                 {
                     title.SetActive(true);
                 }
