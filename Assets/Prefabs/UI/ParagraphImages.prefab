@@ -1,0 +1,324 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1101368844
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1101368845}
+  - component: {fileID: 1101368847}
+  - component: {fileID: 1101368846}
+  m_Layer: 5
+  m_Name: img
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1101368845
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101368844}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3349388243979342000}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1101368847
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101368844}
+  m_CullTransparentMesh: 1
+--- !u!114 &1101368846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101368844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!1001 &6758209848247850771
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 8336891680460918516, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00024414062
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891680862859172, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891680862859172, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891680862859172, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 302.6977
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891680862859172, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891680862859172, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891680862859175, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_text
+      value: "Kimic, K., & Ostrysz, K. (2021). Assessment of blue and green infrastructure
+        solutions in shaping urban public spaces\u2014spatial and functional, environmental,
+        and social aspects. Sustainability (Switzerland), 13(19). https://doi.org/10.3390/su131911041\r\nDavis,
+        M., Duin, L., Iwaszuk, E., Mederake, L., Naumann, S., Rudik, G., & Wagner,
+        I. (2019). Addressing climate change in cities - Catalogue of urban nature-based
+        solutions (T. Bergier & A. Kowalewska (eds.)). The Sendzimir Foundation."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681466943806, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681466943806, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681466943806, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681466943806, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681723370561, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_Size
+      value: 0.4069945
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681723370561, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_Value
+      value: 1.0000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681723370561, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000030517578
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753978, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753979, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_Name
+      value: Paragraph (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681805753979, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681842268067, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891681842268067, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0005187988
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682036894118, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682036894118, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682036894118, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682243231690, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682243231690, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682243231690, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682243231690, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682243231693, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_text
+      value: Green roof
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682250520052, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_text
+      value: "\"Green roofs are spaces on top of buildings covered in vegetation,
+        planted in a growing substrate. They are an increasingly popular measure
+        to introduce more greenery in densely built-up areas, without sacrificing
+        additional space.\r\nTwo main categories can be distinguished: intensive
+        green roofs and extensive green roofs. Intensive green roofs have a thicker
+        substrate layer, a higher variety of vegetation, and are more frequently
+        es- tablished on roofs accessible to residents or public. They require more
+        maintenance than extensive green roofs. Extensive green roofs consist of
+        a thin layer of substrate covered in low-maintenance vegetation such as moss,
+        sedum, wildflowers or grasses. They are cheaper to install than intensive
+        roofs and require minimum maintenance after installation.\" (Davis et al.,
+        2019)\r\n\r\nMain functions (Kimic & Ostrysz, 2021)\r\n\n-stormwater retention,
+        discharge of excess water   to sewage or other receivers\r\n\n-stormwater
+        treatment\r\n\n-stormwater reuse\r\n\n-recreational and decorative functions\r\n\n-increasing
+        biologically vital areas and biodiversity\r\n\n-oxygen production\r\n\n-improving
+        the functioning and reducing the \noperating costs of buildings\r\n\n-counteracting
+        the phenomenon of urban heat island (UHI)\r\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682250520053, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682250520053, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682250520053, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1073
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682250520053, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8336891682250520053, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+--- !u!224 &3349388243979342000 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8336891681842268067, guid: b52938493ce41e34488da0553ec69ce9, type: 3}
+  m_PrefabInstance: {fileID: 6758209848247850771}
+  m_PrefabAsset: {fileID: 0}
