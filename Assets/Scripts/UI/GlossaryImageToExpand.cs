@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,88 +12,101 @@ public class GlossaryImageToExpand : MonoBehaviour
     [SerializeField] float scaleIncrease = 3.5f;
 
     bool move = false;
+    Vector3 destination;
     Vector3 screenCenter;
 
-    private Image imageToExpand;
+    private RectTransform rect;
+    private Image panel;
+    private float panelAlpha;
+    private Image[] imgs;
 
     private void Awake()
     {
-        imageToExpand = GetComponent<Image>();
+        rect = GetComponent<RectTransform>();
+        panel = GetComponent<Image>();
+        panelAlpha = panel.color.a;
+        imgs = GetComponentsInChildren<Image>();
 
-        float centerX = (Screen.width * 0.5f);
-        float centerY = (Screen.height * 0.5f);
-        screenCenter = new Vector3(centerX, centerY, 0f);
-    }
+        // Get the width and height of the screen
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (move)
-        {
-            Vector3 direction = screenCenter - transform.position;
-            Vector3 movement = direction.normalized * speed;
-            transform.Translate(movement);
-        }
-
-
-        //check if destination is reached+stop moving
-        if (Vector3.Distance(transform.position, screenCenter) <= 2 && move)
-        {
-            transform.position = screenCenter;
-            move = false;
-        }
+        // Set the width and height of the RectTransform component to the screen width and height
+        //rect.sizeDelta = new Vector2(screenHeight, screenWidth);
     }
 
     private void OnEnable()
     {
-        //set the position to match startPoint
-        transform.position = startPoint.position;
-
-        //transition time from seconds to milliseconds conversion
-        float framesForTransition = transitionTime / Time.deltaTime;
-
-        //calculate speed needed to get to the screenCenter
-        float distanceToCover = Vector3.Distance(startPoint.position, screenCenter);
-        speed = distanceToCover / framesForTransition;
-
-        //start moving
-        move = true;
+        //make panel and all its children transparent
+        Color panelNoAlpha = panel.color;
+        panelNoAlpha.a = 0;
+        panel.color = panelNoAlpha;
+        foreach (Image img in imgs)
+        {
+            Color noAlpha = img.color;
+            noAlpha.a = 0;
+            img.color = noAlpha;
+        }
 
         //scale it up
-        StartCoroutine(ScaleImageUp());
+        StartCoroutine(FadeIn());
     }
 
-    IEnumerator ScaleImageUp()
+    private IEnumerator FadeIn()
     {
-        Vector3 finalScale = transform.localScale * scaleIncrease;
-        Vector3 initiallScale = transform.localScale;
-        float distanceToCover = Vector3.Distance(startPoint.position, screenCenter);
-        float scaleMagnitudesRaio = initiallScale.magnitude / finalScale.magnitude;
-
-        while (transform.localScale.magnitude <= finalScale.magnitude)
+        float alphaToAddImgs = 0.05f;
+        float totalAlpha = 0f;
+        while (totalAlpha < 1)
         {
-            float currentDistanceFromCenter = Vector3.Distance(transform.position, screenCenter);
-            float finalPositionReachedPercentage = 1 - (currentDistanceFromCenter / distanceToCover);
-
-            //We consider the ratio between the normal scale and the one we want to achieve as a percentage
-
-            float slowGrowthRatio = scaleMagnitudesRaio + (finalPositionReachedPercentage * 0.5f);
-
-            if (slowGrowthRatio > finalPositionReachedPercentage)
+            if (panel.color.a < panelAlpha)
             {
-                transform.localScale = finalScale * slowGrowthRatio;
+                //increase panel
+                Color panelCurrentColor = panel.color;
+                panelCurrentColor.a += alphaToAddImgs;
+                panel.color = panelCurrentColor;
             }
-            else
+
+            foreach (Image img in imgs)
             {
-                transform.localScale = finalScale * finalPositionReachedPercentage;
+                Color imgCurrentColor = img.color;
+                imgCurrentColor.a += alphaToAddImgs;
+                img.color = imgCurrentColor;
             }
+
+            totalAlpha += alphaToAddImgs;
             yield return null;
         }
-        transform.localScale = finalScale;
     }
 
-    private void OnDisable()
+    public void CloseImage()
     {
-        transform.localScale = transform.localScale / scaleIncrease;
+        StartCoroutine(FadeOut());
+    }
+
+    private IEnumerator FadeOut()
+    {
+        float alphaToTakeFromImgs = 0.05f;
+        float totalAlpha = 1f;
+        while (totalAlpha > 0)
+        {
+            if (panel.color.a > 0)
+            {
+                //increase panel
+                Color panelCurrentColor = panel.color;
+                panelCurrentColor.a -= alphaToTakeFromImgs;
+                panel.color = panelCurrentColor;
+            }
+
+            foreach (Image img in imgs)
+            {
+                Color imgCurrentColor = img.color;
+                imgCurrentColor.a -= alphaToTakeFromImgs;
+                img.color = imgCurrentColor;
+            }
+
+            totalAlpha -= alphaToTakeFromImgs;
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 }
