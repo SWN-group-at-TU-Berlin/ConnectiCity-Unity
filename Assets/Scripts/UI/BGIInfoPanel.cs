@@ -1,30 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class BGIInfoPanel : MonoBehaviour, IPointerExitHandler
+public class BGIInfoPanel : MonoBehaviour
 {
-    [SerializeField] GameObject BGIinfoPanel;
+    [SerializeField] GlossaryOpener glossary;
 
-    // Update is called once per frame
-
-
-    public void ActivateBGIInfoPanel()
+    public void OpenGlossary()
     {
-        if (!UIManager.Instance.TutorialOn)
+        if (!glossary.IsOpen())
         {
-            BGIinfoPanel.SetActive(true);
+            glossary.OpenClose();
         }
-    }
-
-    public void DeactivateBGIInfoPanel()
-    {
-        BGIinfoPanel.SetActive(false);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        DeactivateBGIInfoPanel();
     }
 }
