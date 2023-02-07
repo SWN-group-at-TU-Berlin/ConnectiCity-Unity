@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class AudioOptions : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    #region singleton instance
+    private static AudioOptions instance;
+    public static AudioOptions Instance { get { return instance; } }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+
+    }
+    #endregion
+
+    public float effectsVolume = 1f;
+    public float musicVolume = 1f;
+    public bool voiceEffects = true;
+
+    private void Start()
+    {
+        DontDestroyOnLoad(gameObject);
     }
 }

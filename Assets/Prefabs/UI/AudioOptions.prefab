@@ -313,6 +313,7 @@ GameObject:
   - component: {fileID: 7383514285991903236}
   - component: {fileID: 7383514285991903239}
   - component: {fileID: 7383514285991903238}
+  - component: {fileID: 1569749405332847112}
   m_Layer: 5
   m_Name: Toggle
   m_TagString: Untagged
@@ -413,6 +414,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundToPlay: BTNHover
+--- !u!114 &1569749405332847112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383514285991903237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b8377453b50db42a026d7192ddebaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectsSlider: 0
 --- !u!1 &7383514286009436099
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,6 +474,7 @@ GameObject:
   - component: {fileID: 7383514286096691002}
   - component: {fileID: 7383514286096690997}
   - component: {fileID: 7383514286096690996}
+  - component: {fileID: 221047942629572626}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -553,6 +568,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundToPlay: BTNHover
+--- !u!114 &221047942629572626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383514286096691003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b8377453b50db42a026d7192ddebaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectsSlider: 1
 --- !u!1 &7383514286195919411
 GameObject:
   m_ObjectHideFlags: 0
@@ -1545,6 +1573,7 @@ GameObject:
   - component: {fileID: 7383514286981812073}
   - component: {fileID: 7383514286981812072}
   - component: {fileID: 7383514286981812075}
+  - component: {fileID: 8823298640011808063}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -1638,6 +1667,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundToPlay: BTNHover
+--- !u!114 &8823298640011808063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383514286981812078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b8377453b50db42a026d7192ddebaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectsSlider: 0
 --- !u!1 &7383514287029588489
 GameObject:
   m_ObjectHideFlags: 0

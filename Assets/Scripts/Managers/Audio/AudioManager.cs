@@ -19,6 +19,8 @@ public class AudioManager : MonoBehaviour
     //collection of all the sounds to initialize
     [SerializeField] Sound[] sounds;
 
+    //TODO: list for music tracks;
+
     [Header("Random pitch limits:")]
     [SerializeField, Range(-3, 3)] float minPitch = 0f;
     [SerializeField, Range(-3, 3)] float maxPitch = 2f;
@@ -48,6 +50,10 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //TODO: function to play music
+    //TODO: function to fadeIn music
+    //TODO: function to fadeOut music
+
     public void Play(string name)
     {
         //find sound searching by name
@@ -56,6 +62,7 @@ public class AudioManager : MonoBehaviour
         //check if sound with matching name exists in sounds
         if (s != null)
         {
+            s.source.volume = s.volume * AudioOptions.Instance.effectsVolume;
             s.source.Play();
         }
         else
@@ -69,26 +76,30 @@ public class AudioManager : MonoBehaviour
     public void PlayVoice(string name, int currentCharactersDisplayed, float soundFrequency, bool randomizePitch)
     {
         //find sound searching by name
-        Sound s = Array.Find(sounds, sound => sound.name.Equals(name));
-        if (s != null)
+        if (AudioOptions.Instance.voiceEffects)
         {
-            if (currentCharactersDisplayed % soundFrequency == 0)
-            {
-                s.source.Stop();
 
-                //if the pitch value to change is not zero
-                if (randomizePitch)
+            Sound s = Array.Find(sounds, sound => sound.name.Equals(name));
+            if (s != null)
+            {
+                if (currentCharactersDisplayed % soundFrequency == 0)
                 {
-                    //take the random pitch variation
-                    s.source.pitch = UnityEngine.Random.Range(minPitch, maxPitch);
+                    s.source.Stop();
+
+                    //if the pitch value to change is not zero
+                    if (randomizePitch)
+                    {
+                        //take the random pitch variation
+                        s.source.pitch = UnityEngine.Random.Range(minPitch, maxPitch);
+                    }
+                    s.source.Play();
                 }
-                s.source.Play();
             }
-        }
-        else
-        {
-            Debug.LogWarning("No sound with name " + name + " was found");
-            return;
+            else
+            {
+                Debug.LogWarning("No sound with name " + name + " was found");
+                return;
+            }
         }
     }
 
@@ -101,7 +112,7 @@ public class AudioManager : MonoBehaviour
         {
             s.source.volume = 0;
             s.source.Play();
-            StartCoroutine(FadeInSound(s.source, s.volume, fadeInTime));
+            StartCoroutine(FadeInSound(s.source, s.volume*AudioOptions.Instance.effectsVolume, fadeInTime));
         }
         else
         {
@@ -116,7 +127,7 @@ public class AudioManager : MonoBehaviour
 
         if (s != null)
         {
-            StartCoroutine(FadeOutSound(s.source, s.volume, fadeInTime));
+            StartCoroutine(FadeOutSound(s.source, s.volume * AudioOptions.Instance.effectsVolume, fadeInTime));
         }
         else
         {
@@ -131,7 +142,7 @@ public class AudioManager : MonoBehaviour
         float endTime = startTime + fadeTime;
         while (Time.time < endTime && audioSource.volume < maxAudio)
         {
-            float progress = ((Time.time - startTime) / fadeTime)*maxAudio; // maxAudio should be always between 0 and 1
+            float progress = ((Time.time - startTime) / fadeTime) * maxAudio; // maxAudio should be always between 0 and 1
             audioSource.volume = progress;
             yield return null;
         }
@@ -144,7 +155,7 @@ public class AudioManager : MonoBehaviour
         float endTime = startTime + fadeTime;
         while (Time.time < endTime)
         {
-            float progress = ((Time.time - startTime) / fadeTime)*maxAudio;
+            float progress = ((Time.time - startTime) / fadeTime) * maxAudio;
             audioSource.volume -= progress;
             yield return null;
         }

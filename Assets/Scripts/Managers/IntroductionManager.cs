@@ -37,9 +37,16 @@ public class IntroductionManager : MonoBehaviour
 
     public void Play()
     {
-        float fadeInTime = transitionPanel.GetComponent<Animator>().runtimeAnimatorController.animationClips[0].length;
-        transitionPanel.SetActive(true);
-        StartCoroutine(NextScene(fadeInTime));
+        transitionPanel.GetComponent<Animator>().Play("FadeIn", 0, 0f);
+        float animLenght = 0;
+        foreach (AnimationClip anim in transitionPanel.GetComponent<Animator>().runtimeAnimatorController.animationClips)
+        {
+            if (anim.name.Equals("FadeIn"))
+            {
+                animLenght = anim.length;
+            }
+        }
+        StartCoroutine(NextScene(animLenght));
     }
 
     private IEnumerator NextScene(float waitingTime)
