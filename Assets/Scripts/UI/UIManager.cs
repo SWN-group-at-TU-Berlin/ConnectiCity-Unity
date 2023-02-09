@@ -176,7 +176,7 @@ public class UIManager : MonoBehaviour
         flashFloodRisk.minValue = 0;
         flashFloodRisk.maxValue = RainEventsManager.Instance.FlashFloodThreshold;
         flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateFlashFloorRisk(), 0f, flashFloodRiskSliderCap);
-        UpdateFlashFloodRiskTxt(flashFloodRisk.value.ToString("F2"));
+        UpdateFlashFloodRiskTxt(flashFloodRisk.value.ToString("F0"));
     }
 
     private void Update()
@@ -565,7 +565,7 @@ public class UIManager : MonoBehaviour
     public void UpdateWorkersGrowthTxt(string val) { WorkersGrowth.text = val; }
     public void UpdateHostablePeopleTxt(string val) { HostableCitizens.text = val; }
     public void UpdateJobsAvailableTxt(string val) { JobsAvailable.text = val; }
-    public void UpdatePopulationDensityTxt(string val) { PopulationDensityText.text = val; }
+    public void UpdatePopulationDensityTxt(string val) { PopulationDensityText.text = val +"%"; }
     public void UpdateUnemploymentPercentageTxt(string val) { UnemploymentPercentageText.text = val + "%"; }
     public void UpdateFlashFloodRiskTxt(string val) { FlashFloodRiskText.text = val + "%"; }
     public void UpdateEmissionsTxt(string val) { EmissionsText.text = val + "kg"; }
@@ -952,19 +952,19 @@ public class UIManager : MonoBehaviour
     public void UpdatePopulationDesitySlider(float popDensity)
     {
         populationDensity.value = popDensity;
-        UpdatePopulationDensityTxt(popDensity.ToString("F2"));
+        UpdatePopulationDensityTxt(popDensity.ToString("F1"));
     }
 
     public void UpdateUnemploymentSlider(float unmlpRate)
     {
         unemploymentRate.value = unmlpRate;
-        UpdateUnemploymentPercentageTxt(unmlpRate.ToString("F2"));
+        UpdateUnemploymentPercentageTxt(unmlpRate.ToString("F0"));
     }
 
     public void UpdateTrafficSlider()
     {
         trafficIntensity.value = TrafficManager.Instance.GetTrafficIntensity();
-        UpdateTrafficTxt(TrafficManager.Instance.GetTrafficIntensityPercentage().ToString("F2"));
+        UpdateTrafficTxt(TrafficManager.Instance.GetTrafficIntensityPercentage().ToString("F0"));
     }
 
     public void ChangeButtonColorToPressed(Button btn)
@@ -1044,7 +1044,7 @@ public class UIManager : MonoBehaviour
             flashFloodRisk.gameObject.SetActive(true);
             TrafficInfoTab.SetActive(false);
             flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateTotalRunoff(), 0f, flashFloodRiskSliderCap);
-            UpdateFlashFloodRiskTxt(RainEventsManager.Instance.CalculateFlashFloorRisk().ToString("F2"));
+            UpdateFlashFloodRiskTxt(RainEventsManager.Instance.CalculateFlashFloorRisk().ToString("F0"));
 
             //call next tutorial panel
             if (_tutorialOn)
@@ -1100,7 +1100,7 @@ public class UIManager : MonoBehaviour
     public void UpdateEmissionSlider()
     {
         float emissionsVal = TrafficManager.Instance.GetTrafficEmissions();
-        UpdateEmissionsTxt(emissionsVal.ToString("F2"));
+        UpdateEmissionsTxt(emissionsVal.ToString("F1"));
         emissions.value = emissionsVal;
     }
 
@@ -1197,7 +1197,7 @@ public class UIManager : MonoBehaviour
 
             if (fillValue < _actualPrecipitation)
             {
-                actualPrecipitation.text = fillValue.ToString("F2");
+                actualPrecipitation.text = fillValue.ToString("F0");
             }
 
             if (fillValue < _predictedRunoff)
@@ -1207,7 +1207,7 @@ public class UIManager : MonoBehaviour
 
             if (fillValue < _predictedPrecipitation)
             {
-                predictedPrecipitation.text = fillValue.ToString("F2");
+                predictedPrecipitation.text = fillValue.ToString("F0");
             }
 
             yield return new WaitForSeconds(timeToWait);

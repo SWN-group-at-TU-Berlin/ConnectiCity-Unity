@@ -16,7 +16,7 @@ The ratio between hostable people and citizen is shown in the population density
 
 The ratio between jobs available and actual workers is shown in the unemployment tracker#animation:pt1_unemployment
 
-To track the metrics during the game, check whether the black indicator is in the optimal zone (the <color=\#1DC37C>green</color> one)#animation:pt1_trackers
+To track the metrics during the game, check whether the yellow indicator is in the optimal zone (the <color=\#1DC37C>green</color> one)#animation:pt1_trackers
 
 If it moves outside of that zone, the score will be affected negatively.
 
