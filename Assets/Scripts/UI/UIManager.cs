@@ -565,7 +565,7 @@ public class UIManager : MonoBehaviour
     public void UpdateWorkersGrowthTxt(string val) { WorkersGrowth.text = val; }
     public void UpdateHostablePeopleTxt(string val) { HostableCitizens.text = val; }
     public void UpdateJobsAvailableTxt(string val) { JobsAvailable.text = val; }
-    public void UpdatePopulationDensityTxt(string val) { PopulationDensityText.text = val +"%"; }
+    public void UpdatePopulationDensityTxt(string val) { PopulationDensityText.text = val + "%"; }
     public void UpdateUnemploymentPercentageTxt(string val) { UnemploymentPercentageText.text = val + "%"; }
     public void UpdateFlashFloodRiskTxt(string val) { FlashFloodRiskText.text = val + "%"; }
     public void UpdateEmissionsTxt(string val) { EmissionsText.text = val + "kg"; }
@@ -963,8 +963,13 @@ public class UIManager : MonoBehaviour
 
     public void UpdateTrafficSlider()
     {
-        trafficIntensity.value = TrafficManager.Instance.GetTrafficIntensity();
-        UpdateTrafficTxt(TrafficManager.Instance.GetTrafficIntensityPercentage().ToString("F0"));
+        //Check that traffic intensity is !NaN to avoid slider error
+        float trafficIntesityValue = TrafficManager.Instance.GetTrafficIntensity();
+        if (!float.IsNaN(trafficIntesityValue))
+        {
+            trafficIntensity.value = TrafficManager.Instance.GetTrafficIntensity();
+            UpdateTrafficTxt(TrafficManager.Instance.GetTrafficIntensityPercentage().ToString("F0"));
+        }
     }
 
     public void ChangeButtonColorToPressed(Button btn)
