@@ -532,8 +532,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Background: {fileID: 7056620292176776466}
-  palette1: {r: 0.9960785, g: 0.7686275, b: 0.47450984, a: 1}
-  palette2: {r: 1, g: 0.9033196, b: 0.7783019, a: 1}
+  palette1: {r: 0.05490196, g: 0.40392157, b: 0.627451, a: 1}
+  palette2: {r: 0.2, g: 0.8352941, b: 0.8901961, a: 1}
   palette1On: 0
   gameStats: {fileID: 6403223442169395284}
   value: {fileID: 6412445312576621521}
