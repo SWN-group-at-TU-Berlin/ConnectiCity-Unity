@@ -15,6 +15,7 @@ public class ScenesManager : MonoBehaviour
     public void PlayAgain()
     {
         transitionPanel.GetComponent<Animator>().Play("FadeIn", 0, 0f);
+        AudioManager.Instance.StopTrack();
         float animLenght = 0;
         foreach (AnimationClip anim in transitionPanel.GetComponent<Animator>().runtimeAnimatorController.animationClips)
         {

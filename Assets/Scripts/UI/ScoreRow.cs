@@ -9,6 +9,7 @@ public class ScoreRow : MonoBehaviour
     [SerializeField] Image Background;
     [SerializeField] Color palette1;
     [SerializeField] Color palette2;
+    [SerializeField] Color palette3;
     [SerializeField] bool palette1On;
     #region getter
     public bool Palette1On { get { return palette1On; } }
@@ -26,6 +27,12 @@ public class ScoreRow : MonoBehaviour
         socialScore.text = sScore;
         environmentalScore.text = envScore;
         economicScore.text = ecoScore;
+
+        gameStats.color = palette3;
+        value.color = palette3;
+        socialScore.color = palette3;
+        environmentalScore.color = palette3;
+        economicScore.color = palette3;
 
         if (pal1On)
         {
