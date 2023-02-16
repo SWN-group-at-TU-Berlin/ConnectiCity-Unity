@@ -5,12 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class ScenesManager : MonoBehaviour
 {
+    [SerializeField] string trackToPlayOnStartInThisScene;
     [SerializeField] GameObject transitionPanel;
+
+    private void Start()
+    {
+        StartCoroutine(AudioManager.Instance.PlayTrack(trackToPlayOnStartInThisScene));
+    }
     public void PlayAgain()
     {
         transitionPanel.GetComponent<Animator>().Play("FadeIn", 0, 0f);
         float animLenght = 0;
-        foreach(AnimationClip anim in transitionPanel.GetComponent<Animator>().runtimeAnimatorController.animationClips)
+        foreach (AnimationClip anim in transitionPanel.GetComponent<Animator>().runtimeAnimatorController.animationClips)
         {
             if (anim.name.Equals("FadeIn"))
             {
@@ -22,6 +28,7 @@ public class ScenesManager : MonoBehaviour
 
     public void NextScene()
     {
+        AudioManager.Instance.StopTrack();
         transitionPanel.GetComponent<Animator>().Play("FadeIn", 0, 0f);
         float animLenght = 0;
         foreach (AnimationClip anim in transitionPanel.GetComponent<Animator>().runtimeAnimatorController.animationClips)
@@ -49,5 +56,10 @@ public class ScenesManager : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public Scene CurrentScene()
+    {
+        return SceneManager.GetActiveScene();
     }
 }

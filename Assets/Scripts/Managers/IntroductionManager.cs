@@ -35,20 +35,6 @@ public class IntroductionManager : MonoBehaviour
         }
     }
 
-    public void Play()
-    {
-        transitionPanel.GetComponent<Animator>().Play("FadeIn", 0, 0f);
-        float animLenght = 0;
-        foreach (AnimationClip anim in transitionPanel.GetComponent<Animator>().runtimeAnimatorController.animationClips)
-        {
-            if (anim.name.Equals("FadeIn"))
-            {
-                animLenght = anim.length;
-            }
-        }
-        StartCoroutine(NextScene(animLenght));
-    }
-
     private IEnumerator NextScene(float waitingTime)
     {
         yield return new WaitForSeconds(waitingTime);

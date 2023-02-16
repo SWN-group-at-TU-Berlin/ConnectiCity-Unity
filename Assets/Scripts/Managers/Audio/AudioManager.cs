@@ -19,11 +19,20 @@ public class AudioManager : MonoBehaviour
     //collection of all the sounds to initialize
     [SerializeField] Sound[] sounds;
 
-    //TODO: list for music tracks;
+
+    //list for music tracks;
+    [SerializeField] Sound[] tracks;
+
+    int i;
+    bool canSwitchTrack = false;
 
     [Header("Random pitch limits:")]
     [SerializeField, Range(-3, 3)] float minPitch = 0f;
     [SerializeField, Range(-3, 3)] float maxPitch = 2f;
+
+    Sound currentTrackPlaying;
+
+    //TODO: function to start music
 
     private void Awake()
     {
@@ -48,11 +57,44 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
         }
+
+        foreach (Sound s in tracks)
+        {
+            s.source = gameObject.AddComponent<AudioSource>();
+            s.source.clip = s.clip;
+            s.source.loop = s.loop;
+            s.source.volume = s.volume;
+            s.source.pitch = s.pitch;
+        }
+
+        i = 0;
     }
 
-    //TODO: function to play music
-    //TODO: function to fadeIn music
-    //TODO: function to fadeOut music
+    private void Update()
+    {
+        if (currentTrackPlaying != null)
+        {
+            if (currentTrackPlaying.source.isPlaying)
+            {
+                Debug.Log("Currently playing: " + currentTrackPlaying.name + " at volume: " + currentTrackPlaying.source.volume);
+            }
+            if (currentTrackPlaying.source.time > currentTrackPlaying.source.clip.length - 4 && canSwitchTrack)
+            {
+                canSwitchTrack = false;
+                PlayNextTrack();
+            }
+        }
+    }
+
+    void PlayNextTrack()
+    {
+        if (i > tracks.Length - 1)
+        {
+            i = 0;
+        }
+        StartCoroutine(PlayTrack(tracks[i].name));
+        i++;
+    }
 
     public void Play(string name)
     {
@@ -112,7 +154,7 @@ public class AudioManager : MonoBehaviour
         {
             s.source.volume = 0;
             s.source.Play();
-            StartCoroutine(FadeInSound(s.source, s.volume*AudioOptions.Instance.effectsVolume, fadeInTime));
+            StartCoroutine(FadeInSound(s.source, s.volume * AudioOptions.Instance.effectsVolume, fadeInTime));
         }
         else
         {
@@ -138,6 +180,9 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator FadeInSound(AudioSource audioSource, float maxAudio, float fadeTime = 1)
     {
+        Debug.Log("Fading in: " + audioSource.name);
+        audioSource.volume = 0;
+        audioSource.Play();
         float startTime = Time.time;
         float endTime = startTime + fadeTime;
         while (Time.time < endTime && audioSource.volume < maxAudio)
@@ -147,11 +192,12 @@ public class AudioManager : MonoBehaviour
             yield return null;
         }
         audioSource.volume = maxAudio;
+        canSwitchTrack = true;
     }
 
     private IEnumerator FadeOutSound(AudioSource audioSource, float maxAudio, float fadeTime = 1)
     {
-        float startTime = Time.time;
+        /*float startTime = Time.time;
         float endTime = startTime + fadeTime;
         while (Time.time < endTime)
         {
@@ -159,6 +205,68 @@ public class AudioManager : MonoBehaviour
             audioSource.volume -= progress;
             yield return null;
         }
+        audioSource.Stop();*/
+        Debug.Log("Fading out: " + audioSource.name);
+        float startTime = Time.time;
+        float endTime = startTime + fadeTime;
+        float startVolume = audioSource.volume;
+        while (startTime < endTime)
+        {
+            float progress = Time.deltaTime * startVolume;
+            audioSource.volume -= progress;
+            startTime += Time.deltaTime;
+            yield return null;
+        }
         audioSource.Stop();
+    }
+
+    public IEnumerator PlayTrack(string track)
+    {
+        Sound t = Array.Find(tracks, tr => tr.name.Equals(track));
+        if (t != null)
+        {
+            t.source.volume = t.volume * AudioOptions.Instance.musicVolume;
+            if (currentTrackPlaying != null)
+            {
+                if (currentTrackPlaying.source.isPlaying)
+                {
+                    StartCoroutine(FadeOutSound(currentTrackPlaying.source, currentTrackPlaying.volume, 3));
+                    StartCoroutine(FadeInSound(t.source, t.volume, 3));
+                }
+                else
+                {
+                    canSwitchTrack = true;
+                    StartCoroutine(FadeInSound(t.source, t.volume, 3));
+                }
+                yield return new WaitUntil(() => canSwitchTrack);
+                currentTrackPlaying = t;
+            }
+            else
+            {
+                canSwitchTrack = true;
+                StartCoroutine(FadeInSound(t.source, t.volume, 3));
+                currentTrackPlaying = t;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No track named " + track + " can be found");
+        }
+    }
+
+    public void StopTrack()
+    {
+        if (currentTrackPlaying.source.isPlaying)
+        {
+            StartCoroutine(FadeOutSound(currentTrackPlaying.source, currentTrackPlaying.volume, 3f));
+        }
+    }
+
+    public void ChangeCurrentMusicVolume()
+    {
+        if (currentTrackPlaying.source.isActiveAndEnabled)
+        {
+            currentTrackPlaying.source.volume = currentTrackPlaying.volume * AudioOptions.Instance.musicVolume;
+        }
     }
 }

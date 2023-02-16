@@ -305,6 +305,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1951922128390175120, guid: 4556956beeaf5304cbf0527fa0115c42, type: 3}
+      propertyPath: tracks.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9e35803ae22fd71458b80e3c5d6fbbea, type: 3}
+    - target: {fileID: 1951922128390175120, guid: 4556956beeaf5304cbf0527fa0115c42, type: 3}
+      propertyPath: tracks.Array.data[1].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 61b567495bae97d4da2c866aa27702cd, type: 3}
+    - target: {fileID: 1951922128390175120, guid: 4556956beeaf5304cbf0527fa0115c42, type: 3}
+      propertyPath: tracks.Array.data[2].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 0797af9b4e5221843ad7f4b16121a99c, type: 3}
     - target: {fileID: 1951922128390175121, guid: 4556956beeaf5304cbf0527fa0115c42, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -3940,6 +3952,10 @@ PrefabInstance:
       propertyPath: transitionPanel
       value: 
       objectReference: {fileID: 1784864735}
+    - target: {fileID: 4047430234076827355, guid: 61081c16cd5940e42a16d14d7e04c527, type: 3}
+      propertyPath: trackToPlayOnStartInThisScene
+      value: t1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 61081c16cd5940e42a16d14d7e04c527, type: 3}
 --- !u!1 &1548815558
@@ -4963,10 +4979,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
@@ -4974,7 +4994,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7383514285750640675}
     - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1847624254}
+    - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
@@ -4982,11 +5010,23 @@ PrefabInstance:
       value: UpdateSlider
       objectReference: {fileID: 0}
     - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ChangeCurrentMusicVolume
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: AudioOptionsSlider, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: AudioManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383514286981812072, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7383514287029588488, guid: e0414cad784acfe49bd57e8a93d1352f, type: 3}

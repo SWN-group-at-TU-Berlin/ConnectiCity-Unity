@@ -200,5 +200,24 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  tracks:
+  - name: t1
+    clip: {fileID: 8300000, guid: 9e35803ae22fd71458b80e3c5d6fbbea, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: t2
+    clip: {fileID: 8300000, guid: 61b567495bae97d4da2c866aa27702cd, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: t3
+    clip: {fileID: 8300000, guid: 0797af9b4e5221843ad7f4b16121a99c, type: 3}
+    volume: 0.1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
   minPitch: 0.7
   maxPitch: 1.3
