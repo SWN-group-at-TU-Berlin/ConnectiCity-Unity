@@ -25,9 +25,13 @@ public class ScoreGraph : MonoBehaviour
                     //Calculate new size of the bare confronting it with topScore and set it
                     if (element.name.Equals("BarVisual"))
                     {
-                        float scoreProportion = value / topScore;
-                        float newBarHeight = MaxBarHeight * scoreProportion;
-                        barVisual.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newBarHeight);
+                        //set size only if it's positive val to avoid bar height going negative and bugging UI
+                        if (value >= 0)
+                        {
+                            float scoreProportion = value / topScore;
+                            float newBarHeight = MaxBarHeight * scoreProportion;
+                            barVisual.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, newBarHeight);
+                        }
                         element.GetChild(0).GetComponent<TextMeshProUGUI>().text = value.ToString();
                     }
                 }

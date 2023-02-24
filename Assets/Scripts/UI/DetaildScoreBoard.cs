@@ -28,7 +28,7 @@ public class DetaildScoreBoard : MonoBehaviour
         UpdateRoundText(RoundManager.Instance.CurrentRound.ToString());
         UpdateTotalText(snap.total.ToString());
 
-        CearRowsContainer();
+        ClearRowsContainer();
         foreach (GameStat stat in snap.Stats)
         {
             SpawnNewRow(stat.name, stat.value, stat.socialScore.ToString(), stat.environmentalScore.ToString(), stat.economicScore.ToString());
@@ -55,7 +55,7 @@ public class DetaildScoreBoard : MonoBehaviour
         }
     }
 
-    void CearRowsContainer()
+    void ClearRowsContainer()
     {
         foreach(Transform row in rowsContainer)
         {
