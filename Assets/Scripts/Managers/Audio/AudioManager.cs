@@ -236,7 +236,7 @@ public class AudioManager : MonoBehaviour
                 else
                 {
                     canSwitchTrack = true;
-                    StartCoroutine(FadeInSound(t.source, t.volume, 3));
+                    StartCoroutine(FadeInSound(t.source, t.source.volume, 3));
                 }
                 yield return new WaitUntil(() => canSwitchTrack);
                 currentTrackPlaying = t;
@@ -244,7 +244,7 @@ public class AudioManager : MonoBehaviour
             else
             {
                 canSwitchTrack = true;
-                StartCoroutine(FadeInSound(t.source, t.volume, 3));
+                StartCoroutine(FadeInSound(t.source, t.source.volume, 3));
                 currentTrackPlaying = t;
             }
         }
