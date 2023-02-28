@@ -231,7 +231,7 @@ public class AudioManager : MonoBehaviour
                 if (currentTrackPlaying.source.isPlaying)
                 {
                     StartCoroutine(FadeOutSound(currentTrackPlaying.source, currentTrackPlaying.volume, 3));
-                    StartCoroutine(FadeInSound(t.source, t.volume, 3));
+                    StartCoroutine(FadeInSound(t.source, t.source.volume, 3));
                 }
                 else
                 {

@@ -61,6 +61,8 @@ public class RoundManager : MonoBehaviour
             ResourceManager.Instance.IncreaseCitizens();
             ScoreManager.Instance.UpdatePopulationDensity();
             ScoreManager.Instance.UpdateUnemploymentPercentage();
+            UIManager.Instance.UpdateFlashFloodSlider();
+            UIManager.Instance.UpdateFlashFloodRiskTxt(RainEventsManager.Instance.CalculateFlashFloorRisk().ToString("F0"));
         }
         else
         {

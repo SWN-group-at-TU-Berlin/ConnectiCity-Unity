@@ -30,7 +30,7 @@ public class TrafficManager : MonoBehaviour
     //source: gooogle sheet "residents+jobs+traffic" -> tab "Traffic"
     [SerializeField] float avgVehicleSize = 4.5f;
     [SerializeField] float maxCarsVelocity = 50f; //in km/h
-    [SerializeField] float trafficIntensityThreshold = 300f; //value refers to the values of the py traffic model
+    [SerializeField] float trafficIntensityThreshold = 300f; //value to compare to individial streets congestions
     [SerializeField] float maxTrafficIntensity = 502f; //max avarage reachable
     [SerializeField] Gradient gradientExample; //value refers to the values of the py traffic model
     [SerializeField] AnimationCurve avgVehicleEmission;

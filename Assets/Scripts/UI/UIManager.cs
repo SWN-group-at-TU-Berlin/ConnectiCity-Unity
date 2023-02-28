@@ -1048,7 +1048,7 @@ public class UIManager : MonoBehaviour
             populationDensity.gameObject.SetActive(false);
             flashFloodRisk.gameObject.SetActive(true);
             TrafficInfoTab.SetActive(false);
-            flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateTotalRunoff(), 0f, flashFloodRiskSliderCap);
+            UpdateFlashFloodSlider();
             UpdateFlashFloodRiskTxt(RainEventsManager.Instance.CalculateFlashFloorRisk().ToString("F0"));
 
             //call next tutorial panel
@@ -1058,6 +1058,11 @@ public class UIManager : MonoBehaviour
                 ShowRainInfoTab(subcat.SubcatchmentNumber, subcat.BuildStatus, subcat.GetBGIsBuiltOnSubcatchment());
             }
         }
+    }
+
+    public void UpdateFlashFloodSlider()
+    {
+        flashFloodRisk.value = Mathf.Clamp(RainEventsManager.Instance.CalculateTotalRunoff(), 0f, flashFloodRiskSliderCap);
     }
 
     public void TrafficButtonPressed()
