@@ -356,6 +356,7 @@ public class UIManager : MonoBehaviour
                 infoPanelsNotInUse.Enqueue(infoPanel);
             }
             infrastructureTypeButtonPressed = infrastructureTypeToHandle;
+            HideInfoPanels();
             if (_tutorialOn)
             {
                 InfrastructureBuilder.Instance.EnterTutorialBuildStatus();
