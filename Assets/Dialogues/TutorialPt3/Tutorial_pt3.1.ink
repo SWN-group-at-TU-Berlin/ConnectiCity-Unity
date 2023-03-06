@@ -1,4 +1,4 @@
-This is the rain monitoring section.#layout:Left #portrait:Consultant #speaker:Consultant
+This is the rain monitoring section.#layout:Left #portrait:Consultant #speaker:Consultant #buttons:deactivate
 
 Here we can see all the necessary information about the rain events.
 

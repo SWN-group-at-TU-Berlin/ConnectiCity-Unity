@@ -1397,6 +1397,10 @@ public class UIManager : MonoBehaviour
         InfrasructureButton.GetComponent<Button>().enabled = false;
         RoundButton.GetComponent<Button>().enabled = false;
         SocialButton.GetComponent<Button>().enabled = false;
+        if (TutorialManager.Instance.TutorialDialogue != 4)
+        {
+            TrafficButton.GetComponent<Button>().enabled = false;
+        }
         RainButton.GetComponent<Button>().enabled = false;
         GRButtonDefault.GetComponent<Button>().enabled = false;
         RBButtonDefault.GetComponent<Button>().enabled = false;
@@ -1408,6 +1412,7 @@ public class UIManager : MonoBehaviour
         InfrasructureButton.GetComponent<Button>().enabled = true;
         RoundButton.GetComponent<Button>().enabled = true;
         SocialButton.GetComponent<Button>().enabled = true;
+        TrafficButton.GetComponent<Button>().enabled = true;
         RainButton.GetComponent<Button>().enabled = true;
         GRButtonDefault.GetComponent<Button>().enabled = true;
         RBButtonDefault.GetComponent<Button>().enabled = true;
