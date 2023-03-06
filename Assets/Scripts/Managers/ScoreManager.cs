@@ -313,7 +313,7 @@ public class ScoreManager : MonoBehaviour
         populationDensity = CalculatePopulationDensity(pop, spots);
 
         //update UI
-        UIManager.Instance.UpdatePopulationDesitySlider(populationDensity);
+        UIManager.Instance.UpdatePopulationDesitySlider(populationDensity, maxPopDensity);
     }
 
 
@@ -340,6 +340,7 @@ public class ScoreManager : MonoBehaviour
         {
             unemploymentPercentage = (((float)workingPop / (float)jobs) - 1f) * 100f;
         }
+        //clamp value to keep it into the sliders limits
         return Mathf.Clamp( unemploymentPercentage, minUnemploymentRate, maxUnemploymentRate);
     }
 

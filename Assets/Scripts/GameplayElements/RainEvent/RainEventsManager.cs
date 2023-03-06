@@ -122,7 +122,7 @@ public class RainEventsManager : MonoBehaviour
         //Retrieve rain precipitation per round
         float currentRain = rainPerRound[RoundManager.Instance.CurrentRound];
 
-        //calculate and add the prediction uncertanty value to current rain of the round
+        //calculate and add the prediction uncertainty value to current rain of the round
         if (considerPredictionUncertanty)
         {
             currentRain += CalculatePredictionUncertantyValue(currentRain); ;

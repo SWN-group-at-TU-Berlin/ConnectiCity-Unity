@@ -1,4 +1,4 @@
-I am really excited to help you and the city in developing this new neighborhood! I will be using a number of models and simulation softwares to come up with a plan that can solve the challenges ConnectiCity is facing!#layout:Left #portrait:Consultant #speaker:Consultant #animation:pt1_start
+I am really excited to help you and the city in developing this new neighborhood! I will be using a number of models and simulation software to come up with a plan that can solve the challenges ConnectiCity is facing!#layout:Left #portrait:Consultant #speaker:Consultant #animation:pt1_start
 
 Sounds great! Let me tell you more about our vision for this new neighborhood. Your task will be to integrate these goals in your simulations and final plan for the area!#layout:Right #portrait:Mayor #speaker:Mayor Connie
 

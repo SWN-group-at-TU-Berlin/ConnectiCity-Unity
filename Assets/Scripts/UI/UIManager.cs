@@ -950,10 +950,12 @@ public class UIManager : MonoBehaviour
         unemploymentRate.minValue = min;
     }
 
-    public void UpdatePopulationDesitySlider(float popDensity)
+    public void UpdatePopulationDesitySlider(float popDensity, float maxPopDensity)
     {
+        //calculate percentage of pop density based on the max pop density
+        float popDensityPercentage = (popDensity / maxPopDensity) * 100;
         populationDensity.value = popDensity;
-        UpdatePopulationDensityTxt(popDensity.ToString("F1"));
+        UpdatePopulationDensityTxt(popDensityPercentage.ToString("F1"));
     }
 
     public void UpdateUnemploymentSlider(float unmlpRate)

@@ -10,4 +10,4 @@ Correct!#layout:Left #portrait:Consultant #speaker:Consultant
 
 Here we can end the round and see what happens#cutout:active #animation:pt1_end_round
 
-The scores should updated#buttons:enable #tutorial:off #cutout:notActive #animation:pt1_end_round
+The scores should be updated#buttons:enable #tutorial:off #cutout:notActive #animation:pt1_end_round

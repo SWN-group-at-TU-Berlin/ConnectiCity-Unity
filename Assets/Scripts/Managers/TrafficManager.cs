@@ -35,7 +35,6 @@ public class TrafficManager : MonoBehaviour
     [SerializeField] Gradient gradientExample; //value refers to the values of the py traffic model
     [SerializeField] AnimationCurve avgVehicleEmission;
 
-    //float will be swapped with a custom class for Street like Subcatchment
     Dictionary<int, float> trafficData;
     Dictionary<int, float> floodTrafficData;
     Dictionary<int, float> streetsFullCapacity;
@@ -131,6 +130,7 @@ public class TrafficManager : MonoBehaviour
         float streetLenght = streetsLengths[streetNum];
         //maximum possible distance between cars wen traffic is low (assuming only 1 car)
         float maxDist = streetLenght - avgVehicleSize;
+        //calculate current distance by multiplying the max distance possible with the inverse ratio of current traffic capacity on street and max traffic capacity of street
         float currentCarsDistance = maxDist * Mathf.Abs(trafficData[streetNum] / streetsFullCapacity[streetNum] - 1);
         float totalSpaceCarOccupies = currentCarsDistance + avgVehicleSize;
         int numberOfCars = Mathf.CeilToInt(streetLenght / totalSpaceCarOccupies);

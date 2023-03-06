@@ -10,7 +10,7 @@ By the way, I am the Water Manager for ConnectiCity municipality. Nice to meet y
 
 Nice to meet you too!#layout:Left #portrait:Consultant #speaker:Consultant
 
- As Mayior Connie mentioned earlier, we are facing a series of rain events that will increase in intensity in the future#layout:Right #portrait:WaterManager #speaker:Water Manager
+ As Mayor Connie mentioned earlier, we are facing a series of rain events that will increase in intensity in the future#layout:Right #portrait:WaterManager #speaker:Water Manager
  
  One of the objectives for the development of the neighborhood is to become flood resilient
  
