@@ -168,7 +168,23 @@ public class DataReader : MonoBehaviour
             string[] rowValues = row.Split(',');
 
             //store a[0] as key and a[1] as val in dictionary
-            toPopulate.Add(int.Parse(rowValues[0]), float.Parse(rowValues[1]));
+
+            //This is a fix to handle the german format of decimal numbers that uses a ',' instead of a '.'
+            //This workaround is very specific for the situation and it might be a problem for parsing values
+            //that use grouped format e.g. "100,000,000.00" since the current one is non-grouped format e.g. "100000000.00".
+            //A possible solution is to also invert the ',' o '.', but that would require a more advanced string manipulation.
+            //This fix is operated only on Windows machines that are the one that showed this behaviour so far
+            if (Application.systemLanguage.Equals(SystemLanguage.German) 
+                && rowValues[1].Contains(".")
+                && (Application.platform.Equals(RuntimePlatform.WindowsPlayer) || Application.platform.Equals(RuntimePlatform.WindowsEditor)))
+            {
+                string parsedValue = rowValues[1].Replace('.', ',');
+                toPopulate.Add(int.Parse(rowValues[0]), float.Parse(parsedValue));
+            }
+            else
+            {
+                toPopulate.Add(int.Parse(rowValues[0]), float.Parse(rowValues[1]));
+            }
         }
 
         //return dictionary
