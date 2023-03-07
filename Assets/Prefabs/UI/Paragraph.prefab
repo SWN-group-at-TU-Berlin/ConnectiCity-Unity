@@ -1015,6 +1015,7 @@ GameObject:
   - component: {fileID: 8336891680862859172}
   - component: {fileID: 8336891680862859174}
   - component: {fileID: 8336891680862859175}
+  - component: {fileID: 1081730381414952203}
   m_Layer: 5
   m_Name: ReferencesText
   m_TagString: Untagged
@@ -1145,6 +1146,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1081730381414952203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8336891680862859173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 918107e1eabf20447bc7e871d2897fec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8336891681466943807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,8 +1412,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8336891682036894169}
   m_HandleRect: {fileID: 8336891682036894118}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 0.9999984
+  m_Size: 0.70065325
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

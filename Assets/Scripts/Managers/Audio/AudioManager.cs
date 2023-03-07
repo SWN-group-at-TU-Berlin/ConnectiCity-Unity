@@ -74,10 +74,6 @@ public class AudioManager : MonoBehaviour
     {
         if (currentTrackPlaying != null)
         {
-            if (currentTrackPlaying.source.isPlaying)
-            {
-                Debug.Log("Currently playing: " + currentTrackPlaying.name + " at volume: " + currentTrackPlaying.source.volume);
-            }
             if (currentTrackPlaying.source.time > currentTrackPlaying.source.clip.length - 4 && canSwitchTrack)
             {
                 canSwitchTrack = false;
