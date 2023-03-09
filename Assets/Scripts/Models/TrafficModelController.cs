@@ -65,11 +65,14 @@ public class TrafficModelController : MonoBehaviour
             m_path = System.IO.Directory.GetParent(Application.dataPath).FullName;
 
             //path manupulation to delete the .app folder from m_path
-            string[] pathToClean = m_path.Split('/');
-            List<string> arrayPathToClean = new List<string>(pathToClean);
-            arrayPathToClean.RemoveAt(arrayPathToClean.Count - 1);
-            string[] cleanArrayPath = arrayPathToClean.ToArray();
-            m_path = string.Join("/", cleanArrayPath);
+            if (Application.platform.Equals(RuntimePlatform.OSXPlayer))
+            {
+                string[] pathToClean = m_path.Split('/');
+                List<string> arrayPathToClean = new List<string>(pathToClean);
+                arrayPathToClean.RemoveAt(arrayPathToClean.Count - 1);
+                string[] cleanArrayPath = arrayPathToClean.ToArray();
+                m_path = string.Join("/", cleanArrayPath);
+            }
 
             string[] FileNamePath = { m_path, "ConnectiCity-TrafficModel/venv/bin/python3" };
             psi.FileName = string.Join("/", FileNamePath);
@@ -91,7 +94,7 @@ public class TrafficModelController : MonoBehaviour
             string[] tmp = { m_path, "ConnectiCity-TrafficModel/main.py" };
             ScriptPath = tmp;
             script = string.Join("/", ScriptPath);
-        
+
         }
 
         psi.Arguments = $"{script} --areas {areas} --flooding {flooding}";
@@ -106,10 +109,10 @@ public class TrafficModelController : MonoBehaviour
         var errors = "";
         _results = "";
 
-        using(var process = Process.Start(psi))
+        using (var process = Process.Start(psi))
         {
-            errors =  process.StandardError.ReadToEnd();
-            _results =  process.StandardOutput.ReadToEnd();
+            errors = process.StandardError.ReadToEnd();
+            _results = process.StandardOutput.ReadToEnd();
         }
 
         UnityEngine.Debug.Log("ERRORS:");
