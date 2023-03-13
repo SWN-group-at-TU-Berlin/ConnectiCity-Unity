@@ -1,6 +1,6 @@
 Here you can follow the CO2 emission resulting from car traffic in the area.#layout:Left #portrait:Consultant #speaker:Consultant #animation:pt2_emissions #cutout:active
 
-It's also possible to check the traffic intensity of the whole city#animation:pt2_traffic
+It's also possible to check the traffic intensity of the whole neighbourhood#animation:pt2_traffic
 
 To reduce both emissions and traffic intensity, we can implement bus stations and bus lines in our simulation and calculate their impact.
 

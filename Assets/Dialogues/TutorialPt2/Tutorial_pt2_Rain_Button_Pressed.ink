@@ -18,7 +18,7 @@ Nice to meet you too!#layout:Left #portrait:Consultant #speaker:Consultant
  
  Well, we simulate the changing climate at the end of every round with a rain event representative of the heaviest rain that year#layout:Left #portrait:Consultant #speaker:Consultant 
  
- That would be the panel we saw when we ended the pevious round
+ That would be the panel we saw when we ended the previous round
  
  Here we can see the anticipated/predicted precipitation for that round#cutout:active #animation:pt3_prediction
  

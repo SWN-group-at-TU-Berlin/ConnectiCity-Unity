@@ -12,7 +12,7 @@ Citizens also need a roof over their head and jobs to earn a living.
 
 Here we can check how many people the city can host, together with the number of jobs available.#animation:pt1_housing_and_jobs
 
-The ratio between hostable people and citizen is shown in the population density trackers#animation:pt1_population_density
+The ratio between hostable people and citizens is shown in the population density trackers#animation:pt1_population_density
 
 The ratio between jobs available and actual workers is shown in the unemployment tracker#animation:pt1_unemployment
 
@@ -31,4 +31,4 @@ Here we can also see the impact of the different metrics on the overall score.
 Alright, I am curious to see what kind of plan you can come up with! Let’s get to work!#layout:Right #portrait:Mayor #speaker:Mayor Connie #animation:pt1_start
 
 I think I will start from the housing for the citizens#layout:Left #portrait:Consultant #speaker:Consultant 
-Let me show you how to construct buildings on <color=\#63C3FF>commercial subcatchments</color> in this software...#subcatchment:build #cutout:notActive
+Let me show you how to construct buildings on <color=\#63C3FF>residential subcatchments</color> in this software...#subcatchment:build #cutout:notActive
