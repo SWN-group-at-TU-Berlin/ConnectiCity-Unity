@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,8 +52,8 @@ public class InputProvider
         return input.GameplayActions.Pause.triggered;
     }
 
-    public bool SpaceBar()
+    public PlayerInput Actions()
     {
-        return input.GameplayActions.SpaceBar.triggered;
+        return input;
     }
 }

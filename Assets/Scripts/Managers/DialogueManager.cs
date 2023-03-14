@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Params")]
     [SerializeField] private float typingSpeed = 0.04f;
     [SerializeField] private float voiceSoundFrequency = 2f;
-    [SerializeField, Range(0,1)] private float voicepitchVariation = 0.10f;
+    [SerializeField, Range(0, 1)] private float voicepitchVariation = 0.10f;
     [SerializeField] bool randomizeVoice = false;
 
     [Header("Dialogue UI")]
@@ -44,7 +45,7 @@ public class DialogueManager : MonoBehaviour
     private static DialogueManager instance;
 
     private InputProvider input;
-
+    private bool endLine = false;
     private const string SPEAKER_TAG = "speaker";
     private const string PORTRAIT_TAG = "portrait";
     private const string LAYOUT_TAG = "layout";
@@ -67,9 +68,11 @@ public class DialogueManager : MonoBehaviour
         instance = this;
 
         input = new InputProvider();
-
+        input.Actions().GameplayActions.SpaceBar.performed += ctx => SpaceBarPressed();
         layoutAnimator = dialoguePanel.GetComponent<Animator>();
     }
+
+
 
     private void OnEnable()
     {
@@ -168,15 +171,28 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private void SpaceBarPressed()
+    {
+        if (!dialogueIsPlaying) { return; }
+
+        if (canContinueToNextLine)
+        {
+            ContinueStory();
+        } else
+        {
+            endLine = true;
+        }
+    }
+
     private IEnumerator DisplayLine(string line)
     {
         // empty the dialogue text
         dialogueText.text = "";
+        canContinueToNextLine = false;
         // hide items while text is typing
         continueIcon.SetActive(false);
         HideChoices();
 
-        canContinueToNextLine = false;
 
         bool isAddingRichTextTag = false;
 
@@ -184,8 +200,9 @@ public class DialogueManager : MonoBehaviour
         foreach (char letter in line.ToCharArray())
         {
             // if the submit button is pressed, finish up displaying the line right away
-            if (input.MouseLeftButton())
+            if (input.MouseLeftButton() ^ endLine)
             {
+                endLine = false;
                 dialogueText.text = line;
                 break;
             }
