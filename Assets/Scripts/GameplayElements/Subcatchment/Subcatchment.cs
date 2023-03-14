@@ -129,6 +129,7 @@ public class Subcatchment : MonoBehaviour
 
                 if (input.MouseLeftButton())
                 {
+                    IsSelected = true;
                     if (IsHighlighted)
                     {
                         InfrastructureBuilder.Instance.SelectedSubcatchment = this;
@@ -160,7 +161,11 @@ public class Subcatchment : MonoBehaviour
             }
             else
             {
-                if (IsHovered)
+                if (input.MouseLeftButton())
+                {
+                    IsSelected = false;
+                }
+                if (IsHovered && !IsSelected)
                 {
                     IsHovered = false;
                     outline.OutlineColor = Color.white;
@@ -171,7 +176,11 @@ public class Subcatchment : MonoBehaviour
         }
         else
         {
-            if (IsHovered)
+            if (input.MouseLeftButton())
+            {
+                IsSelected = false;
+            }
+            if (IsHovered && !IsSelected)
             {
                 IsHovered = false;
                 outline.OutlineColor = Color.white;

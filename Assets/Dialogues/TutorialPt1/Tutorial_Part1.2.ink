@@ -1,4 +1,4 @@
-As you can see, we now have new housing and the population density updated#layout:Left #portrait:Consultant #speaker:Consultant
+As you can see, we now have new housing and the population capacity updated#layout:Left #portrait:Consultant #speaker:Consultant
 
 That's interesting!#layout:Right #portrait:Mayor #speaker:Mayor Connie
 

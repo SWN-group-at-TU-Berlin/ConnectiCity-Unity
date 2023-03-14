@@ -159,8 +159,8 @@ public class ScoreManager : MonoBehaviour
         }
 
 
-        popDensity.name = "Population Density";
-        popDensity.value = populationDensity.ToString("F2");
+        popDensity.name = "Population Capacity";
+        popDensity.value = populationDensity.ToString("F2") + "%";
         popDensity.socialScore = socialPopDensityScore;
         popDensity.economicScore = economicPopDensityScore;
         popDensity.environmentalScore = environmentPopDensityScore;

@@ -13,6 +13,7 @@ public class InputProvider
         input.CameraMovement.MousePosition.Enable();
         input.GameplayActions.MouseLeftButton.Enable();
         input.GameplayActions.Pause.Enable();
+        input.GameplayActions.SpaceBar.Enable();
     }
 
     public void Disable()
@@ -22,6 +23,7 @@ public class InputProvider
         input.CameraMovement.Zoom.Disable();
         input.GameplayActions.MouseLeftButton.Disable();
         input.GameplayActions.Pause.Disable();
+        input.GameplayActions.SpaceBar.Disable();
     }
 
     public Vector2 CameraMovement()
@@ -47,5 +49,10 @@ public class InputProvider
     public bool PauseButton()
     {
         return input.GameplayActions.Pause.triggered;
+    }
+
+    public bool SpaceBar()
+    {
+        return input.GameplayActions.SpaceBar.triggered;
     }
 }

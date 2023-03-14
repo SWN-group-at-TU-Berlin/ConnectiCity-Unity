@@ -112,7 +112,6 @@ public class DialogueManager : MonoBehaviour
         }
 
         // handle continuing to the next line in the dialogue when submit is pressed
-        // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (currentStory.currentChoices.Count == 0 && input.MouseLeftButton())
         {
             //ContinueStory();

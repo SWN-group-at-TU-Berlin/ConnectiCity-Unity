@@ -156,6 +156,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpaceBar"",
+                    ""type"": ""Button"",
+                    ""id"": ""8866316f-640a-4e5f-9003-63b3feaa5ff8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -180,6 +189,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c457876-c779-4e3f-ac55-0e0c24938ebc"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpaceBar"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -195,6 +215,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_GameplayActions = asset.FindActionMap("GameplayActions", throwIfNotFound: true);
         m_GameplayActions_MouseLeftButton = m_GameplayActions.FindAction("MouseLeftButton", throwIfNotFound: true);
         m_GameplayActions_Pause = m_GameplayActions.FindAction("Pause", throwIfNotFound: true);
+        m_GameplayActions_SpaceBar = m_GameplayActions.FindAction("SpaceBar", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -305,12 +326,14 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private IGameplayActionsActions m_GameplayActionsActionsCallbackInterface;
     private readonly InputAction m_GameplayActions_MouseLeftButton;
     private readonly InputAction m_GameplayActions_Pause;
+    private readonly InputAction m_GameplayActions_SpaceBar;
     public struct GameplayActionsActions
     {
         private @PlayerInput m_Wrapper;
         public GameplayActionsActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @MouseLeftButton => m_Wrapper.m_GameplayActions_MouseLeftButton;
         public InputAction @Pause => m_Wrapper.m_GameplayActions_Pause;
+        public InputAction @SpaceBar => m_Wrapper.m_GameplayActions_SpaceBar;
         public InputActionMap Get() { return m_Wrapper.m_GameplayActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -326,6 +349,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Pause.started -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnPause;
                 @Pause.performed -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnPause;
                 @Pause.canceled -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnPause;
+                @SpaceBar.started -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnSpaceBar;
+                @SpaceBar.performed -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnSpaceBar;
+                @SpaceBar.canceled -= m_Wrapper.m_GameplayActionsActionsCallbackInterface.OnSpaceBar;
             }
             m_Wrapper.m_GameplayActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -336,6 +362,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Pause.started += instance.OnPause;
                 @Pause.performed += instance.OnPause;
                 @Pause.canceled += instance.OnPause;
+                @SpaceBar.started += instance.OnSpaceBar;
+                @SpaceBar.performed += instance.OnSpaceBar;
+                @SpaceBar.canceled += instance.OnSpaceBar;
             }
         }
     }
@@ -350,5 +379,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     {
         void OnMouseLeftButton(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnSpaceBar(InputAction.CallbackContext context);
     }
 }
